@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DistanceTracker.AddRunnerPage"
+             Title="Add a Runner">
+    <VerticalStackLayout>
+        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
+            <Label 
+            Text="First Name"
+            VerticalOptions="Start" 
+            HorizontalOptions="Start"
+            FontSize="12"/>
+
+            <Entry FontSize="14" Placeholder="John" Text="{Binding FirstName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
+        </Grid>
+
+
+        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
+            <Label 
+            Text="Last Name"
+            VerticalOptions="Start" 
+            HorizontalOptions="Start"
+                FontSize="12"/>
+
+            <Entry FontSize="14" Placeholder="Doe" Text="{Binding LastName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
+        </Grid>
+
+        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
+            <Label 
+            Text="Last Name"
+            VerticalOptions="Start" 
+            HorizontalOptions="Start"
+                FontSize="12"/>
+
+            <Entry FontSize="14" Placeholder="1234" Text="{Binding BibNumber}" Keyboard="Numeric" HorizontalOptions="CenterAndExpand" />
+        </Grid>
+
+        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
+            <Label 
+            Text="Age"
+            VerticalOptions="Start" 
+            HorizontalOptions="Start"
+                FontSize="12"/>
+
+            <DatePicker FontSize="14" Date="{Binding BirthDate}" HorizontalOptions="CenterAndExpand" />
+        </Grid>
+
+        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
+            <Label 
+            Text="Sex"
+            VerticalOptions="Start" 
+            HorizontalOptions="Start"
+                FontSize="12"/>
+
+            <Picker FontSize="14" Title="Sex" HorizontalOptions="CenterAndExpand" SelectedItem="{Binding SelectedSex}">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Male</x:String>
+                        <x:String>Female</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+        </Grid>
+
+        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
+            <Label 
+            Text="Age"
+            VerticalOptions="Start" 
+            HorizontalOptions="Start"
+                FontSize="12"/>
+
+            <Entry FontSize="14" Placeholder="40" Text="{Binding Age}" Keyboard="Numeric" HorizontalOptions="CenterAndExpand" />
+        </Grid>
+
+
+        <Button x:Name="SaveRunner"
+                            HeightRequest="60" FontSize="Large"
+                            Text="Setup an Event" Margin="15, 5" CornerRadius="6"
+                            HorizontalOptions="FillAndExpand"                            
+                            BorderWidth="0" Clicked="SaveRunner_Clicked" 
+                            Command="{Binding NavigateCommand}" CommandParameter="SetupEventPage"/>
+
+    </VerticalStackLayout>
+</ContentPage>

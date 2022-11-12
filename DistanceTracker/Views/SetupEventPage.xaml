@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DistanceTracker.SetupEventPage"
+             Title="Setup an Event">
+    <VerticalStackLayout>
+        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
+            <Label 
+            Text="Event Name"
+            VerticalOptions="Start" 
+            HorizontalOptions="Start"
+            FontSize="12"/>
+
+            <Entry FontSize="14" Placeholder="BC Trailathon" Text="{Binding EventName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
+        </Grid>
+
+
+        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
+            <Label 
+            Text="Event Type"
+            VerticalOptions="Start" 
+            HorizontalOptions="Start"
+                FontSize="12"/>
+
+            <Entry FontSize="14" Placeholder="12Hour" Text="{Binding EventType}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
+        </Grid>
+
+
+        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
+            <Label 
+            Text="Event Date"
+            VerticalOptions="Start" 
+            HorizontalOptions="Start"
+                FontSize="12"/>
+
+            <DatePicker FontSize="14" Date="{Binding EventDate}" HorizontalOptions="CenterAndExpand" />
+        </Grid>
+    </VerticalStackLayout>
+</ContentPage>
