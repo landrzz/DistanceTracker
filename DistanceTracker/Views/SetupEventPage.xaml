@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DistanceTracker.SetupEventPage"
              Title="Setup an Event">
-    <VerticalStackLayout>
+    <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
         <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
             <Label 
             Text="Event Name"
             VerticalOptions="Start" 
-            HorizontalOptions="Start"
-            FontSize="12"/>
+            HorizontalOptions="Start"/>
 
-            <Entry FontSize="14" Placeholder="BC Trailathon" Text="{Binding EventName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
+            <Entry Placeholder="BC Trailathon" Text="{Binding EventName}" Keyboard="Text" HorizontalOptions="FillAndExpand"
+                   Grid.Row="1" HorizontalTextAlignment="Center"/>
         </Grid>
 
 
@@ -19,10 +19,10 @@
             <Label 
             Text="Event Type"
             VerticalOptions="Start" 
-            HorizontalOptions="Start"
-                FontSize="12"/>
+            HorizontalOptions="Start"/>
 
-            <Entry FontSize="14" Placeholder="12Hour" Text="{Binding EventType}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
+            <Entry  Placeholder="12Hour" Text="{Binding EventType}" Keyboard="Text" HorizontalOptions="FillAndExpand"
+                    Grid.Row="1" HorizontalTextAlignment="Center"/>
         </Grid>
 
 
@@ -30,10 +30,23 @@
             <Label 
             Text="Event Date"
             VerticalOptions="Start" 
-            HorizontalOptions="Start"
-                FontSize="12"/>
+            HorizontalOptions="Start"/>
 
-            <DatePicker FontSize="14" Date="{Binding EventDate}" HorizontalOptions="CenterAndExpand" />
+            <DatePicker  Date="{Binding EventDate}" HorizontalOptions="CenterAndExpand"
+                         Grid.Row="1" />
         </Grid>
-    </VerticalStackLayout>
+
+        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
+            <Label 
+            Text="Event Passcode"
+            VerticalOptions="Start" 
+            HorizontalOptions="Start"/>
+
+            <Entry IsPassword="True" Text="{Binding EventPassword}" Keyboard="Text" HorizontalOptions="FillAndExpand"
+                   Grid.Row="1" HorizontalTextAlignment="Center"/>
+        </Grid>
+
+        <Button Text="Save Event" HeightRequest="50" HorizontalOptions="FillAndExpand"
+                Command="{Binding SaveEventCommand}" FontSize="18" /> 
+     </StackLayout>
 </ContentPage>

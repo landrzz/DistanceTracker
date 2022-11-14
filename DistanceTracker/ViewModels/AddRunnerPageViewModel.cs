@@ -25,11 +25,24 @@ namespace DistanceTracker
         private IDialogs _dialogService { get; }
         public DelegateCommand<string> NavigateCommand { get; }
 
-        public AddRunnerPageViewModel(BaseServices services) : base(services)
+        public AddRunnerPageViewModel(Shiny.BaseServices services) : base(services)
         {
             _navigationService = services.Navigation;
             _dialogService = services.Dialogs;
             NavigateCommand = new DelegateCommand<string>(OnNavigateCommandExecuted);
+        }
+
+        public override async void OnNavigatedTo(INavigationParameters parameters)
+        {
+            //check event is set
+            var eventSet = CheckIsEventSet();
+            if (!eventSet)
+            {
+                await _dialogService.Alert("You must specify a default event before adding a runner!", "Set Event First!");
+                await _navigationService.GoBackAsync();
+            }
+
+            base.OnNavigatedTo(parameters);
         }
 
         private void OnNavigateCommandExecuted(string uri)
@@ -48,7 +61,7 @@ namespace DistanceTracker
             {
                 if (ConnectivityService.IsConnected())
                 {
-                    var curEventName = Preferences.Default.Get("currentevetname", string.Empty);
+                    var curEventName = Preferences.Default.Get("currenteventname", string.Empty);
 
                     if (string.IsNullOrWhiteSpace(curEventName))
                     {
@@ -107,10 +120,20 @@ namespace DistanceTracker
             catch (Exception ex)
             {
                 ShowLoading = false;
-                Logger.LogError(ex, "EnterPersonalAccessCode - Error validating personal access code");
             }
             IsBusy = false;
             ShowLoading = false;
+        }
+
+        public bool CheckIsEventSet()
+        {
+            var raceEvent = Preferences.Get("currenteventname", string.Empty);
+            if (string.IsNullOrWhiteSpace(raceEvent))
+            {
+                return false;
+            }
+            else
+                return true;
         }
 
         [Reactive] public string Property { get; set; }

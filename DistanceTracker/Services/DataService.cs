@@ -21,7 +21,7 @@ namespace DistanceTracker
 
 
         static RestClient client;
-        static string BaseUrl = Endpoints.SSConfBaseURL;
+        static string BaseUrl = Endpoints.DistTrackURLBase;
 
 
         static DataService()
@@ -44,7 +44,7 @@ namespace DistanceTracker
             GetAsync<IEnumerable<Runner>>(Endpoints.Runners, Endpoints.Runners, forceRefresh: forceRefresh, raceEvent: raceEvent);
 
         public static Task<IEnumerable<RaceEvent>> GetRaces(bool forceRefresh = true) =>
-            GetAsync<IEnumerable<RaceEvent>>(Endpoints.RaceEvents, Endpoints.RaceEvents, forceRefresh: forceRefresh, raceEvent: raceEvent);
+            GetAsync<IEnumerable<RaceEvent>>(Endpoints.RaceEvents, Endpoints.RaceEvents, forceRefresh: forceRefresh);
 
 
 
@@ -77,7 +77,7 @@ namespace DistanceTracker
             {
                 if (string.IsNullOrWhiteSpace(json))
                 {
-                    Debug.WriteLine($"CONF KEY {raceEvent}");
+                    Debug.WriteLine($"RACE EVENT: {raceEvent}");
 
                     url = $"{url}?code={Endpoints.code}";
                     if (!string.IsNullOrWhiteSpace(raceEvent))
@@ -116,7 +116,7 @@ namespace DistanceTracker
             Runner retrieved_runner = null;
             var jsonObject = JsonConvert.SerializeObject(_runner);
 
-            var url = $"{Endpoints.SSConfBaseURL}/{Endpoints.AddRunner}?code={Endpoints.code}";
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddRunner}?code={Endpoints.code}";
             Debug.WriteLine(url);
 
             //another way of sending the request
@@ -133,6 +133,31 @@ namespace DistanceTracker
             }
 
             return retrieved_runner;
+        }
+
+        public static async Task<RaceEvent> PostRaceEventAsync(RaceEvent _race)
+        {
+            Debug.WriteLine("Creating a new Race Event Item...");
+            RaceEvent retrieved_race = null;
+            var jsonObject = JsonConvert.SerializeObject(_race);
+
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddRaceEvent}?code={Endpoints.code}";
+            Debug.WriteLine(url);
+
+            //another way of sending the request
+            //var restRequest = new RestRequest(url, Method.POST);
+            //request.AddHeader("Content-Type", "application/json");
+            //request.AddParameter("application/json", jsonObject, ParameterType.RequestBody);
+            //var response = await client.ExecuteAsync(restRequest);
+
+            var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_race, "application/json");
+            var response = await client.PostAsync<RaceEvent>(restRequest);
+            if (response != null)
+            {
+                retrieved_race = response;
+            }
+
+            return retrieved_race;
         }
 
         public static void AddToBarrel(string key, string data, TimeSpan expireIn, object dataObject)
@@ -155,7 +180,7 @@ namespace DistanceTracker
     public static class Endpoints
     {
         //SS Conf
-        public static string SSConfBaseURL = "https://conferencefunctions20210624142237.azurewebsites.net/api";
+        public static string DistTrackURLBase = "https://distancetrackerfunctions2022.azurewebsites.net/api";
 
         public static string AddUser = "Post-CreateUser";
         public static string Users = "Get-Users";
@@ -172,6 +197,6 @@ namespace DistanceTracker
 
         public static string Settings = "Get-Settings";
 
-        public static string code = "oEJW9mvQNtIASHcjGBSCpbEpQs84d9k8ANgov5hAgWMTX2Q5T0NaFQ==";       
+        public static string code = "pZ0O29mHHLRgXE8fMikc7qO130RyLWXw16BaAyZsYRuEAzFuNznU9A==";       
     }
 }

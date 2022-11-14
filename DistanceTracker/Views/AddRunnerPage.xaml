@@ -1,17 +1,16 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DistanceTracker.AddRunnerPage"
              Title="Add a Runner">
-    <VerticalStackLayout>
+    <StackLayout>
         <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
             <Label 
             Text="First Name"
             VerticalOptions="Start" 
-            HorizontalOptions="Start"
-            FontSize="12"/>
+            HorizontalOptions="Start"/>
 
-            <Entry FontSize="14" Placeholder="John" Text="{Binding FirstName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
+            <Entry Placeholder="John" Text="{Binding FirstName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
         </Grid>
 
 
@@ -19,40 +18,36 @@
             <Label 
             Text="Last Name"
             VerticalOptions="Start" 
-            HorizontalOptions="Start"
-                FontSize="12"/>
+            HorizontalOptions="Start"/>
 
-            <Entry FontSize="14" Placeholder="Doe" Text="{Binding LastName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
+            <Entry Placeholder="Doe" Text="{Binding LastName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
         </Grid>
 
         <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
             <Label 
             Text="Last Name"
             VerticalOptions="Start" 
-            HorizontalOptions="Start"
-                FontSize="12"/>
+            HorizontalOptions="Start"/>
 
-            <Entry FontSize="14" Placeholder="1234" Text="{Binding BibNumber}" Keyboard="Numeric" HorizontalOptions="CenterAndExpand" />
+            <Entry Placeholder="1234" Text="{Binding BibNumber}" Keyboard="Numeric" HorizontalOptions="CenterAndExpand" />
         </Grid>
 
         <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
             <Label 
             Text="Age"
             VerticalOptions="Start" 
-            HorizontalOptions="Start"
-                FontSize="12"/>
+            HorizontalOptions="Start" />
 
-            <DatePicker FontSize="14" Date="{Binding BirthDate}" HorizontalOptions="CenterAndExpand" />
+            <DatePicker Date="{Binding BirthDate}" HorizontalOptions="CenterAndExpand" />
         </Grid>
 
         <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
             <Label 
             Text="Sex"
             VerticalOptions="Start" 
-            HorizontalOptions="Start"
-                FontSize="12"/>
+            HorizontalOptions="Start" />
 
-            <Picker FontSize="14" Title="Sex" HorizontalOptions="CenterAndExpand" SelectedItem="{Binding SelectedSex}">
+            <Picker  Title="Sex" HorizontalOptions="CenterAndExpand" SelectedItem="{Binding SelectedSex}">
                 <Picker.ItemsSource>
                     <x:Array Type="{x:Type x:String}">
                         <x:String>Male</x:String>
@@ -66,10 +61,9 @@
             <Label 
             Text="Age"
             VerticalOptions="Start" 
-            HorizontalOptions="Start"
-                FontSize="12"/>
+            HorizontalOptions="Start"/>
 
-            <Entry FontSize="14" Placeholder="40" Text="{Binding Age}" Keyboard="Numeric" HorizontalOptions="CenterAndExpand" />
+            <Entry Placeholder="40" Text="{Binding Age}" Keyboard="Numeric" HorizontalOptions="CenterAndExpand" />
         </Grid>
 
 
@@ -80,5 +74,5 @@
                             BorderWidth="0" Clicked="SaveRunner_Clicked" 
                             Command="{Binding NavigateCommand}" CommandParameter="SetupEventPage"/>
 
-    </VerticalStackLayout>
+    </StackLayout>
 </ContentPage>

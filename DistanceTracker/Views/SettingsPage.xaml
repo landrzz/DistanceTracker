@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DistanceTracker.SettingsPage"
@@ -12,9 +12,23 @@
 
         <Button Grid.Row="1" x:Name="AddEventButton"
                             HeightRequest="60" FontSize="Large"
-                            Text="Setup an Event" Margin="15, 5" CornerRadius="6"
+                            Text="Setup a New Event" Margin="15, 5" CornerRadius="6"
                             HorizontalOptions="FillAndExpand"                            
                             BorderWidth="0" Clicked="AddEventButton_Clicked" 
                             Command="{Binding NavigateCommand}" CommandParameter="SetupEventPage"/>
+
+        <Button Grid.Row="2" x:Name="SelectEventButton"
+                            HeightRequest="60" FontSize="Large"
+                            Text="Choose an Existing Event" Margin="15, 5" CornerRadius="6"
+                            HorizontalOptions="FillAndExpand"                            
+                            BorderWidth="0" 
+                            Command="{Binding NavigateCommand}" CommandParameter="EventsListPage"/>
+
+        <Button Grid.Row="3" x:Name="ResetAppSettingsButton"
+                            HeightRequest="60" FontSize="Large"
+                            Text="Reset App Settings" Margin="15, 5" CornerRadius="6"
+                            HorizontalOptions="FillAndExpand"                            
+                            BorderWidth="0" Clicked="ResetAppSettingsButton_Clicked" 
+                            />
     </Grid>
 </ContentPage>
