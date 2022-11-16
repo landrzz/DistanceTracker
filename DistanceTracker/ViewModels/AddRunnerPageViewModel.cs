@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,15 +11,16 @@ namespace DistanceTracker
 {
     public class AddRunnerPageViewModel : ViewModel
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateTime BirthDate { get; set; }
+        [Reactive] public string FirstName { get; set; }
+        [Reactive] public string LastName { get; set; }
+        [Reactive] public DateTime BirthDate { get; set; }
 
-        public string Age;
-        public string SelectedSex { get; set; }
-        public string BibNumber { get; set; }
+        [Reactive] public string Age { get; set; }
+        [Reactive] public string SelectedSex { get; set; }
+        [Reactive] public string BibNumber { get; set; }
+        [Reactive] public string TeamName { get; set; }
 
-        public bool ShowLoading { get; set; }
+        [Reactive] public bool ShowLoading { get; set; }
 
         public ICommand SaveRunnerCommand => new Command(SaveNewRunner);
         private INavigationService _navigationService { get; }
@@ -30,6 +32,8 @@ namespace DistanceTracker
             _navigationService = services.Navigation;
             _dialogService = services.Dialogs;
             NavigateCommand = new DelegateCommand<string>(OnNavigateCommandExecuted);
+
+            BirthDate = new DateTime(1990, 6, 15);
         }
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
@@ -61,6 +65,7 @@ namespace DistanceTracker
             {
                 if (ConnectivityService.IsConnected())
                 {
+                    ShowLoading = true;
                     var curEventName = Preferences.Default.Get("currenteventname", string.Empty);
 
                     if (string.IsNullOrWhiteSpace(curEventName))
@@ -73,11 +78,40 @@ namespace DistanceTracker
                     bool result = int.TryParse(BibNumber, out i);
                     if (!result)
                     {
-
                         ShowLoading = false;
                         IsBusy = false;
+                        await _dialogService.Snackbar("Bib Number is a required field!");
                         return;
                     }
+
+                    if (string.IsNullOrWhiteSpace(SelectedSex))
+                    {
+                        ShowLoading = false;
+                        IsBusy = false;
+                        await _dialogService.Snackbar("Sex is a required field!");
+                        return;
+                    }
+
+                    var rand = new Random();
+                    var randNum = rand.Next(100, 999);
+
+                    if (string.IsNullOrWhiteSpace(FirstName))
+                        FirstName = $"Racer{randNum}";
+
+                    if (string.IsNullOrWhiteSpace(LastName))
+                        LastName = $"Racer{randNum}";
+
+                    if (string.IsNullOrWhiteSpace(TeamName))
+                        LastName = $"SOLO";
+
+                    if (BirthDate.Year == 1900)
+                        BirthDate = new DateTime(1970, 1, 1);
+
+                    if (string.IsNullOrWhiteSpace(Age))
+                        Age = "0";
+
+                    //if (string.IsNullOrWhiteSpace(SelectedSex))
+                    //    SelectedSex = "Not Specified";
 
                     var newRunner = new Runner()
                     {
@@ -86,29 +120,27 @@ namespace DistanceTracker
                         BirthDate = BirthDate,
                         Sex = SelectedSex,
                         BibNumber = BibNumber,
-                        EventName = curEventName,                       
+                        EventName = curEventName, 
+                        TeamName = TeamName,
                     };
 
-                    var user = await DataService.PostRunnerAsync(newRunner);
-                    if (user == null)
-                    {                    
-                        
+                    var runner = await DataService.PostRunnerAsync(newRunner);
+                    if (runner == null)
+                    {                                           
                         await _dialogService.Alert("Create Runner Failed",
                             "An error occured while creating the runner record. Please try again.",
                             "OK");
                     }
                     else
                     {
-                        //show a success toast?
-
-                        //ShowLoading = false;
-                        //var navP = new NavigationParameters();
-                        //navP.Add(Keys.SuccessPopup_Message, AppStrings.AccountCreated);
-                        //await _navigationService.NavigateAsync("SuccessPopupPage", navP, false, true);
-                        //await Task.Delay(1300);
-                        //await _navigationService.ClearPopupStackAsync();
-
-
+                        await _dialogService.Snackbar("Runner Saved Successfully!");
+                        BibNumber = string.Empty;
+                        FirstName = string.Empty;
+                        LastName = string.Empty;
+                        SelectedSex = string.Empty;
+                        Age = string.Empty;
+                        BirthDate = new DateTime(1990, 6, 15);
+                        TeamName = string.Empty;
                     }
                 }
                 else

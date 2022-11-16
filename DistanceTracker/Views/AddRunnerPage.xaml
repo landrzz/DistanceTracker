@@ -3,51 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DistanceTracker.AddRunnerPage"
              Title="Add a Runner">
-    <StackLayout>
+    <RefreshView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                 RefreshColor="{StaticResource Primary}" IsRefreshing="{Binding ShowLoading}">
+    
+    <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
         <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
             <Label 
-            Text="First Name"
+            Text="Bib Number*"
             VerticalOptions="Start" 
             HorizontalOptions="Start"/>
 
-            <Entry Placeholder="John" Text="{Binding FirstName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
-        </Grid>
-
-
-        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
-            <Label 
-            Text="Last Name"
-            VerticalOptions="Start" 
-            HorizontalOptions="Start"/>
-
-            <Entry Placeholder="Doe" Text="{Binding LastName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
+            <Entry Grid.Row="1" Placeholder="1234" Text="{Binding BibNumber}" Keyboard="Numeric" HorizontalOptions="CenterAndExpand" />
         </Grid>
 
         <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
             <Label 
-            Text="Last Name"
-            VerticalOptions="Start" 
-            HorizontalOptions="Start"/>
+        Text="Sex*"
+        VerticalOptions="Start" 
+        HorizontalOptions="Start" />
 
-            <Entry Placeholder="1234" Text="{Binding BibNumber}" Keyboard="Numeric" HorizontalOptions="CenterAndExpand" />
-        </Grid>
-
-        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
-            <Label 
-            Text="Age"
-            VerticalOptions="Start" 
-            HorizontalOptions="Start" />
-
-            <DatePicker Date="{Binding BirthDate}" HorizontalOptions="CenterAndExpand" />
-        </Grid>
-
-        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
-            <Label 
-            Text="Sex"
-            VerticalOptions="Start" 
-            HorizontalOptions="Start" />
-
-            <Picker  Title="Sex" HorizontalOptions="CenterAndExpand" SelectedItem="{Binding SelectedSex}">
+            <Picker Grid.Row="1" Title="Sex" HorizontalOptions="CenterAndExpand" SelectedItem="{Binding SelectedSex}">
                 <Picker.ItemsSource>
                     <x:Array Type="{x:Type x:String}">
                         <x:String>Male</x:String>
@@ -57,22 +32,62 @@
             </Picker>
         </Grid>
 
+         <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
+            <Label 
+            Text="First Name"
+            VerticalOptions="Start" 
+            HorizontalOptions="Start"/>
+
+            <Entry Grid.Row="1" Placeholder="John" Text="{Binding FirstName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
+        </Grid>
+
+
+        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
+            <Label 
+            Text="Last Name"
+            VerticalOptions="Start" 
+            HorizontalOptions="Start"/>
+
+            <Entry Grid.Row="1" Placeholder="Doe" Text="{Binding LastName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
+        </Grid>
+
+        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
+            <Label 
+                    Text="Team Name"
+                    VerticalOptions="Start" 
+                    HorizontalOptions="Start"/>
+
+            <Entry Grid.Row="1" Placeholder="Cool Runners" Text="{Binding TeamName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
+        </Grid>
+
+        <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
+            <Label 
+            Text="Age"
+            VerticalOptions="Start" 
+            HorizontalOptions="Start" />
+
+            <DatePicker Grid.Row="1" x:Name="BirthDatePicker" Date="{Binding BirthDate}" HorizontalOptions="CenterAndExpand" DateSelected="DatePicker_DateSelected" />
+        </Grid>
+
+        
+
         <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
             <Label 
             Text="Age"
             VerticalOptions="Start" 
             HorizontalOptions="Start"/>
 
-            <Entry Placeholder="40" Text="{Binding Age}" Keyboard="Numeric" HorizontalOptions="CenterAndExpand" />
+            <Entry Grid.Row="1" x:Name="AgeEntry" Placeholder="40" Text="{Binding Age}" Keyboard="Numeric" HorizontalOptions="CenterAndExpand" />
         </Grid>
 
 
         <Button x:Name="SaveRunner"
                             HeightRequest="60" FontSize="Large"
-                            Text="Setup an Event" Margin="15, 5" CornerRadius="6"
+                            Text="Save Runner Details" Margin="15, 5" CornerRadius="6"
                             HorizontalOptions="FillAndExpand"                            
-                            BorderWidth="0" Clicked="SaveRunner_Clicked" 
-                            Command="{Binding NavigateCommand}" CommandParameter="SetupEventPage"/>
+                            BorderWidth="0" 
+                            Command="{Binding SaveRunnerCommand}"/>
 
     </StackLayout>
+    </RefreshView>
 </ContentPage>

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using DistanceTracker.ViewModels;
 using Prism.DryIoc;
 using ZXing.Net.Maui.Controls;
 
@@ -57,6 +58,8 @@ namespace DistanceTracker
             s.RegisterForNavigation<RecordDistancePage, RecordDistancePageViewModel>();
             s.RegisterForNavigation<SetupEventPage, SetupEventPageViewModel>();
             s.RegisterForNavigation<AddRunnerPage, AddRunnerPageViewModel>();
+            s.RegisterForNavigation<EventsListPage, EventsListPageViewModel>();
+            s.RegisterForNavigation<DashboardPage, DashboardPageViewModel>();
 
         }
     }

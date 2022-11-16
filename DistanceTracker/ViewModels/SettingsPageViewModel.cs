@@ -13,6 +13,7 @@ namespace DistanceTracker
 
         public DelegateCommand<string> NavigateCommand { get; }
 
+        
         public ICommand FinalizeSetDistancesCommand => new Command(FinalizeSetDistances);
 
         public SettingsPageViewModel(BaseServices services) : base(services)
@@ -27,8 +28,6 @@ namespace DistanceTracker
             _navigationService.NavigateAsync(uri)
                 .OnNavigationError(ex => Console.WriteLine(ex));
         }
-
-
         public async void FinalizeSetDistances()
         {
             await _dialogService.Snackbar("Distances Set Successfully!");

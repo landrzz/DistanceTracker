@@ -36,6 +36,7 @@
 		<MauiImage Include="Resources\Images\*" />
 		<MauiFont Include="Resources\Fonts\*" />
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+		<MauiXaml Remove="DistancePopup.xaml" />
 		<MauiAsset Include="appsettings.json" LogicalName="appsettings.json" />
 	</ItemGroup>
 
@@ -54,6 +55,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\DashboardPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EventsListPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\AddRunnerPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -75,5 +82,6 @@
 	<ItemGroup>
 	  <Folder Include="Extensions\" />
 	  <Folder Include="Infrastructure\" />
+	  <Folder Include="Popups\" />
 	</ItemGroup>
 </Project>

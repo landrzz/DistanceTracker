@@ -24,7 +24,7 @@
                             BorderWidth="0" 
                             Command="{Binding NavigateCommand}" CommandParameter="EventsListPage"/>
 
-        <Button Grid.Row="3" x:Name="ResetAppSettingsButton"
+        <Button Grid.Row="3" x:Name="ResetAppSettingsButton" BackgroundColor="DarkOrange"
                             HeightRequest="60" FontSize="Large"
                             Text="Reset App Settings" Margin="15, 5" CornerRadius="6"
                             HorizontalOptions="FillAndExpand"                            

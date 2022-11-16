@@ -15,5 +15,10 @@ namespace DistanceTracker
         public string Sex { get; set; }
         public string BibNumber { get; set; }
         public string EventName { get; set; }
+        public string TeamName { get; set; }
+
+        public string RunnerName => $"{FirstName} {LastName}".Trim();
+
+        public string Id { get; set; }
     }
 }

@@ -370,9 +370,15 @@
 
     <Style TargetType="NavigationPage">
         <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray950}}" />
-        <Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource White}}" />
-        <Setter Property="IconColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource White}}" />
+        <Setter Property="BarTextColor" Value="{AppThemeBinding Light=White, Dark={StaticResource White}}" />
+        <Setter Property="IconColor" Value="{AppThemeBinding Light=White, Dark={StaticResource White}}" />
     </Style>
+
+    <!--<Style TargetType="NavigationPage" x:Key="Nav">
+        --><!-- Impicit --><!--
+        <Setter Property="BarTextColor" Value="{AppThemeBinding Dark={StaticResource BabyPowderWhite}, Light={StaticResource YankeesBlueGray}}" />
+        <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Dark={StaticResource YankeesBlueGray}, Light={StaticResource PlatinumGray}}" />
+    </Style>-->
 
     <Style TargetType="TabbedPage">
         <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />

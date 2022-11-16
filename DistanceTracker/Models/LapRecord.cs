@@ -13,5 +13,6 @@ namespace DistanceTracker
         public string RunnerName { get; set; }
         public string RaceEventName { get; set; }
         public DateTime LapCompletedTime { get; set; } //= TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
+        public string Id { get; set; }
     }
 }

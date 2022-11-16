@@ -13,5 +13,6 @@ namespace DistanceTracker
         public DateTime EventDate { get; set; }
         public string EventYear { get; set; }
         public string EventPassCode { get; set; }
+        public string Id { get; set; }
     }
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms" xmlns:b1="http://prismlibrary.com"
+             x:Class="DistanceTracker.EventsListPage"
+             x:Name="eventsPage"
+             Title="EventsListPage">
+    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <ListView ItemsSource="{Binding EventList}" 
+                  RowHeight="100"
+                  IsRefreshing="{Binding IsRefreshing,Mode=TwoWay}"
+                  SelectedItem="{Binding SelectedEvent, Mode=TwoWay}">
+            <ListView.Behaviors>
+                <b1:EventToCommandBehavior EventName="ItemTapped"
+                                          EventArgsParameterPath="Item"
+                                          Command="{Binding BindingContext.RaceEventSelectedCommand, Source={x:Reference eventsPage}}" />
+            </ListView.Behaviors>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell Height="100">
+                        <Grid Padding="10" RowDefinitions="Auto, Auto" ColumnDefinitions="*">
+                            <Label Grid.Column="0" Grid.Row="0"
+                               Text="{Binding EventName}"
+                               FontAttributes="Bold" />
+
+                            <Label Grid.Row="1"
+                               Grid.Column="0"
+                               Text="{Binding EventType}"                               
+                               VerticalOptions="Center" HorizontalTextAlignment="End" HorizontalOptions="End" />
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</ContentPage>

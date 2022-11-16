@@ -28,10 +28,8 @@ namespace DistanceTracker
 
             int days = (today - dob.AddMonths((years * 12) + months)).Days;
 
-            return string.Format("{0} year{1}, {2} month{3} and {4} day{5}",
-                                 years, (years == 1) ? "" : "s",
-                                 months, (months == 1) ? "" : "s",
-                                 days, (days == 1) ? "" : "s");
+            return years.ToString();
+            //return $"{years} year{((years == 1) ? "" : "s")}, {months} month{((months == 1) ? "" : "s")} and {days} day{((days == 1) ? "" : "s")}";
         }
     }
 }

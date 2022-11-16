@@ -10,6 +10,7 @@ using RestSharp;
 using Newtonsoft.Json;
 using RestSharp.Serializers.NewtonsoftJson;
 using MonkeyCache.SQLite;
+using RestSharp.Authenticators;
 
 namespace DistanceTracker
 {
@@ -35,6 +36,7 @@ namespace DistanceTracker
                 NullValueHandling = NullValueHandling.Ignore,
             });
             client.ThrowOnAnyError = true;
+            
         }
 
         public static Task<IEnumerable<LapRecord>> GetLapRecords(bool forceRefresh = true, string raceEvent = "") =>
@@ -63,9 +65,9 @@ namespace DistanceTracker
 
                 //Determine if we should get results from cache
                 if (!ConnectivityService.IsConnected())
-                    json = Barrel.Current.Get<string>($"{user}-{keybase}");
-                else if (!forceRefresh && !Barrel.Current.IsExpired($"{user}-{keybase}"))
-                    json = Barrel.Current.Get<string>($"{user}-{keybase}");
+                    json = Barrel.Current.Get<string>($"{keybase}");
+                else if (!forceRefresh && !Barrel.Current.IsExpired($"{keybase}"))
+                    json = Barrel.Current.Get<string>($"{keybase}");
             }
             catch (Exception ex)
             {
@@ -80,17 +82,26 @@ namespace DistanceTracker
                     Debug.WriteLine($"RACE EVENT: {raceEvent}");
 
                     url = $"{url}?code={Endpoints.code}";
+
+      
                     if (!string.IsNullOrWhiteSpace(raceEvent))
-                        url = $"{url}&conference={raceEvent}";
+                        url = $"{url}&raceeventname={raceEvent}";
+
                     Debug.WriteLine($"URL -- {url}");
 
                     var request = new RestRequest(url, DataFormat.Json);
                     dataObject = await client.GetAsync<T>(request);
 
-                    AddToBarrel(key: $"{user}-{keybase}",
-                                data: JsonConvert.SerializeObject(dataObject),
-                                expireIn: TimeSpan.FromMinutes(mins),
-                                dataObject);
+                    try
+                    {
+                        //AddToBarrel(key: $"{keybase}",
+                        //        data: JsonConvert.SerializeObject(dataObject),
+                        //        expireIn: TimeSpan.FromMinutes(mins),
+                        //        dataObject);
+                    }
+                    catch (Exception exx)
+                    {
+                    }
 
                     dataRetrieved = $"Retrieved {dataObject.GetType()} from SERVER";
                 }
@@ -119,20 +130,45 @@ namespace DistanceTracker
             var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddRunner}?code={Endpoints.code}";
             Debug.WriteLine(url);
 
-            //another way of sending the request
-            //var restRequest = new RestRequest(url, Method.POST);
-            //request.AddHeader("Content-Type", "application/json");
-            //request.AddParameter("application/json", jsonObject, ParameterType.RequestBody);
-            //var response = await client.ExecuteAsync(restRequest);
+            var savedCode = Preferences.Get("currenteventcode", string.Empty);
+            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
 
             var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_runner, "application/json");
             var response = await client.PostAsync<Runner>(restRequest);
             if (response != null)
             {
-                retrieved_runner = response;
+                if (response.Id != null)
+                {
+                    retrieved_runner = response;
+                }                
             }
 
             return retrieved_runner;
+        }
+
+        public static async Task<LapRecord> PostLapRecordAsync(LapRecord _laprecord)
+        {
+            Debug.WriteLine("Creating a new Lap Record Item...");
+            LapRecord retrieved_laprecord = null;
+            var jsonObject = JsonConvert.SerializeObject(_laprecord);
+
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddLapRecord}?code={Endpoints.code}";
+            Debug.WriteLine(url);
+
+            var savedCode = Preferences.Get("currenteventcode", string.Empty);
+            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
+
+            var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_laprecord, "application/json");
+            var response = await client.PostAsync<LapRecord>(restRequest);
+            if (response != null)
+            {
+                if (response.Id != null)
+                {
+                    retrieved_laprecord = response;
+                }
+            }
+
+            return retrieved_laprecord;
         }
 
         public static async Task<RaceEvent> PostRaceEventAsync(RaceEvent _race)
@@ -144,17 +180,14 @@ namespace DistanceTracker
             var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddRaceEvent}?code={Endpoints.code}";
             Debug.WriteLine(url);
 
-            //another way of sending the request
-            //var restRequest = new RestRequest(url, Method.POST);
-            //request.AddHeader("Content-Type", "application/json");
-            //request.AddParameter("application/json", jsonObject, ParameterType.RequestBody);
-            //var response = await client.ExecuteAsync(restRequest);
-
             var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_race, "application/json");
             var response = await client.PostAsync<RaceEvent>(restRequest);
             if (response != null)
             {
-                retrieved_race = response;
+                if (response.Id != null)
+                {
+                    retrieved_race = response;
+                }
             }
 
             return retrieved_race;

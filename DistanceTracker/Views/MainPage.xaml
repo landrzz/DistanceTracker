@@ -25,8 +25,15 @@
                                 BorderWidth="0" Clicked="AddRunnerButton_Clicked" 
                                 Command="{Binding NavigateCommand}" CommandParameter="AddRunnerPage"/>
 
+            <Button Grid.Row="2" x:Name="DashboardButton"
+                                HeightRequest="60" FontSize="Large"
+                                Text="Stats Dashboard" Margin="15, 5" CornerRadius="6"
+                                HorizontalOptions="FillAndExpand"                            
+                                BorderWidth="0" 
+                                Command="{Binding NavigateCommand}" CommandParameter="DashboardPage"/>
 
-            <Button Grid.Row="2" x:Name="SettingsButton"
+
+            <Button Grid.Row="3" x:Name="SettingsButton"
                                 HeightRequest="60" FontSize="Large"
                                 Text="Settings" Margin="15, 5" CornerRadius="6"
                                 HorizontalOptions="FillAndExpand"                            

@@ -109,6 +109,10 @@ namespace DistanceTracker
                         if (result)
                         {
                             Preferences.Set("currenteventname", race.EventName);
+                            Preferences.Set("currenteventcode", race.EventPassCode);
+
+                            await _dialogService.Snackbar($"{race.EventName} set as Default!");
+
                             await _navigationService.GoBackAsync();
                         }
                     }
