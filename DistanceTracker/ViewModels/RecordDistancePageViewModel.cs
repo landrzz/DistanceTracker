@@ -28,6 +28,9 @@ namespace DistanceTracker
 
         [Reactive] public Runner SelectedRunner { get; set; }
 
+        public ICommand ShowLapsEditPageCommand => new Command(ShowLapsEditPage);
+        
+
         public RecordDistancePageViewModel(Shiny.BaseServices services) : base(services)
         {
             SelectionChangedCommand = new DelegateCommand<Runner>(RunnerSelected);
@@ -215,6 +218,18 @@ namespace DistanceTracker
                 return true;
         }
 
+        public async void ShowLapsEditPage()
+        {
+            try
+            {
+                await _navigationService.NavigateAsync("EditLapsPage");
+            }
+            catch (Exception ex)
+            {
+
+                
+            }
+        }
 
         [Reactive] public string Property { get; set; }
     }

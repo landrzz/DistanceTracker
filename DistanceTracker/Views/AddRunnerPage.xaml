@@ -11,7 +11,8 @@
             <Label 
             Text="Bib Number*"
             VerticalOptions="Start" 
-            HorizontalOptions="Start"/>
+            HorizontalOptions="Start"
+            FontAttributes="Bold"/>
 
             <Entry Grid.Row="1" Placeholder="1234" Text="{Binding BibNumber}" Keyboard="Numeric" HorizontalOptions="CenterAndExpand" />
         </Grid>
@@ -20,9 +21,10 @@
             <Label 
         Text="Sex*"
         VerticalOptions="Start" 
-        HorizontalOptions="Start" />
+        HorizontalOptions="Start"
+                FontAttributes="Bold"/>
 
-            <Picker Grid.Row="1" Title="Sex" HorizontalOptions="CenterAndExpand" SelectedItem="{Binding SelectedSex}">
+            <Picker Grid.Row="1" Title="Sex" HorizontalOptions="CenterAndExpand" SelectedItem="{Binding SelectedSex}" FontSize="18">
                 <Picker.ItemsSource>
                     <x:Array Type="{x:Type x:String}">
                         <x:String>Male</x:String>
@@ -36,9 +38,10 @@
             <Label 
             Text="First Name"
             VerticalOptions="Start" 
-            HorizontalOptions="Start"/>
+            HorizontalOptions="Start"
+                FontAttributes="Bold"/>
 
-            <Entry Grid.Row="1" Placeholder="John" Text="{Binding FirstName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
+                <Entry Grid.Row="1" Placeholder="John" Text="{Binding FirstName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" />
         </Grid>
 
 
@@ -46,27 +49,30 @@
             <Label 
             Text="Last Name"
             VerticalOptions="Start" 
-            HorizontalOptions="Start"/>
+            HorizontalOptions="Start"
+                FontAttributes="Bold"/>
 
-            <Entry Grid.Row="1" Placeholder="Doe" Text="{Binding LastName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
+                <Entry Grid.Row="1" Placeholder="Doe" Text="{Binding LastName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" />
         </Grid>
 
         <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
             <Label 
                     Text="Team Name"
                     VerticalOptions="Start" 
-                    HorizontalOptions="Start"/>
+                    HorizontalOptions="Start"
+                FontAttributes="Bold"/>
 
-            <Entry Grid.Row="1" Placeholder="Cool Runners" Text="{Binding TeamName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" />
+            <Entry Grid.Row="1" Placeholder="Cool Runners" Text="{Binding TeamName}" Keyboard="Text" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" />
         </Grid>
 
         <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
             <Label 
-            Text="Age"
+            Text="Date of Birth"
             VerticalOptions="Start" 
-            HorizontalOptions="Start" />
+            HorizontalOptions="Start"
+                FontAttributes="Bold"/>
 
-            <DatePicker Grid.Row="1" x:Name="BirthDatePicker" Date="{Binding BirthDate}" HorizontalOptions="CenterAndExpand" DateSelected="DatePicker_DateSelected" />
+            <DatePicker Grid.Row="1" x:Name="BirthDatePicker" Date="{Binding BirthDate}" HorizontalOptions="CenterAndExpand" DateSelected="DatePicker_DateSelected" FontSize="18" />
         </Grid>
 
         
@@ -75,7 +81,8 @@
             <Label 
             Text="Age"
             VerticalOptions="Start" 
-            HorizontalOptions="Start"/>
+            HorizontalOptions="Start"
+                FontAttributes="Bold"/>
 
             <Entry Grid.Row="1" x:Name="AgeEntry" Placeholder="40" Text="{Binding Age}" Keyboard="Numeric" HorizontalOptions="CenterAndExpand" />
         </Grid>

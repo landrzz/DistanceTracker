@@ -4,24 +4,28 @@
              x:Class="DistanceTracker.RecordDistancePage" xmlns:b1="http://prismlibrary.com"
              xmlns:vm="clr-namespace:DistanceTracker"
              Title="Record Distances" x:Name="recordDistancePage">
-    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-        <!--
-        
-        SelectionChangedCommand="{Binding SelectionChangedCommand}" 
-                        SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}" 
-        
-                                SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference RunnersCollectionView}}"
-                        SelectionChangedCommand="{Binding SelectionChangedCommand}"
-        
-        <CollectionView.Behaviors>
-                <b1:EventToCommandBehavior EventName="SelectionChanged"
-                                          EventArgsParameterPath="SelectedItem"
-                                          Command="{Binding BindingContext.SelectionChangedCommand, Source={x:Reference recordDistancePage}}" />
-        
-        
-        SelectionChanged="RunnersCollectionView_SelectionChanged"
-            </CollectionView.Behaviors>-->
 
+    <NavigationPage.TitleView>
+        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" Orientation="Horizontal" HeightRequest="44">
+            <Label Text="Classes" Style="{StaticResource NavBarTitleLabel}"  />
+
+            <!--<Label Text="{x:Static fontawesome:FAIcons.Star}" Style="{StaticResource NavBarIconLabel}" HorizontalOptions="EndAndExpand"
+                   FontFamily="{Binding StarIconFontFamily}" >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding OnFilterClassFavoritesTappedCommand}" />
+                </Label.GestureRecognizers>
+            </Label>-->
+
+            <Label Text="Edit" Style="{StaticResource NavBarIconLabel}" HorizontalOptions="EndAndExpand" >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ShowLapsEditPageCommand}" />
+                </Label.GestureRecognizers>
+            </Label>
+        </StackLayout>
+    </NavigationPage.TitleView>
+    
+    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+       
         <RefreshView IsRefreshing="{Binding IsRefreshing}" RefreshColor="{StaticResource Primary}">
 
             <CollectionView x:Name="RunnersCollectionView"
@@ -39,21 +43,27 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame HasShadow="False" CornerRadius="10" Margin="2" BackgroundColor="LightGray"
+                        <Frame HasShadow="False" CornerRadius="10" Margin="2" Padding="2" BackgroundColor="{Binding Sex, Converter={StaticResource GenderToColorConverter}}"
                            HeightRequest="100">
-                        <Grid Padding="8" RowDefinitions="Auto, Auto" ColumnDefinitions="*" HorizontalOptions="Center" 
+                        <Grid Padding="8" RowDefinitions="*, Auto, Auto" ColumnDefinitions="*" HorizontalOptions="Center" 
                               VerticalOptions="Center">
-                            <Label Grid.Column="0" Grid.Row="0"
+                            <Label Grid.Column="0" Grid.Row="0" FontSize="22"
                                Text="{Binding BibNumber}" HorizontalOptions="CenterAndExpand"
-                               HorizontalTextAlignment="Center" FontSize="20"
-                               FontAttributes="Bold" />
+                               HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand"
+                               FontAttributes="Bold" Margin="0,0,0,10" />
 
                             <Label Grid.Row="1"
                                Grid.Column="0"
                                Text="{Binding RunnerName}"  
-                               FontSize="11"
-                               VerticalOptions="Center" HorizontalTextAlignment="End" HorizontalOptions="End" />
-                        </Grid>
+                               FontSize="11" HorizontalOptions="Center"
+                                   VerticalOptions="End"
+                                 />
+                                <Label Grid.Row="2"
+                               Grid.Column="0"
+                               Text="{Binding TeamName}"  
+                               FontSize="11" HorizontalOptions="Center"
+                                  />
+                            </Grid>
 
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:RecordDistancePageViewModel}}, Path=SelectionChangedCommand}" CommandParameter="{Binding .}" />

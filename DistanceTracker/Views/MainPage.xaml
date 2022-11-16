@@ -10,30 +10,30 @@
 
         <Label Text="{Binding CurrentDistances}" HorizontalTextAlignment="Center"  HorizontalOptions="FillAndExpand" />
 
-        <Grid RowDefinitions="*, *, *, *" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <Grid RowDefinitions="*, *, *, *, *" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             <Button Grid.Row="0" x:Name="RecordDistances"
-                                HeightRequest="60" FontSize="Large"
+                                HeightRequest="100" FontSize="Large"
                                 Text="Record Distances" Margin="15, 5" CornerRadius="6"
                                 HorizontalOptions="FillAndExpand"                            
                                 BorderWidth="0" Clicked="RecordDistances_Clicked" 
                                 Command="{Binding NavigateCommand}" CommandParameter="RecordDistancePage"/>
-        
-            <Button Grid.Row="1" x:Name="AddRunnerButton"
+
+            <Button Grid.Row="1" x:Name="DashboardButton"
+                                HeightRequest="100" FontSize="Large"
+                                Text="Stats Dashboard" Margin="15, 5" CornerRadius="6"
+                                HorizontalOptions="FillAndExpand"                            
+                                BorderWidth="0" 
+                                Command="{Binding NavigateCommand}" CommandParameter="DashboardPage"/>
+
+            <Button Grid.Row="3" x:Name="AddRunnerButton"
                                 HeightRequest="60" FontSize="Large"
                                 Text="Add a Runner" Margin="15, 5" CornerRadius="6"
                                 HorizontalOptions="FillAndExpand"                            
                                 BorderWidth="0" Clicked="AddRunnerButton_Clicked" 
                                 Command="{Binding NavigateCommand}" CommandParameter="AddRunnerPage"/>
 
-            <Button Grid.Row="2" x:Name="DashboardButton"
-                                HeightRequest="60" FontSize="Large"
-                                Text="Stats Dashboard" Margin="15, 5" CornerRadius="6"
-                                HorizontalOptions="FillAndExpand"                            
-                                BorderWidth="0" 
-                                Command="{Binding NavigateCommand}" CommandParameter="DashboardPage"/>
-
-
-            <Button Grid.Row="3" x:Name="SettingsButton"
+            
+            <Button Grid.Row="4" x:Name="SettingsButton" BackgroundColor="MediumPurple"
                                 HeightRequest="60" FontSize="Large"
                                 Text="Settings" Margin="15, 5" CornerRadius="6"
                                 HorizontalOptions="FillAndExpand"                            

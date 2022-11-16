@@ -66,7 +66,6 @@
                 return;
 
             IsBusy = true;
-
             try
             {
                 var res = await _dialogService.Confirm($"Would you like to set {raceevent.EventName} as your default event?", "Set as Default?", "Yes", "No");

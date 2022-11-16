@@ -1,4 +1,5 @@
-﻿using Prism.Events;
+﻿using DynamicData.Aggregation;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +23,20 @@ namespace DistanceTracker
         [Reactive] public string LeadingMaleName { get; set; }
         [Reactive] public string LeadingMaleDistance { get; set; }
         [Reactive] public string OverallDistanceTotal { get; set; }
-        [Reactive] public string LeadingTeam { get; set; }
-        [Reactive] public string LeadingTeamDistance { get; set; }
+
+        //Teams
+        [Reactive] public string LeadingTeamNameMale { get; set; }
+        [Reactive] public string LeadingTeamDistanceMale { get; set; }
+        [Reactive] public string LeadingTeamNameFemale { get; set; }
+        [Reactive] public string LeadingTeamDistanceFemale { get; set; }
+        [Reactive] public string LeadingTeamNameCoed { get; set; }
+        [Reactive] public string LeadingTeamDistanceCoed { get; set; }
 
         public List<Runner> RunnersList { get; set; } = new List<Runner>();
         public List<LapRecord> LapRecordsList { get; set; } = new List<LapRecord>();
 
-        public ObservableCollection<Racer> RacersList { get; set; } = new ObservableCollection<Racer>();
+        [Reactive] public ObservableCollection<Racer> RacersList { get; set; } = new ObservableCollection<Racer>();
+        [Reactive] public ObservableCollection<RaceTeam> RaceTeamsList { get; set; } = new ObservableCollection<RaceTeam>();
 
         public DashboardPageViewModel(BaseServices services) : base(services)
         {           
@@ -133,6 +141,7 @@ namespace DistanceTracker
 
                     RacersList.Add(racer);
                 }
+                RacersList = new ObservableCollection<Racer>(RacersList.OrderByDescending(x => x.CurrentMileageTotal));
 
                 if (RacersList.Any())
                 {
@@ -142,15 +151,70 @@ namespace DistanceTracker
                         .Select(grp => grp.ToList())
                         .ToList();
 
-                    var topDistanceRunnerMale = RacersList.Where(x => x.Sex == "Male").MaxBy(x => x.CurrentMileageTotal);
 
+                    //var teamsDetails = groupedRunnerTeams.Select(x => new
+                    //{
+                    //    list = x,
+                    //    total = x.Sum(m => m.CurrentMileageTotal),
+                    //    teamName = x.Select(n => n.TeamName).FirstOrDefault()
+                    //}).OrderByDescending(x => x.total);
+                    //var leadingTeamDetails = teamsDetails.FirstOrDefault();
+
+                    var _raceTeamsList = new List<RaceTeam>();
+                    foreach (var grp in groupedRunnerTeams)
+                    {
+                        var grpItm = grp.FirstOrDefault();
+                        var raceTeam = new RaceTeam()
+                        {
+                            TeamName = grpItm.TeamName,
+                            RaceEventName = grpItm.RaceEventName,
+                        };
+
+                        raceTeam.CurrrentTeamMileageDistance = grp.Sum(x => x.CurrentMileageTotal);
+                        raceTeam.BibNumbers = string.Join("|", grp.Select(x => x.BibNumber));
+                        raceTeam.TeamMemberNames = string.Join("|", grp.Select(x => x.RacerName));
+
+                        if (grp.All(s => s.Sex == "Male"))
+                        {
+                            raceTeam.TeamType = "Male";
+                        }
+                        else if (grp.All(s => s.Sex == "Female"))
+                        {
+                            raceTeam.TeamType = "Female";
+                        }
+                        else
+                        {
+                            raceTeam.TeamType = "Coed";
+                        }
+
+                        _raceTeamsList.Add(raceTeam);
+                    }
+                    RaceTeamsList = new ObservableCollection<RaceTeam>(_raceTeamsList.OrderByDescending(x => x.CurrrentTeamMileageDistance));
+
+                    var raceTeamsOrderedMale = _raceTeamsList.Where(s => s.TeamType == "Male").OrderByDescending(x => x.CurrrentTeamMileageDistance).ToList();
+                    var raceTeamsOrderedFemale = _raceTeamsList.Where(s => s.TeamType == "Female").OrderByDescending(x => x.CurrrentTeamMileageDistance).ToList();
+                    var raceTeamsOrderedCoed = _raceTeamsList.Where(s => s.TeamType == "Coed").OrderByDescending(x => x.CurrrentTeamMileageDistance).ToList();
+
+                    var leadingTeamM = raceTeamsOrderedMale.FirstOrDefault();
+                    var leadingTeamF = raceTeamsOrderedFemale.FirstOrDefault();
+                    var leadingTeamCoed = raceTeamsOrderedCoed.FirstOrDefault();
+
+
+
+                    var topDistanceRunnerMale = RacersList.Where(x => x.Sex == "Male").MaxBy(x => x.CurrentMileageTotal);
                     var topDistanceRunnerFemale = RacersList.Where(x => x.Sex == "Female").MaxBy(x => x.CurrentMileageTotal);
 
                     LeadingFemaleDistance = topDistanceRunnerFemale?.CurrentMileageTotal.ToString() ?? "0";
                     LeadingMaleDistance = topDistanceRunnerMale?.CurrentMileageTotal.ToString() ?? "0";
-
                     LeadingMaleName = topDistanceRunnerMale?.RacerName ?? "John Doe";
                     LeadingFemaleName = topDistanceRunnerFemale?.RacerName ?? "Jane Doe";
+                    LeadingTeamNameMale = leadingTeamM?.TeamName ?? "Team";
+                    LeadingTeamNameFemale = leadingTeamF?.TeamName ?? "Team";
+                    LeadingTeamNameCoed = leadingTeamCoed?.TeamName ?? "Team";
+                    LeadingTeamDistanceMale = leadingTeamM?.CurrrentTeamMileageDistance.ToString() ?? "0";
+                    LeadingTeamDistanceFemale = leadingTeamF?.CurrrentTeamMileageDistance.ToString() ?? "0";
+                    LeadingTeamDistanceCoed = leadingTeamCoed?.CurrrentTeamMileageDistance.ToString() ?? "0";
+
                 }
 
                 OverallDistanceTotal = LapRecordsList.Sum(x => double.Parse(x.LapDistance)).ToString("N2");
@@ -202,6 +266,16 @@ namespace DistanceTracker
             double total = CompletedLaps.Sum(item => double.Parse(item.LapDistance));
             return total;
         }
+    }
+
+    public class RaceTeam
+    {
+        public string BibNumbers { get; set; }
+        public string TeamMemberNames { get; set; }
+        public string TeamName { get; set; }
+        public string RaceEventName { get; set;}
+        public double CurrrentTeamMileageDistance { get; set; }
+        public string TeamType { get; set; }
     }
 
 }

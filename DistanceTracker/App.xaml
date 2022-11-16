@@ -2,9 +2,35 @@
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:DistanceTracker"
+             xmlns:converters="clr-namespace:DistanceTracker"
              x:Class="DistanceTracker.App">
     <Application.Resources>
+
+        
+
         <ResourceDictionary>
+
+            <converters:GenderToColorConverter x:Key="GenderToColorConverter" />
+
+            <Style x:Key="NavBarTitleLabel" TargetType="Label" >
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="Margin" Value="0, 0, 5, 0" />
+                <Setter Property="FontAttributes" Value="None" />
+                <Setter Property="FontSize" Value="Large" />
+            </Style>
+
+            <Style x:Key="NavBarIconLabel" TargetType="Label" >
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="Margin" Value="0, 0, 5, 0" />
+                <Setter Property="FontFamily" Value="FARegular" />
+                <Setter Property="FontSize" Value="Large" />
+            </Style>
+
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />

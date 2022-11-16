@@ -9,33 +9,166 @@
                  
     
             <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                <Grid RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="*, *, *" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                    <Frame Grid.Row="0" Grid.Column="0" HeightRequest="120" HorizontalOptions="FillAndExpand" HasShadow="False" CornerRadius="8" Padding="3" Margin="3"
-                           BackgroundColor="{StaticResource Primary}">
+            <Grid RowDefinitions="*, *" ColumnDefinitions="*" RowSpacing="0"
+                  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+                <ScrollView Grid.Row="0">
+                <Grid   RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="*, *, *, *, *, *" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                    <Frame Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" HeightRequest="110" HorizontalOptions="FillAndExpand" HasShadow="False" CornerRadius="8" Padding="3" Margin="3"
+                               BackgroundColor="{StaticResource Primary}">
+                        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                            <Label Text="Overall Group Distance" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" TextColor="White"/>
+                            <Label Text="{Binding OverallDistanceTotal}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="40" FontAttributes="Bold" TextColor="White" Margin="0,0,0,14"/>
+                        </StackLayout>
+                    </Frame>
+
+
+                    <Frame Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HeightRequest="110" HorizontalOptions="FillAndExpand" HasShadow="False" CornerRadius="8" Padding="3" Margin="3"
+                           BackgroundColor="MediumPurple">
                         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  >
                             <Label Text="Distance Leader (M)" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="18" TextColor="White"/>
-                        <Label Text="{Binding LeadingMaleDistance}" VerticalOptions="Center" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="24" FontAttributes="Bold" TextColor="White"/>
+                        <Label Text="{Binding LeadingMaleDistance}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="28" FontAttributes="Bold" TextColor="White"/>
                         <Label Text="{Binding LeadingMaleName}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="9" TextColor="White"/>
                         </StackLayout>
                     </Frame>
 
-                    <Frame Grid.Row="0" Grid.Column="1" HeightRequest="120" HorizontalOptions="FillAndExpand" HasShadow="False" CornerRadius="8" Padding="3" Margin="3"
-                           BackgroundColor="{StaticResource Primary}">
+                        <Frame Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="3"  HeightRequest="110" HorizontalOptions="FillAndExpand" HasShadow="False" CornerRadius="8" Padding="3" Margin="3"
+                           BackgroundColor="MediumPurple">
                         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                         <Label Text="Distance Leader (F)" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="18" TextColor="White"/>
-                        <Label Text="{Binding LeadingFemaleDistance}" VerticalOptions="Center" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="24" FontAttributes="Bold" TextColor="White"/>
+                        <Label Text="{Binding LeadingFemaleDistance}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="28" FontAttributes="Bold" TextColor="White"/>
                         <Label Text="{Binding LeadingFemaleName}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="9" TextColor="White"/>
                         </StackLayout>
                     </Frame>
 
-                    <Frame Grid.Row="0" Grid.Column="2" HeightRequest="120" HorizontalOptions="FillAndExpand" HasShadow="False" CornerRadius="8" Padding="3" Margin="3"
-                           BackgroundColor="{StaticResource Primary}">
+                        <Frame Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HeightRequest="110" HorizontalOptions="FillAndExpand" HasShadow="False" CornerRadius="8" Padding="3" Margin="3"
+                           BackgroundColor="MediumPurple">
                         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                        <Label Text="Overall Distance" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" TextColor="White"/>
-                        <Label Text="{Binding OverallDistanceTotal}" VerticalOptions="Center" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="24" FontAttributes="Bold" TextColor="White"/>
+                        <Label Text="Top Team (M)" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" TextColor="White"/>
+                        <Label Text="{Binding LeadingTeamDistanceMale}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="28" FontAttributes="Bold" TextColor="White"/>
+                        <Label Text="{Binding LeadingTeamNameMale}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="9" TextColor="White"/>
+
                     </StackLayout>
                     </Frame>
+
+                        <Frame Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" HeightRequest="110" HorizontalOptions="FillAndExpand" HasShadow="False" CornerRadius="8" Padding="3" Margin="3"
+                           BackgroundColor="MediumPurple">
+                    <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                        <Label Text="Top Team (F)" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" TextColor="White"/>
+                        <Label Text="{Binding LeadingTeamDistanceFemale}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="28" FontAttributes="Bold" TextColor="White"/>
+                        <Label Text="{Binding LeadingTeamNameFemale}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="9" TextColor="White"/>
+                    </StackLayout>
+                </Frame>
+
+
+                        <Frame Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" HeightRequest="110" HorizontalOptions="FillAndExpand" HasShadow="False" CornerRadius="8" Padding="3" Margin="3"
+                           BackgroundColor="MediumPurple">
+                    <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                        <Label Text="Top Team (C)" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" TextColor="White"/>
+                        <Label Text="{Binding LeadingTeamDistanceCoed}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="28" FontAttributes="Bold" TextColor="White"/>
+                        <Label Text="{Binding LeadingTeamNameCoed}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="9" TextColor="White"/>
+                    </StackLayout>
+                </Frame>
+            </Grid>
+                </ScrollView>
+
+                <Grid Grid.Row="1" RowDefinitions="*, *" ColumnDefinitions="*" RowSpacing="10" Padding="3">
+                    <ListView Grid.Row="0" 
+                              CachingStrategy="RecycleElementAndDataTemplate"
+                              RowHeight="54"
+                              SeparatorVisibility="None"
+                              ItemsSource="{Binding RacersList}"
+                              >
+                        <ListView.Header>
+                            <StackLayout Padding="0" Margin="0">
+                                <Label Text="Individuals" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="10" />
+                            </StackLayout>
+                        </ListView.Header>
+                        
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell >
+                                    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="0" Margin="0">
+                                        
+                                    
+                                    <Frame HeightRequest="50" HasShadow="False" Margin="0" Padding="7, 3, 7, 3" CornerRadius="7" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                                           BackgroundColor="{Binding Sex, Converter={StaticResource GenderToColorConverter}}">
+                                        <Grid RowDefinitions="*, *" ColumnDefinitions="*" RowSpacing="0" 
+                                              HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                                            <Label Grid.Column="0" Grid.Row="0"
+                               Text="{Binding RacerName}" FontSize="14"
+                               FontAttributes="Bold" VerticalOptions="Center"  />
+
+                                            <Label Grid.Row="1"
+                               FontSize="12" FontAttributes="Bold"
+                               Text="{Binding BibNumber}"                               
+                               />
+
+                                            <Label Grid.Row="1"
+                               FontSize="16"
+                               Text="{Binding CurrentMileageTotal}"                               
+                               HorizontalTextAlignment="End" HorizontalOptions="End" />
+                                        </Grid>
+                                    </Frame>
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+
+
+                  <!-- =================================================== -->
+                    <ListView Grid.Row="1" 
+                              CachingStrategy="RecycleElementAndDataTemplate"
+                              RowHeight="54"
+                              SeparatorVisibility="None"
+                              ItemsSource="{Binding RaceTeamsList}"
+                              >
+
+                        <ListView.Header>
+                            <StackLayout Padding="0" Margin="0">
+                             <Label Text="Teams" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="10" />
+                            </StackLayout>
+                        </ListView.Header>
+                        
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell >
+                                    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="0" Margin="0">
+
+
+                                        <Frame HeightRequest="50" HasShadow="False" Margin="0" Padding="7, 3, 7, 3" CornerRadius="7" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                                           BackgroundColor="{Binding TeamType, Converter={StaticResource GenderToColorConverter}}">
+                                            <Grid RowDefinitions="*, *" ColumnDefinitions="*" RowSpacing="0" 
+                                              HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                                                <Label Grid.Column="0" Grid.Row="0"
+                               Text="{Binding TeamName}" FontSize="14"
+                               FontAttributes="Bold" VerticalOptions="Center"  />
+
+                                                <Label Grid.Row="1"
+                               FontSize="12" FontAttributes="Bold"
+                               Text="{Binding BibNumbers}"                               
+                               />
+
+                                                <Label Grid.Row="1"
+                               FontSize="16"
+                               Text="{Binding CurrrentTeamMileageDistance}"                               
+                               HorizontalTextAlignment="End" HorizontalOptions="End" />
+                                            </Grid>
+                                        </Frame>
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
                 </Grid>
-            </StackLayout>
+
+
+                
+
+            </Grid>
+        </StackLayout>
     </RefreshView>
 </ContentPage>

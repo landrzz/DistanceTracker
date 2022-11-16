@@ -193,6 +193,31 @@ namespace DistanceTracker
             return retrieved_race;
         }
 
+        public static async Task<LapRecord> DeleteLapRecord(LapRecord _lap)
+        {
+            Debug.WriteLine("Deleting a lap record item...");
+            LapRecord retrieved_result = null;
+            var jsonObject = JsonConvert.SerializeObject(_lap);
+
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.DeleteLap}?code={Endpoints.code}";
+            Debug.WriteLine(url);
+
+            var savedCode = Preferences.Get("currenteventcode", string.Empty);
+            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
+
+            var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_lap, "application/json");
+            var response = await client.PostAsync<LapRecord>(restRequest);
+            if (response != null)
+            {
+                if (response.Id != null)
+                {
+                    retrieved_result = response;
+                }
+            }
+
+            return retrieved_result;
+        }
+
         public static void AddToBarrel(string key, string data, TimeSpan expireIn, object dataObject)
         {
             //if User type, and user type has square brackets (array)... remove them
@@ -221,6 +246,7 @@ namespace DistanceTracker
     
         public static string AddLapRecord = "Post-LapRecord";
         public static string LapRecords = "Get-LapRecords";
+        public static string DeleteLap = "DELETE-LapRecord";
 
         public static string AddRaceEvent = "Post-RaceEvent";
         public static string RaceEvents = "Get-RaceEvents";
