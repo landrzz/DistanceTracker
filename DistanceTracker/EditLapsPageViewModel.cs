@@ -13,7 +13,7 @@ namespace DistanceTracker
         private IDialogs _dialogService { get; }
 
         public DelegateCommand<string> NavigateCommand { get; }
-
+        public string EventName { get; set; }
         [Reactive] public bool IsRefreshing { get; set; }
         [Reactive] public LapRecord SelectedLap { get; set; }
         public List<LapRecord> LapRecordsList { get; set; } = new List<LapRecord>();
@@ -36,7 +36,7 @@ namespace DistanceTracker
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
-            var EventName = Preferences.Get("currenteventname", string.Empty);
+            EventName = Preferences.Get("currenteventname", string.Empty);
 
             if (parameters.GetNavigationMode() != Prism.Navigation.NavigationMode.Back)
             {
@@ -60,7 +60,7 @@ namespace DistanceTracker
                 if (laprecordList != null)
                 {
                     LapRecordsList = laprecordList;
-                    LapRecords = new ObservableCollection<LapRecord>(LapRecordsList);
+                    LapRecords = new ObservableCollection<LapRecord>(LapRecordsList.OrderByDescending(x => x.LapCompletedTime));
                     TotalNumberOfLaps = $"Laps: {LapRecordsList.Count}";
                 }
             }
@@ -113,6 +113,12 @@ namespace DistanceTracker
             try
             {
                 var deleteResult = await DataService.DeleteLapRecord(lap);
+                if (deleteResult != null)
+                {
+
+                }
+
+                await GetLapRecords(EventName, forceRefresh: true);
             }
             catch (Exception)
             {

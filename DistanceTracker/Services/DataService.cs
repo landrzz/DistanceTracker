@@ -193,26 +193,23 @@ namespace DistanceTracker
             return retrieved_race;
         }
 
-        public static async Task<LapRecord> DeleteLapRecord(LapRecord _lap)
+        public static async Task<Object> DeleteLapRecord(LapRecord _lap)
         {
             Debug.WriteLine("Deleting a lap record item...");
-            LapRecord retrieved_result = null;
+            Object retrieved_result = null;
             var jsonObject = JsonConvert.SerializeObject(_lap);
 
-            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.DeleteLap}?code={Endpoints.code}";
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.DeleteLap}/{_lap.Id}?code={Endpoints.code}";
             Debug.WriteLine(url);
 
             var savedCode = Preferences.Get("currenteventcode", string.Empty);
             client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
 
             var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_lap, "application/json");
-            var response = await client.PostAsync<LapRecord>(restRequest);
+            var response = await client.DeleteAsync<Object>(restRequest);  
             if (response != null)
             {
-                if (response.Id != null)
-                {
-                    retrieved_result = response;
-                }
+                retrieved_result = response;
             }
 
             return retrieved_result;
@@ -246,7 +243,7 @@ namespace DistanceTracker
     
         public static string AddLapRecord = "Post-LapRecord";
         public static string LapRecords = "Get-LapRecords";
-        public static string DeleteLap = "DELETE-LapRecord";
+        public static string DeleteLap = "Delete-LapRecord";
 
         public static string AddRaceEvent = "Post-RaceEvent";
         public static string RaceEvents = "Get-RaceEvents";

@@ -78,6 +78,7 @@
                               RowHeight="54"
                               SeparatorVisibility="None"
                               ItemsSource="{Binding RacersList}"
+                              IsRefreshing="{Binding IsRefreshing}"
                               >
                         <ListView.Header>
                             <StackLayout Padding="0" Margin="0">
@@ -124,6 +125,7 @@
                               RowHeight="54"
                               SeparatorVisibility="None"
                               ItemsSource="{Binding RaceTeamsList}"
+                              IsRefreshing="{Binding IsRefreshing}"
                               >
 
                         <ListView.Header>

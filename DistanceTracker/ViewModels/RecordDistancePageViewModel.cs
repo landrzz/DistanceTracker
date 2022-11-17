@@ -27,6 +27,7 @@ namespace DistanceTracker
         public DelegateCommand<Runner> SelectionChangedCommand { get; }
 
         [Reactive] public Runner SelectedRunner { get; set; }
+        [Reactive] public string ItemCount { get; set; }
 
         public ICommand ShowLapsEditPageCommand => new Command(ShowLapsEditPage);
         
@@ -100,7 +101,9 @@ namespace DistanceTracker
                 runnersList = runnersListResult.ToList();
                 if (runnersList != null)
                 {
-                    RunnersList = new ObservableCollection<Runner>(runnersList.OrderBy(x => int.Parse(x.BibNumber)));
+                    
+                    RunnersList = new ObservableCollection<Runner>(runnersList.OrderBy(x => double.Parse(x.BibNumber)));
+                    ItemCount = RunnersList.Count.ToString();
                 }
             }
             catch (Exception ex)

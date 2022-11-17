@@ -7,7 +7,8 @@
 
     <NavigationPage.TitleView>
         <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" Orientation="Horizontal" HeightRequest="44">
-            <Label Text="Classes" Style="{StaticResource NavBarTitleLabel}"  />
+            <Label Text="Runners" VerticalOptions="Center" FontSize="Large" 
+                   TextColor="{AppThemeBinding Light=Gray, Dark=Gray}"/>
 
             <!--<Label Text="{x:Static fontawesome:FAIcons.Star}" Style="{StaticResource NavBarIconLabel}" HorizontalOptions="EndAndExpand"
                    FontFamily="{Binding StarIconFontFamily}" >
@@ -16,34 +17,43 @@
                 </Label.GestureRecognizers>
             </Label>-->
 
-            <Label Text="Edit" Style="{StaticResource NavBarIconLabel}" HorizontalOptions="EndAndExpand" >
+            <Label Text="Edit" HorizontalOptions="EndAndExpand" VerticalOptions="Center"
+                   Margin="10, 0, 10, 0" TextColor="{AppThemeBinding Light=Gray, Dark=Gray}">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding ShowLapsEditPageCommand}" />
                 </Label.GestureRecognizers>
             </Label>
         </StackLayout>
     </NavigationPage.TitleView>
-    
-    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-       
-        <RefreshView IsRefreshing="{Binding IsRefreshing}" RefreshColor="{StaticResource Primary}">
 
-            <CollectionView x:Name="RunnersCollectionView"
+    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" RowDefinitions="Auto, *" RowSpacing="5">
+
+        <!--<RefreshView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" 
+                     IsRefreshing="{Binding IsRefreshing}" RefreshColor="{StaticResource Primary}"
+                      >
+            <Button Text="Refresh" HeightRequest="80" Command="{Binding RefreshCommand}" BackgroundColor="MediumPurple"/>
+        </RefreshView>-->
+
+        <CollectionView Grid.Row="1"  x:Name="RunnersCollectionView"
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="FillAndExpand"
                         ItemsSource="{Binding RunnersList}"
                         SelectionMode="Single"
-                                  
+                        ItemSizingStrategy="MeasureAllItems"
+                         HorizontalScrollBarVisibility="Always"
+                         VerticalScrollBarVisibility="Always"
                         SelectedItem="{Binding SelectedRunner, Mode=TwoWay}"
-                        
-                        EmptyView="No Runners to Display"
+                        Footer="{Binding ItemCount}"
+                        EmptyView="No Runners to Display / Loading..."
                         >
-            
+
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical"
-                                 Span="3" />
+                                 Span="3" HorizontalItemSpacing="2" VerticalItemSpacing="2" />
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                        <Frame HasShadow="False" CornerRadius="10" Margin="2" Padding="2" BackgroundColor="{Binding Sex, Converter={StaticResource GenderToColorConverter}}"
+                    <Frame HasShadow="False" CornerRadius="10" Margin="3" Padding="2" BackgroundColor="{Binding Sex, Converter={StaticResource GenderToColorConverter}}"
                            HeightRequest="100">
                         <Grid Padding="8" RowDefinitions="*, Auto, Auto" ColumnDefinitions="*" HorizontalOptions="Center" 
                               VerticalOptions="Center">
@@ -58,22 +68,21 @@
                                FontSize="11" HorizontalOptions="Center"
                                    VerticalOptions="End"
                                  />
-                                <Label Grid.Row="2"
+                            <Label Grid.Row="2"
                                Grid.Column="0"
                                Text="{Binding TeamName}"  
                                FontSize="11" HorizontalOptions="Center"
                                   />
-                            </Grid>
+                        </Grid>
 
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:RecordDistancePageViewModel}}, Path=SelectionChangedCommand}" CommandParameter="{Binding .}" />
-                            </Frame.GestureRecognizers>
-                        
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:RecordDistancePageViewModel}}, Path=SelectionChangedCommand}" CommandParameter="{Binding .}" />
+                        </Frame.GestureRecognizers>
+
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-            
         </CollectionView>
-     </RefreshView>
+
     </Grid>
 </ContentPage>

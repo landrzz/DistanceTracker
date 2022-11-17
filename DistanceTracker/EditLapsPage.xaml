@@ -11,7 +11,8 @@
                               SeparatorVisibility="None"
                               ItemsSource="{Binding LapRecords}"
                   IsRefreshing="{Binding IsRefreshing,Mode=TwoWay}"
-                  SelectedItem="{Binding SelectedLap, Mode=TwoWay}">
+                  SelectedItem="{Binding SelectedLap, Mode=TwoWay}"
+                  Footer="{Binding TotalNumberOfLaps}">
 
             <ListView.Behaviors>
                 <b1:EventToCommandBehavior EventName="ItemTapped"
@@ -49,11 +50,11 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
 
-            <ListView.Footer>
-                <StackLayout Padding="0" Margin="0">
+            <!--<ListView.Footer>
+                <StackLayout Padding="0" Margin="0" HeightRequest="30">
                     <Label Text="{Binding TotalNumberOfLaps}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="10" />
                 </StackLayout>
-            </ListView.Footer>
+            </ListView.Footer>-->
 
         </ListView>
     </StackLayout>
