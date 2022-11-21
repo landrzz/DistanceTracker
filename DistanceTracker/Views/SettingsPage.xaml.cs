@@ -25,7 +25,7 @@ public partial class SettingsPage : ContentPage
 
     private async void SetupDistancesButton_Clicked(object sender, EventArgs e)
     {
-        var currentDistances = Preferences.Default.Get("distances", string.Empty);
+        var currentDistances = Preferences.Default.Get(Keys.Distances, string.Empty);
         var res = string.Empty;
         if (!string.IsNullOrWhiteSpace(currentDistances))
         {
@@ -42,12 +42,9 @@ public partial class SettingsPage : ContentPage
 
         if (!string.IsNullOrWhiteSpace(res))
         {
-            Preferences.Default.Set("distances", res);
+            Preferences.Default.Set(Keys.Distances, res);
             _vm.FinalizeSetDistancesCommand.Execute(null);
         }
-
-
-
         System.Diagnostics.Debug.WriteLine(res);
     }
 

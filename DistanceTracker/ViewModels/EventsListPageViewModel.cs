@@ -75,8 +75,10 @@
                     var eventPass = await _dialogService.Input("Please enter the event passcode", "Event Passcode", "OK", "Cancel");
                     if (eventPass == raceevent.EventPassCode)
                     {
-                        Preferences.Set("currenteventname", raceevent.EventName);
-                        Preferences.Set("currenteventcode", raceevent.EventPassCode);
+                        Preferences.Set(Keys.CurrentEventName, raceevent.EventName);
+                        Preferences.Set(Keys.CurrentEventCode, raceevent.EventPassCode);
+                        Preferences.Set(Keys.CurrentEventId, raceevent.Id);
+                        Preferences.Set(Keys.CurrentEventTimestamp, raceevent?.EventStartTimestamp);
                         await _dialogService.Snackbar("Default Event Set!");
                     }
                     else

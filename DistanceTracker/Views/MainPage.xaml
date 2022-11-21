@@ -10,6 +10,10 @@
 
         <Label Text="{Binding CurrentDistances}" HorizontalTextAlignment="Center"  HorizontalOptions="FillAndExpand" />
 
+        <Label Text="{Binding EventStartTime}" HorizontalTextAlignment="Center"  HorizontalOptions="FillAndExpand" />
+
+        <Label HorizontalTextAlignment="Center"  HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="ElapsedTimeLabel" />
+
         <Grid RowDefinitions="*, *, *, *, *" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             <Button Grid.Row="0" x:Name="RecordDistances"
                                 HeightRequest="100" FontSize="Large"

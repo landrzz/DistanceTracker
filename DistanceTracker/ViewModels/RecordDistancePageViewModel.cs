@@ -1,4 +1,5 @@
 ﻿
+using Humanizer;
 using Shiny;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,8 @@ namespace DistanceTracker
 
         [Reactive] public Runner SelectedRunner { get; set; }
         [Reactive] public string ItemCount { get; set; }
+        public string EventTimeStamp { get; set; }
+        public string EventId { get; set; }
 
         public ICommand ShowLapsEditPageCommand => new Command(ShowLapsEditPage);
         
@@ -45,16 +48,19 @@ namespace DistanceTracker
         {
             base.OnNavigatedTo(parameters);
 
+            CheckIsEventIdSet();
             var distancesSet = CheckAreDistancesSet();
             var raceEvent = CheckIsEventSet();
-
             if (!raceEvent || !distancesSet)
             {
                 await _dialogService.Alert("You must specify both a default event and default event distances before recording distance!", "Set Event First!");
                 await _navigationService.GoBackAsync();
             }
+            CheckIsEventTimeStampSet();
 
-            var currentDistances = Preferences.Default.Get("distances", string.Empty);
+            var currentDistances = Preferences.Get(Keys.Distances, string.Empty);
+            var currentEventId = Preferences.Get(Keys.CurrentEventId, string.Empty);
+
             if (!string.IsNullOrWhiteSpace(currentDistances))
             {
                 ////may have things like 13.1 or 5K - need to convert to mileage
@@ -79,7 +85,8 @@ namespace DistanceTracker
 
             if (parameters.GetNavigationMode() != Prism.Navigation.NavigationMode.Back)
             {
-                IsRefreshing = true;                
+                IsRefreshing = true;
+                await GetEventDetails(currentEventId, forceRefresh: true);
                 await GetRunners(EventName, forceRefresh: true);
                 IsRefreshing = false;
             }
@@ -89,6 +96,36 @@ namespace DistanceTracker
         {
             _navigationService.NavigateAsync(uri)
                 .OnNavigationError(ex => Console.WriteLine(ex));
+        }
+
+        public async Task<List<Runner>> GetEventDetails(string currentEventId, bool forceRefresh = true)
+        {
+            var runnersList = new List<Runner>();
+
+            try
+            {
+                var eventDetails = await DataService.GetEvent(forceRefresh, currentEventId);
+                if (eventDetails != null)
+                {
+                    var currentTimestamp = eventDetails.EventStartTimestamp ?? string.Empty;
+                    if (string.IsNullOrWhiteSpace(currentTimestamp))
+                    {
+                        await _dialogService.Alert("Event time clock has not been started yet. You may still add distances but no time deltas will be recorded.", "Time Clock Not Yet Started", "OK");
+                    }
+                    else
+                    {
+                        Preferences.Set(Keys.CurrentEventTimestamp, currentTimestamp);
+                        CheckIsEventTimeStampSet();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"{ex.Message}  {ex.InnerException}");
+                Logger.LogError(ex, "GetRunners - Error getting runners");
+            }
+
+            return runnersList;
         }
 
         public async Task<List<Runner>> GetRunners(string curRaceEvent, bool forceRefresh = true)
@@ -141,6 +178,8 @@ namespace DistanceTracker
                     //a distance was selected
                     var distance = result;
 
+                    var elapsedTimeTicks = GetElapsedTicks();
+
                     //create new lap record
                     var lapRecord = new LapRecord()
                     {
@@ -149,6 +188,7 @@ namespace DistanceTracker
                         RunnerName = runner.RunnerName,
                         LapDistance = distance,
                         RaceEventName = EventName,
+                        LapTimeSpan = elapsedTimeTicks,
                     };
 
                     //save
@@ -198,7 +238,7 @@ namespace DistanceTracker
 
         public bool CheckIsEventSet()
         {
-            var raceEvent = Preferences.Get("currenteventname", string.Empty);
+            var raceEvent = Preferences.Get(Keys.CurrentEventName, string.Empty);
             if (string.IsNullOrWhiteSpace(raceEvent))
             {
                 return false;
@@ -210,15 +250,44 @@ namespace DistanceTracker
             }
         }
 
+        public string CurrentEventTimestamp { get; set; }
+        public bool CheckIsEventTimeStampSet()
+        {
+            EventTimeStamp = Preferences.Get(Keys.CurrentEventTimestamp, string.Empty);
+            if (string.IsNullOrWhiteSpace(EventTimeStamp))
+            {
+                return false;
+            }
+            else
+            {
+                CurrentEventTimestamp = EventTimeStamp;
+                return true;
+            }
+        }
+
         public bool CheckAreDistancesSet()
         {
-            var distances = Preferences.Get("distances", string.Empty);
+            var distances = Preferences.Get(Keys.Distances, string.Empty);
             if (string.IsNullOrWhiteSpace(distances))
             {
                 return false;
             }
             else
                 return true;
+        }
+
+        public bool CheckIsEventIdSet()
+        {
+            var raceEventId = Preferences.Get(Keys.CurrentEventId, string.Empty);
+            if (string.IsNullOrWhiteSpace(raceEventId))
+            {
+                return false;
+            }
+            else
+            {
+                EventId = raceEventId;
+                return true;
+            }
         }
 
         public async void ShowLapsEditPage()
@@ -229,9 +298,31 @@ namespace DistanceTracker
             }
             catch (Exception ex)
             {
-
-                
+                System.Diagnostics.Debug.WriteLine($"{ex.Message}  {ex.InnerException}");
+                Logger.LogError(ex, "ShowLapsEditPage - Error showing laps edit page");
             }
+        }
+
+        public int GetElapsedTicks()
+        {
+            if (!string.IsNullOrWhiteSpace(EventTimeStamp))
+            {
+                //convert to DT
+                DateTime dtStarted;
+                var dtValid = DateTime.TryParse(EventTimeStamp, out dtStarted);
+
+                if (dtValid)
+                {
+                    var tsElapsed = (DateTime.Now - dtStarted).TotalSeconds;
+                    return (int)tsElapsed;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+                return 0;
         }
 
         [Reactive] public string Property { get; set; }

@@ -39,14 +39,17 @@ namespace DistanceTracker
             
         }
 
-        public static Task<IEnumerable<LapRecord>> GetLapRecords(bool forceRefresh = true, string raceEvent = "") =>
-            GetAsync<IEnumerable<LapRecord>>(Endpoints.LapRecords, Endpoints.Settings, forceRefresh: forceRefresh, raceEvent: raceEvent);
+        public static Task<IEnumerable<LapRecord>> GetLapRecords(bool forceRefresh = true, string raceEventId = "") =>
+            GetAsync<IEnumerable<LapRecord>>(Endpoints.LapRecords, Endpoints.Settings, forceRefresh: forceRefresh, raceEvent: raceEventId);
 
-        public static Task<IEnumerable<Runner>> GetRunners(bool forceRefresh = true, string raceEvent = "") =>
-            GetAsync<IEnumerable<Runner>>(Endpoints.Runners, Endpoints.Runners, forceRefresh: forceRefresh, raceEvent: raceEvent);
+        public static Task<IEnumerable<Runner>> GetRunners(bool forceRefresh = true, string raceEventId = "") =>
+            GetAsync<IEnumerable<Runner>>(Endpoints.Runners, Endpoints.Runners, forceRefresh: forceRefresh, raceEvent: raceEventId);
 
         public static Task<IEnumerable<RaceEvent>> GetRaces(bool forceRefresh = true) =>
             GetAsync<IEnumerable<RaceEvent>>(Endpoints.RaceEvents, Endpoints.RaceEvents, forceRefresh: forceRefresh);
+
+        public static Task<RaceEvent> GetEvent(bool forceRefresh = true, string raceEventId = "") =>
+            GetAsync<RaceEvent>(Endpoints.RaceEvent, Endpoints.RaceEvent, forceRefresh: forceRefresh, raceEvent: raceEventId);
 
 
 
@@ -79,13 +82,13 @@ namespace DistanceTracker
             {
                 if (string.IsNullOrWhiteSpace(json))
                 {
-                    Debug.WriteLine($"RACE EVENT: {raceEvent}");
+                    Debug.WriteLine($"RACE EVENT ID: {raceEvent}");
 
                     url = $"{url}?code={Endpoints.code}";
 
       
                     if (!string.IsNullOrWhiteSpace(raceEvent))
-                        url = $"{url}&raceeventname={raceEvent}";
+                        url = $"{url}&raceeventid={raceEvent}";
 
                     Debug.WriteLine($"URL -- {url}");
 
@@ -127,10 +130,12 @@ namespace DistanceTracker
             Runner retrieved_runner = null;
             var jsonObject = JsonConvert.SerializeObject(_runner);
 
-            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddRunner}?code={Endpoints.code}";
+            var id = Preferences.Get(Keys.CurrentEventId, string.Empty);
+
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddRunner}/{id}?code={Endpoints.code}";
             Debug.WriteLine(url);
 
-            var savedCode = Preferences.Get("currenteventcode", string.Empty);
+            var savedCode = Preferences.Get(Keys.CurrentEventCode, string.Empty);
             client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
 
             var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_runner, "application/json");
@@ -152,10 +157,11 @@ namespace DistanceTracker
             LapRecord retrieved_laprecord = null;
             var jsonObject = JsonConvert.SerializeObject(_laprecord);
 
-            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddLapRecord}?code={Endpoints.code}";
+            var id = Preferences.Get(Keys.CurrentEventName, string.Empty);
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddLapRecord}/{id}?code={Endpoints.code}";
             Debug.WriteLine(url);
 
-            var savedCode = Preferences.Get("currenteventcode", string.Empty);
+            var savedCode = Preferences.Get(Keys.CurrentEventCode, string.Empty);
             client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
 
             var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_laprecord, "application/json");
@@ -177,7 +183,9 @@ namespace DistanceTracker
             RaceEvent retrieved_race = null;
             var jsonObject = JsonConvert.SerializeObject(_race);
 
-            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddRaceEvent}?code={Endpoints.code}";
+            var id = Preferences.Get(Keys.CurrentEventId, string.Empty);
+
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddRaceEvent}/{id}?code={Endpoints.code}";
             Debug.WriteLine(url);
 
             var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_race, "application/json");
@@ -202,7 +210,7 @@ namespace DistanceTracker
             var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.DeleteLap}/{_lap.Id}?code={Endpoints.code}";
             Debug.WriteLine(url);
 
-            var savedCode = Preferences.Get("currenteventcode", string.Empty);
+            var savedCode = Preferences.Get(Keys.CurrentEventCode, string.Empty);
             client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
 
             var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_lap, "application/json");
@@ -210,6 +218,41 @@ namespace DistanceTracker
             if (response != null)
             {
                 retrieved_result = response;
+            }
+
+            return retrieved_result;
+        }
+
+        public static async Task<RaceEvent> PutEventTimeClock(string now)
+        {
+            Debug.WriteLine("Starting the event time clock...");
+            RaceEvent retrieved_result = null;
+            Object result_obj = null;
+
+            //var nowObject = new { EventStartTimestamp = now };
+            var nowTimeCode = new RaceEventTimeCode()
+            {
+                EventStartTimestamp = now,
+            };
+            var jsonObject = JsonConvert.SerializeObject(nowTimeCode);
+            //var jsonObject = JsonConvert.SerializeObject(nowObject);
+
+            var id = Preferences.Get(Keys.CurrentEventId, string.Empty);
+
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.UpdateRaceEvent}/{id}?code={Endpoints.code}";
+            Debug.WriteLine(url);
+            //url = $"http://localhost:7071/api/Update-RaceEvent/{id}?code={Endpoints.code}";
+
+            var savedCode = Preferences.Get(Keys.CurrentEventCode, string.Empty);
+            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
+
+            var restRequest = new RestRequest(url, Method.PUT).AddJsonBody(nowTimeCode, "application/json");
+            var response = await client.PutAsync<RaceEvent>(restRequest);
+            if (response != null)
+            {
+                if (response.EventName != null)
+                    retrieved_result = response;
+                //result_obj = response;
             }
 
             return retrieved_result;
@@ -232,6 +275,11 @@ namespace DistanceTracker
 
     }
 
+    public class RaceEventTimeCode
+    {
+        public string EventStartTimestamp { get; set; } 
+    }
+
     public static class Endpoints
     {
         //SS Conf
@@ -247,6 +295,8 @@ namespace DistanceTracker
 
         public static string AddRaceEvent = "Post-RaceEvent";
         public static string RaceEvents = "Get-RaceEvents";
+        public static string RaceEvent = "Get-RaceEvent";
+        public static string UpdateRaceEvent = "Update-RaceEvent";
                 
         public static string AddRunner = "Post-Runner";
         public static string Runners = "Get-Runners";

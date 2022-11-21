@@ -15,6 +15,7 @@ namespace DistanceTracker
 
         public DelegateCommand<string> NavigateCommand { get; }
 
+        public string EventId { get; set; }
         [Reactive] public bool ShowLoading { get; set; }
         [Reactive] public string EventName { get; set; }
         [Reactive] public bool IsRefreshing { get; set; }
@@ -47,6 +48,7 @@ namespace DistanceTracker
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
+            CheckIsEventIdSet();
             var raceEvent = CheckIsEventSet();
             if (!raceEvent)
             {
@@ -234,7 +236,7 @@ namespace DistanceTracker
 
         public bool CheckIsEventSet()
         {
-            var raceEvent = Preferences.Get("currenteventname", string.Empty);
+            var raceEvent = Preferences.Get(Keys.CurrentEventName, string.Empty);
             if (string.IsNullOrWhiteSpace(raceEvent))
             {
                 return false;
@@ -242,6 +244,20 @@ namespace DistanceTracker
             else
             {
                 EventName = raceEvent;
+                return true;
+            }
+        }
+
+        public bool CheckIsEventIdSet()
+        {
+            var raceEventId = Preferences.Get(Keys.CurrentEventId, string.Empty);
+            if (string.IsNullOrWhiteSpace(raceEventId))
+            {
+                return false;
+            }
+            else
+            {
+                EventId = raceEventId;
                 return true;
             }
         }

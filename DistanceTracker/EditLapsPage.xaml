@@ -7,7 +7,7 @@
     <StackLayout>
         <ListView Grid.Row="1" 
                               CachingStrategy="RecycleElementAndDataTemplate"
-                              RowHeight="54"
+                              RowHeight="66"
                               SeparatorVisibility="None"
                               ItemsSource="{Binding LapRecords}"
                   IsRefreshing="{Binding IsRefreshing,Mode=TwoWay}"
@@ -26,21 +26,26 @@
                         <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="0" Margin="0">
 
 
-                            <Frame HeightRequest="50" HasShadow="False" Margin="0" Padding="7, 3, 7, 3" CornerRadius="7" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                            <Frame HeightRequest="62" HasShadow="False" Margin="0" Padding="7, 3, 7, 3" CornerRadius="7" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
                                            BackgroundColor="{Binding TeamType, Converter={StaticResource GenderToColorConverter}}">
-                                <Grid RowDefinitions="*, *" ColumnDefinitions="*" RowSpacing="0" 
+                                <Grid RowDefinitions="Auto, *, *" ColumnDefinitions="*" RowSpacing="0" 
                                               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                                    <Label Grid.Column="0" Grid.Row="0"
-                               Text="{Binding RunnerName}" FontSize="14"
+                                    <Label Grid.Row="0"
+                               FontSize="12" FontAttributes="Italic"
+                               Text="{Binding LapCompletedTime}"                               
+                               />
+                                    
+                                    <Label Grid.Column="0" Grid.Row="1"
+                               Text="{Binding RunnerName}" FontSize="16"
                                FontAttributes="Bold" VerticalOptions="Center"  />
 
-                                    <Label Grid.Row="1"
-                               FontSize="12" FontAttributes="Bold"
+                                    <Label Grid.Row="2"
+                               FontSize="12" 
                                Text="{Binding BibNumber}"                               
                                />
 
-                                    <Label Grid.Row="1"
-                               FontSize="16"
+                                    <Label Grid.Row="2"
+                               FontSize="16" FontAttributes="Bold"
                                Text="{Binding LapDistance}"                               
                                HorizontalTextAlignment="End" HorizontalOptions="End" />
                                 </Grid>

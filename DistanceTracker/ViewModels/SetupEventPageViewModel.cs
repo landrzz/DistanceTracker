@@ -108,8 +108,8 @@ namespace DistanceTracker
                         var result = await _dialogService.Confirm($"Set as Default?", $"Would you like to set this event ({race.EventName}) as your default?", "YES", "NO");
                         if (result)
                         {
-                            Preferences.Set("currenteventname", race.EventName);
-                            Preferences.Set("currenteventcode", race.EventPassCode);
+                            Preferences.Set(Keys.CurrentEventName, race.EventName);
+                            Preferences.Set(Keys.CurrentEventCode, race.EventPassCode);
 
                             await _dialogService.Snackbar($"{race.EventName} set as Default!");
 

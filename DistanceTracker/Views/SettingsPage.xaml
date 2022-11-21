@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DistanceTracker.SettingsPage"
              Title="Settings">
-    <Grid RowDefinitions="*, *, *, *">
+    <Grid RowDefinitions="*, *, *, *, *">
         <Button Grid.Row="0" x:Name="SetupDistancesButton"
                             HeightRequest="60" FontSize="Large"
                             Text="Setup Distances" Margin="15, 5" CornerRadius="6"
@@ -24,7 +24,15 @@
                             BorderWidth="0" 
                             Command="{Binding NavigateCommand}" CommandParameter="EventsListPage"/>
 
-        <Button Grid.Row="3" x:Name="ResetAppSettingsButton" BackgroundColor="DarkOrange"
+        <Button Grid.Row="3" x:Name="StartEventTimer"
+                            HeightRequest="60" FontSize="Large"
+                            Text="Start Event Time Clock" Margin="15, 5" CornerRadius="6"
+                            HorizontalOptions="FillAndExpand"                            
+                            BorderWidth="0" 
+                            Command="{Binding StartEventTimeClockCommand}"/>
+
+
+        <Button Grid.Row="4" x:Name="ResetAppSettingsButton" BackgroundColor="DarkOrange"
                             HeightRequest="60" FontSize="Large"
                             Text="Reset App Settings" Margin="15, 5" CornerRadius="6"
                             HorizontalOptions="FillAndExpand"                            

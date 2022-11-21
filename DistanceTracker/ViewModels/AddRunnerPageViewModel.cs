@@ -66,7 +66,7 @@ namespace DistanceTracker
                 if (ConnectivityService.IsConnected())
                 {
                     ShowLoading = true;
-                    var curEventName = Preferences.Default.Get("currenteventname", string.Empty);
+                    var curEventName = Preferences.Default.Get(Keys.CurrentEventName, string.Empty);
 
                     if (string.IsNullOrWhiteSpace(curEventName))
                     {
@@ -159,7 +159,7 @@ namespace DistanceTracker
 
         public bool CheckIsEventSet()
         {
-            var raceEvent = Preferences.Get("currenteventname", string.Empty);
+            var raceEvent = Preferences.Get(Keys.CurrentEventName, string.Empty);
             if (string.IsNullOrWhiteSpace(raceEvent))
             {
                 return false;

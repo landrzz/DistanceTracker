@@ -20,6 +20,7 @@ namespace DistanceTracker
         [Reactive] public ObservableCollection<LapRecord> LapRecords { get; set; } = new ObservableCollection<LapRecord>();
         [Reactive] public string TotalNumberOfLaps { get; set; }
         public DelegateCommand<LapRecord> LapRecordSelectedCommand { get; }
+        public string EventId { get; set; }
         public EditLapsPageViewModel(Shiny.BaseServices services) : base(services)
         {
             _navigationService = services.Navigation;
@@ -36,7 +37,7 @@ namespace DistanceTracker
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
-            EventName = Preferences.Get("currenteventname", string.Empty);
+            EventName = Preferences.Get(Keys.CurrentEventName, string.Empty);
 
             if (parameters.GetNavigationMode() != Prism.Navigation.NavigationMode.Back)
             {

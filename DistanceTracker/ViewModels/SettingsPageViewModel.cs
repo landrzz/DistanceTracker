@@ -16,6 +16,8 @@ namespace DistanceTracker
         
         public ICommand FinalizeSetDistancesCommand => new Command(FinalizeSetDistances);
 
+        public ICommand StartEventTimeClockCommand => new Command(StartEventTimeClock);
+
         public SettingsPageViewModel(BaseServices services) : base(services)
         {
             _navigationService = services.Navigation;
@@ -31,6 +33,35 @@ namespace DistanceTracker
         public async void FinalizeSetDistances()
         {
             await _dialogService.Snackbar("Distances Set Successfully!");
+        }
+
+        public async void StartEventTimeClock()
+        {
+            try
+            {
+                var answer = await _dialogService.Confirm("Would you like to start the event time clock? This should only be done once. If the event clock has already been started, this operation will fail.", "Start Event Time Clock", "YES", "CANCEL"); ;
+                if (answer)
+                {
+                    //pass in the event id
+                    var now = DateTime.Now.ToString();
+                    var res = await DataService.PutEventTimeClock(now);
+
+                    if (res != null)
+                    {
+                        Preferences.Set(Keys.CurrentEventTimestamp, res.EventStartTimestamp);
+                        await _dialogService.Snackbar("Time Clock Started!");
+                    }
+                    else
+                    {
+                        await _dialogService.Alert("Event time clock not started/set! This may be because the time clock has already been started by another race director.", "Clock was not started.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"{ex.Message}  {ex.InnerException}");
+                Logger.LogError(ex, "StartEventTimeClock - Error setting event start clock");
+            }
         }
 
         [Reactive] public string Property { get; set; }
