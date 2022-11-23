@@ -2,14 +2,14 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DistanceTracker.DashboardPage" 
-             Title="DashboardPage">
+             Title="Live Stats">
 
     <RefreshView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
             RefreshColor="{StaticResource Primary}" IsRefreshing="{Binding IsRefreshing}">
                  
     
             <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-            <Grid RowDefinitions="*, *" ColumnDefinitions="*" RowSpacing="0"
+            <Grid RowDefinitions=".5*, .5*" ColumnDefinitions="*" RowSpacing="0"
                   HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
 
                 <ScrollView Grid.Row="0">
@@ -84,13 +84,14 @@
                 </ScrollView>
 
                 <Grid Grid.Row="1" RowDefinitions="*, *" ColumnDefinitions="*" RowSpacing="10" Padding="3">
-                    <ListView Grid.Row="0" 
+                    <ListView Grid.Row="0"
+                              HorizontalOptions="FillAndExpand"
+                              VerticalOptions="FillAndExpand"
                               CachingStrategy="RecycleElementAndDataTemplate"
                               RowHeight="54"
                               SeparatorVisibility="None"
                               ItemsSource="{Binding RacersList}"
-                              IsRefreshing="{Binding IsRefreshing}"
-                              >
+                              IsRefreshing="{Binding IsRefreshing}">
                         <ListView.Header>
                             <StackLayout Padding="0" Margin="0">
                                 <Label Text="Individuals" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontAttributes="Bold" FontSize="10" />
@@ -132,6 +133,8 @@
 
                   <!-- =================================================== -->
                     <ListView Grid.Row="1" 
+                              HorizontalOptions="FillAndExpand"
+                              VerticalOptions="FillAndExpand"
                               CachingStrategy="RecycleElementAndDataTemplate"
                               RowHeight="54"
                               SeparatorVisibility="None"

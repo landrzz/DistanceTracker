@@ -32,7 +32,7 @@
             VerticalOptions="Start" 
             HorizontalOptions="Start"/>
 
-            <DatePicker  Date="{Binding EventDate}" x:Name="eventdatepicker" HorizontalOptions="CenterAndExpand"
+            <DatePicker  Date="{Binding EventDate}" x:Name="eventdatepicker" HorizontalOptions="FillAndExpand" 
                          Grid.Row="1" />
         </Grid>
 

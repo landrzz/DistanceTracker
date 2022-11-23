@@ -13,5 +13,6 @@ namespace DistanceTracker
         public const string CurrentEventCode = "currenteventcode";
         public const string CurrentEventTimestamp = "currenteventtimestamp";
         public const string Distances = "distances";
+        public const string RefreshInterval = "refreshinterval";
     }
 }

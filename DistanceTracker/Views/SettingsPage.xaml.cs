@@ -37,7 +37,7 @@ public partial class SettingsPage : ContentPage
         {
             res = await this.DisplayPromptAsync("Enter Distances", "Distances should be integer/decimal values only!\n" +
             "Use comma separated values.\n\n" +
-            "Example: 1.2, 3.1", "OK", "Cancel", "13.1, 26.2", -1, Keyboard.Default, currentDistances);
+            "Example: 1.2, 3.1", "OK", "Cancel", "13.1, 26.2", -1, Keyboard.Default);
         }
 
         if (!string.IsNullOrWhiteSpace(res))
@@ -61,5 +61,30 @@ public partial class SettingsPage : ContentPage
         {
             Preferences.Clear();
         }       
+    }
+
+    private async void SetDashboardRefresh_Clicked(object sender, EventArgs e)
+    {
+        var currentInterval = Preferences.Default.Get(Keys.RefreshInterval, 0);
+        var res = string.Empty;
+
+        if (currentInterval != 0)
+        {
+            res = await this.DisplayPromptAsync("Set Refresh Interval", "Refresh interval in seconds. Use whole number values only.", "OK", "Cancel", maxLength: -1, keyboard: Keyboard.Numeric, initialValue: currentInterval.ToString()); //"OK", "Cancel", "13.1, 26.2",      //  ("Enter Distances",  -1, );
+        }
+        else
+        {
+            res = await this.DisplayPromptAsync("Set Refresh Interval", "Refresh interval in seconds. Use whole number values only.", "OK", "Cancel", maxLength: -1, keyboard: Keyboard.Numeric);
+        }
+
+        if (!string.IsNullOrWhiteSpace(res))
+        {
+            var resInt = 60;
+            var worked = int.TryParse(res, out resInt);
+
+            Preferences.Default.Set(Keys.RefreshInterval, resInt);
+            _vm.FinalizeSetDistancesCommand.Execute(null);
+        }
+        System.Diagnostics.Debug.WriteLine(res);
     }
 }

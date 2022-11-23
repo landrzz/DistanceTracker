@@ -15,6 +15,7 @@ namespace DistanceTracker
 
         
         public ICommand FinalizeSetDistancesCommand => new Command(FinalizeSetDistances);
+        public ICommand FinalizeSetRefreshIntervalCommand => new Command(FinalizeSetRefreshInterval);
 
         public ICommand StartEventTimeClockCommand => new Command(StartEventTimeClock);
 
@@ -33,6 +34,11 @@ namespace DistanceTracker
         public async void FinalizeSetDistances()
         {
             await _dialogService.Snackbar("Distances Set Successfully!");
+        }
+
+        public async void FinalizeSetRefreshInterval()
+        {
+            await _dialogService.Snackbar("Refresh Interval Set Successfully!");
         }
 
         public async void StartEventTimeClock()

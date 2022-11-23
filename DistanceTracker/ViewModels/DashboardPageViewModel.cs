@@ -2,9 +2,11 @@
 using Prism.Events;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace DistanceTracker
 {
@@ -15,7 +17,9 @@ namespace DistanceTracker
 
         public DelegateCommand<string> NavigateCommand { get; }
 
+        System.Timers.Timer refreshTimer;
         public string EventId { get; set; }
+        public ElapsedEventHandler refreshHandler;
         [Reactive] public bool ShowLoading { get; set; }
         [Reactive] public string EventName { get; set; }
         [Reactive] public bool IsRefreshing { get; set; }
@@ -43,22 +47,75 @@ namespace DistanceTracker
         {           
             _navigationService = services.Navigation;
             _dialogService = services.Dialogs;
+
+            refreshTimer = new System.Timers.Timer(60000);
+
+            refreshHandler = new ElapsedEventHandler(OnTimedEvent);
+
             NavigateCommand = new DelegateCommand<string>(OnNavigateCommandExecuted);
         }
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
-            CheckIsEventIdSet();
-            var raceEvent = CheckIsEventSet();
-            if (!raceEvent)
+            try
             {
-                await _dialogService.Alert("You must a default event before viewing the dashboard!", "Set Event First!");
-                await _navigationService.GoBackAsync();
+                CheckIsEventIdSet();
+                var raceEvent = CheckIsEventSet();
+                if (!raceEvent)
+                {
+                    await _dialogService.Alert("You must a default event before viewing the dashboard!", "Set Event First!");
+                    await _navigationService.GoBackAsync();
+                }
+
+                refreshTimer.Stop();
+                var interval = Preferences.Get(Keys.RefreshInterval, 60);
+                refreshTimer.Interval = interval * 1000;
+
+                if (parameters.GetNavigationMode() != Prism.Navigation.NavigationMode.Back)
+                {
+                    //no need to force a refresh of the class list
+                    IsRefreshing = true;
+                    await GetRunners(EventName, forceRefresh: true);
+                    await GetLapRecords(EventName, forceRefresh: true);
+
+                    FormatData();
+                    IsRefreshing = false;
+                }
+
+                refreshTimer.Elapsed += refreshHandler;
+                refreshTimer.Enabled = true;
+                refreshTimer.Start();
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
-            if (parameters.GetNavigationMode() != Prism.Navigation.NavigationMode.Back)
+            base.OnNavigatedTo(parameters);
+        }
+
+        public override void OnNavigatedFrom(INavigationParameters parameters)
+        {
+            try
             {
-                //no need to force a refresh of the class list
+                refreshTimer.Elapsed -= refreshHandler;
+                refreshTimer.Enabled = false;
+                refreshTimer.Stop();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"{ex.Message}  {ex.InnerException}");
+                Logger.LogError(ex, "OnNavigatedFrom");
+            }
+
+            base.OnNavigatedFrom(parameters);
+        }
+
+        private async void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            try
+            {
                 IsRefreshing = true;
                 await GetRunners(EventName, forceRefresh: true);
                 await GetLapRecords(EventName, forceRefresh: true);
@@ -66,8 +123,18 @@ namespace DistanceTracker
                 FormatData();
                 IsRefreshing = false;
             }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"{ex.Message}  {ex.InnerException}");
+                Logger.LogError(ex, "OnTimedEvent - Error on timer elapsed");
+            }
 
-            base.OnNavigatedTo(parameters);
+            //var startedWhen = GetTimeLeftToRun(dtStarted);
+            //Debug.WriteLine(startedWhen);
+            //MainThread.BeginInvokeOnMainThread(() =>
+            //{
+            //    TimeLeftLabel.Text = $"{startedWhen}";
+            //});
         }
 
         public async Task<List<Runner>> GetRunners(string curRaceEvent, bool forceRefresh = true)

@@ -9,9 +9,9 @@ namespace DistanceTracker
 
         public DelegateCommand<string> NavigateCommand { get; }
 
-        [Reactive] public string CurrentEventName { get; set; } = "Current Event Name: NOT SET";
-        [Reactive] public string CurrentDistances { get; set; } = "Current Distances: NOT SET";
-        [Reactive] public string EventStartTime { get; set; } = "Event Started: NOT STARTED YET";
+        [Reactive] public string CurrentEventName { get; set; } = "Event Name: NOT SET";
+        [Reactive] public string CurrentDistances { get; set; } = "Distances: NOT SET";
+        [Reactive] public string EventStartTime { get; set; } = "Started At: NOT STARTED YET";
         public string StartTime { get; set; }
 
         public MainViewModel(Shiny.BaseServices services) : base(services)
@@ -29,13 +29,13 @@ namespace DistanceTracker
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
             var curEvent = Preferences.Get(Keys.CurrentEventName, "NOT SET");
-            CurrentEventName = $"Current Event Name: {curEvent}";
+            CurrentEventName = $"Event Name: {curEvent}";
 
             var curDistance = Preferences.Get(Keys.Distances, "NOT SET");
-            CurrentDistances = $"Current Distances: {curDistance}";
+            CurrentDistances = $"Distances: {curDistance}";
 
             StartTime = Preferences.Get(Keys.CurrentEventTimestamp, "NOT STARTED YET");
-            EventStartTime = $"Event Started: {StartTime}";
+            EventStartTime = $"Started At: {StartTime}";
 
             base.OnNavigatedTo(parameters);
         }
@@ -43,13 +43,13 @@ namespace DistanceTracker
         public override Task InitializeAsync(INavigationParameters parameters)
         {
             var curEvent = Preferences.Get(Keys.CurrentEventName, "NOT SET");
-            CurrentEventName = $"Current Event Name: {curEvent}";
+            CurrentEventName = $"Event Name: {curEvent}";
 
             var curDistance = Preferences.Get(Keys.Distances, "NOT SET");
-            CurrentDistances = $"Current Distances: {curDistance}";
+            CurrentDistances = $"Distances: {curDistance}";
 
             StartTime = Preferences.Get(Keys.CurrentEventTimestamp, "NOT STARTED YET");
-            EventStartTime = $"Event Started: {StartTime}";
+            EventStartTime = $"Started At: {StartTime}";
 
             return base.InitializeAsync(parameters);
         }

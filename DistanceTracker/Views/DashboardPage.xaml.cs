@@ -31,6 +31,9 @@ public partial class DashboardPage : ContentPage
     {
         try
         {
+            var refreshInterval = Preferences.Get(Keys.RefreshInterval, 60);
+            this.Title = $"Live Stats (refresh every {refreshInterval}s)";
+
             var timeStarted = Preferences.Get(Keys.CurrentEventTimestamp, string.Empty);
             if (!string.IsNullOrWhiteSpace(timeStarted))
             {
