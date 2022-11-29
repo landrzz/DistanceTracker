@@ -3,45 +3,45 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DistanceTracker.SettingsPage"
              Title="Settings">
-    <Grid RowDefinitions="*, *, *, *, *" ColumnDefinitions="*, *">
-        <Button Grid.Row="0" x:Name="SetupDistancesButton"
+    <Grid RowDefinitions="*, *, *, *, *" ColumnDefinitions="*, *, *, *, *, *">
+        <Button Grid.Row="0" Grid.ColumnSpan="2" x:Name="SetupDistancesButton"
                             FontSize="Large" LineBreakMode="WordWrap"
                             Text="Setup Distances" Margin="15, 5" CornerRadius="6"
                             HorizontalOptions="FillAndExpand"                            
                             BorderWidth="0" Clicked="SetupDistancesButton_Clicked" />
 
-        <Button Grid.Row="0" Grid.Column="1" x:Name="SetDashboardRefresh"
+        <Button Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" x:Name="SetDashboardRefresh"
                             FontSize="Large"
                             Text="Set Refresh Interval" Margin="15, 5" CornerRadius="6"
                             HorizontalOptions="FillAndExpand" LineBreakMode="WordWrap"                      
                             BorderWidth="0" Clicked="SetDashboardRefresh_Clicked" />
-        
-        
 
-        <Button Grid.Row="1" x:Name="AddEventButton"
+        <Button Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" x:Name="SetEventTimeFrame"
+                            FontSize="Large"
+                            Text="Set Event Time Frame" Margin="15, 5" CornerRadius="6"
+                            HorizontalOptions="FillAndExpand" LineBreakMode="WordWrap"                      
+                            BorderWidth="0" Clicked="SetEventTimeFrame_Clicked" />
+
+
+
+        <Button Grid.Row="1" Grid.ColumnSpan="3" x:Name="AddEventButton"
                             FontSize="Medium"
                             Text="Setup a New Event" Margin="15, 5" CornerRadius="6"
                             HorizontalOptions="FillAndExpand" LineBreakMode="WordWrap"                      
                             BorderWidth="0" Clicked="AddEventButton_Clicked" 
                             Command="{Binding NavigateCommand}" CommandParameter="SetupEventPage"/>
 
-        <Button Grid.Row="1" Grid.Column="1" x:Name="SelectEventButton"
+        <Button Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="3" x:Name="SelectEventButton"
                             FontSize="Medium" LineBreakMode="WordWrap"
                             Text="Choose an Existing Event" Margin="15, 5" CornerRadius="6"
                             HorizontalOptions="FillAndExpand"                            
                             BorderWidth="0" 
                             Command="{Binding NavigateCommand}" CommandParameter="EventsListPage"/>
-        
-        
 
-        <Button Grid.Row="2" Grid.ColumnSpan="2" x:Name="AddRunnerButton" 
-                            HeightRequest="100" FontSize="Medium"
-                            Text="Add Runner" Margin="15, 5" CornerRadius="6"
-                            HorizontalOptions="FillAndExpand"                            
-                            BorderWidth="0" LineBreakMode="WordWrap"
-                            Command="{Binding NavigateCommand}" CommandParameter="AddRunnerPage"/>
 
-        <Button Grid.Row="3" Grid.ColumnSpan="2" x:Name="StartEventTimer"
+
+        
+        <Button Grid.Row="2" Grid.ColumnSpan="6" x:Name="StartEventTimer"
                             HeightRequest="100" FontSize="Medium"
                             Text="Start Event Time Clock" Margin="15, 5" CornerRadius="6"
                             HorizontalOptions="FillAndExpand" LineBreakMode="WordWrap"                        
@@ -49,11 +49,20 @@
                             Command="{Binding StartEventTimeClockCommand}"/>
 
 
-        <Button Grid.Row="4" Grid.ColumnSpan="2" x:Name="ResetAppSettingsButton" BackgroundColor="DarkOrange"
+        <Button Grid.Row="3" Grid.ColumnSpan="6" x:Name="AddRunnerButton" 
+                            HeightRequest="100" FontSize="Medium"
+                            Text="Add Runner" Margin="15, 5" CornerRadius="6"
+                            HorizontalOptions="FillAndExpand"                            
+                            BorderWidth="0" LineBreakMode="WordWrap"
+                            Command="{Binding NavigateCommand}" CommandParameter="AddRunnerPage"/>
+
+        
+
+
+        <Button Grid.Row="4" Grid.ColumnSpan="6" x:Name="ResetAppSettingsButton" BackgroundColor="DarkOrange"
                             HeightRequest="60" FontSize="Large"
                             Text="Reset App Settings" Margin="15, 5" CornerRadius="6"
                             HorizontalOptions="FillAndExpand"                            
-                            BorderWidth="0" Clicked="ResetAppSettingsButton_Clicked" 
-                            />
+                            BorderWidth="0" Clicked="ResetAppSettingsButton_Clicked" />
     </Grid>
 </ContentPage>

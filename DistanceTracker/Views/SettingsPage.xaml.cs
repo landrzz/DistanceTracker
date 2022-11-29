@@ -87,4 +87,30 @@ public partial class SettingsPage : ContentPage
         }
         System.Diagnostics.Debug.WriteLine(res);
     }
+
+    public async void SetEventTimeFrame_Clicked(System.Object sender, System.EventArgs e)
+    {
+        var eventTimeLimit = Preferences.Default.Get(Keys.TimeLimitHours, 12);
+        var res = string.Empty;
+
+        if (eventTimeLimit != 0)
+        {
+            res = await this.DisplayPromptAsync("Set Event Time Limit", "Set the time limit for the event. For example, 12 hours, 8 hours, etc.\nUse whole numbers only.", "OK", "Cancel", maxLength: 2, keyboard: Keyboard.Numeric, initialValue: eventTimeLimit.ToString()); //"OK", "Cancel", "13.1, 26.2",      //  ("Enter Distances",  -1, );
+        }
+        else
+        {
+            res = await this.DisplayPromptAsync("Set Event Time Limit", "Set the time limit for the event. For example, 12 hours, 8 hours, etc.\nUse whole numbers only.", "OK", "Cancel", maxLength: 2, keyboard: Keyboard.Numeric);
+        }
+
+        if (!string.IsNullOrWhiteSpace(res))
+        {
+            var resInt = 12;
+            var worked = int.TryParse(res, out resInt);
+
+            Preferences.Default.Set(Keys.TimeLimitHours, resInt);
+            _vm.FinalizeEventTimeLimitCommand.Execute(null);
+        }
+        System.Diagnostics.Debug.WriteLine(res);
+
+    }
 }

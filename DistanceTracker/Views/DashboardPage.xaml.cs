@@ -8,13 +8,13 @@ public partial class DashboardPage : ContentPage
 {
     System.Timers.Timer myTimer;
     DateTime dtStarted;
-    double total12HourMiliseconds; 
+    double totalTimeLimitHours; 
     public DashboardPage()
 	{
 		InitializeComponent();
 
         myTimer = new System.Timers.Timer(1000);
-        total12HourMiliseconds = new TimeSpan(12, 0, 0).TotalMilliseconds;
+        totalTimeLimitHours = new TimeSpan(12, 0, 0).TotalMilliseconds;
     }
 
     private void OnTimedEvent(object source, ElapsedEventArgs e)
@@ -72,7 +72,7 @@ public partial class DashboardPage : ContentPage
     public string GetTimeLeftToRun(DateTime dtStarted)
     {
         var tsElapsed = (DateTime.Now - dtStarted).TotalMilliseconds;        
-        var tsLeft = total12HourMiliseconds - tsElapsed;
+        var tsLeft = totalTimeLimitHours - tsElapsed;
         return TimeSpan.FromMilliseconds(tsLeft).Humanize(3, countEmptyUnits: true, minUnit: Humanizer.Localisation.TimeUnit.Second);
     }
 }
