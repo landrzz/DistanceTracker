@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DistanceTracker.DashboardPage" 
@@ -9,7 +9,7 @@
                  
     
             <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-            <Grid RowDefinitions=".5*, .5*" ColumnDefinitions="*" RowSpacing="0"
+            <Grid RowDefinitions="Auto, *" ColumnDefinitions="*" RowSpacing="0"
                   HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
 
                 <ScrollView Grid.Row="0">

@@ -7,7 +7,7 @@
 
     <NavigationPage.TitleView>
         <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" Orientation="Horizontal" HeightRequest="44">
-            <Label Text="Runners" VerticalOptions="Center" FontSize="Large" 
+            <Label Text="Record Distancess" VerticalOptions="Center" FontSize="Large" 
                    TextColor="{AppThemeBinding Light=Gray, Dark=Gray}"/>
 
             <!--<Label Text="{x:Static fontawesome:FAIcons.Star}" Style="{StaticResource NavBarIconLabel}" HorizontalOptions="EndAndExpand"

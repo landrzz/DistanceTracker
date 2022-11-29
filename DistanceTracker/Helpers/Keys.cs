@@ -14,5 +14,7 @@ namespace DistanceTracker
         public const string CurrentEventTimestamp = "currenteventtimestamp";
         public const string Distances = "distances";
         public const string RefreshInterval = "refreshinterval";
+        public const string TimeLimitHours = "timelimithours";
+
     }
 }

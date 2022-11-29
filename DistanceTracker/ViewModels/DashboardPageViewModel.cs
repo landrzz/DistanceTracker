@@ -116,12 +116,14 @@ namespace DistanceTracker
         {
             try
             {
-                IsRefreshing = true;
-                await GetRunners(EventName, forceRefresh: true);
-                await GetLapRecords(EventName, forceRefresh: true);
-
-                FormatData();
-                IsRefreshing = false;
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    IsRefreshing = true;
+                    await GetRunners(EventName, forceRefresh: true);
+                    await GetLapRecords(EventName, forceRefresh: true);
+                    FormatData();
+                    IsRefreshing = false;
+                });
             }
             catch (Exception ex)
             {
@@ -189,9 +191,7 @@ namespace DistanceTracker
                 var groupedLapRecordsList = LapRecordsList.GroupBy(u => u.BibNumber)
                         .Select(grp => grp.ToList())
                         .ToList();
-
-                
-               
+             
                 foreach (var grp in groupedLapRecordsList)
                 {
                     var grpItem = grp.FirstOrDefault();
