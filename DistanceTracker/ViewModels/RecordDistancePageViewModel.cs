@@ -298,7 +298,15 @@ namespace DistanceTracker
                 {
                     "Edit Laps", "Edit Runners"
                 };
-                var res await _dialogService.ActionSheet("Edit Options", null, null, list.ToArray()); //.NavigateAsync("EditLapsPage");
+                var res = await _dialogService.ActionSheet("Edit Options", null, null, list.ToArray()); //.NavigateAsync("EditLapsPage");
+                if (res == "Edit Laps")
+                {
+                    ShowLapsEditPage();
+                }
+                else if (res == "Edit Runners")
+                {
+                    ShowRunnersEditPage();
+                }
             }
             catch (Exception ex)
             {
@@ -312,6 +320,19 @@ namespace DistanceTracker
             try
             {
                 await _navigationService.NavigateAsync("EditLapsPage");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"{ex.Message}  {ex.InnerException}");
+                Logger.LogError(ex, "ShowLapsEditPage - Error showing laps edit page");
+            }
+        }
+
+        public async void ShowRunnersEditPage()
+        {
+            try
+            {
+                await _navigationService.NavigateAsync("EditRunnersPage");
             }
             catch (Exception ex)
             {
