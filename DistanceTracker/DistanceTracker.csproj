@@ -36,8 +36,8 @@
 	  <CodesignProvision>VS: com.alanders.distancetracker Development</CodesignProvision>
 	</PropertyGroup>
 	<ItemGroup>
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\dttrail.svg" Color="#828282" />
+		<MauiSplashScreen Include="Resources\dttrail.svg" Color="#828282" BaseSize="56,56" />
 
 		<MauiImage Include="Resources\Images\*" />
 		<MauiFont Include="Resources\Fonts\*" />

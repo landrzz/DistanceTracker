@@ -32,7 +32,7 @@ namespace DistanceTracker
         public string EventTimeStamp { get; set; }
         public string EventId { get; set; }
 
-        public ICommand ShowLapsEditPageCommand => new Command(ShowLapsEditPage);
+        public ICommand ShowEditOptionsCommand => new Command(ShowEditOptions);
         
 
         public RecordDistancePageViewModel(Shiny.BaseServices services) : base(services)
@@ -287,6 +287,23 @@ namespace DistanceTracker
             {
                 EventId = raceEventId;
                 return true;
+            }
+        }
+
+        public async void ShowEditOptions()
+        {
+            try
+            {
+                var list = new List<string>()
+                {
+                    "Edit Laps", "Edit Runners"
+                };
+                var res await _dialogService.ActionSheet("Edit Options", null, null, list.ToArray()); //.NavigateAsync("EditLapsPage");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"{ex.Message}  {ex.InnerException}");
+                Logger.LogError(ex, "ShowLapsEditPage - Error showing laps edit page");
             }
         }
 

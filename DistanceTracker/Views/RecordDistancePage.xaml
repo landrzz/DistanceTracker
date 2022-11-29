@@ -20,7 +20,7 @@
             <Label Text="Edit" HorizontalOptions="EndAndExpand" VerticalOptions="Center"
                    Margin="10, 0, 10, 0" TextColor="{AppThemeBinding Light=Gray, Dark=Gray}">
                 <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding ShowLapsEditPageCommand}" />
+                    <TapGestureRecognizer Command="{Binding ShowEditOptionsCommand}" />
                 </Label.GestureRecognizers>
             </Label>
         </StackLayout>

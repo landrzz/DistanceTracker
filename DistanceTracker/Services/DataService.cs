@@ -213,8 +213,30 @@ namespace DistanceTracker
             var savedCode = Preferences.Get(Keys.CurrentEventCode, string.Empty);
             client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
 
-            var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_lap, "application/json");
+            var restRequest = new RestRequest(url, Method.DELETE).AddJsonBody(_lap, "application/json");
             var response = await client.DeleteAsync<Object>(restRequest);  
+            if (response != null)
+            {
+                retrieved_result = response;
+            }
+
+            return retrieved_result;
+        }
+
+        public static async Task<Object> DeleteRunner(Runner _runner)
+        {
+            Debug.WriteLine("Deleting a runner...");
+            Object retrieved_result = null;
+            var jsonObject = JsonConvert.SerializeObject(_runner);
+
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.DeleteRunner}/{_runner.Id}?code={Endpoints.code}";
+            Debug.WriteLine(url);
+
+            var savedCode = Preferences.Get(Keys.CurrentEventCode, string.Empty);
+            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
+
+            var restRequest = new RestRequest(url, Method.DELETE).AddJsonBody(_runner, "application/json");
+            var response = await client.DeleteAsync<Object>(restRequest);
             if (response != null)
             {
                 retrieved_result = response;
@@ -300,6 +322,7 @@ namespace DistanceTracker
                 
         public static string AddRunner = "Post-Runner";
         public static string Runners = "Get-Runners";
+        public static string DeleteRunner = "Delete-Runner";
 
         public static string Settings = "Get-Settings";
 
