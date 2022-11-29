@@ -102,7 +102,7 @@ namespace DistanceTracker
                         LastName = $"Racer{randNum}";
 
                     if (string.IsNullOrWhiteSpace(TeamName))
-                        LastName = $"SOLO";
+                        TeamName = $"SOLO";
 
                     if (BirthDate.Year == 1900)
                         BirthDate = new DateTime(1970, 1, 1);
@@ -159,7 +159,7 @@ namespace DistanceTracker
 
         public bool CheckIsEventSet()
         {
-            var raceEvent = Preferences.Get(Keys.CurrentEventName, string.Empty);
+            var raceEvent = Preferences.Default.Get(Keys.CurrentEventName, string.Empty);
             if (string.IsNullOrWhiteSpace(raceEvent))
             {
                 return false;

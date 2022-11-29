@@ -37,7 +37,7 @@ namespace DistanceTracker
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
-            EventName = Preferences.Get(Keys.CurrentEventName, string.Empty);
+            EventName = Preferences.Default.Get(Keys.CurrentEventName, string.Empty);
 
             if (parameters.GetNavigationMode() != Prism.Navigation.NavigationMode.Back)
             {
@@ -116,7 +116,7 @@ namespace DistanceTracker
                 var deleteResult = await DataService.DeleteLapRecord(lap);
                 if (deleteResult != null)
                 {
-
+                    await _dialogService.Snackbar("Lap record deleted successfully");
                 }
 
                 await GetLapRecords(EventName, forceRefresh: true);

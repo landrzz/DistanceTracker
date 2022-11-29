@@ -31,10 +31,10 @@ public partial class DashboardPage : ContentPage
     {
         try
         {
-            var refreshInterval = Preferences.Get(Keys.RefreshInterval, 60);
+            var refreshInterval = Preferences.Default.Get(Keys.RefreshInterval, 60);
             this.Title = $"Live Stats (refresh every {refreshInterval}s)";
 
-            var timeStarted = Preferences.Get(Keys.CurrentEventTimestamp, string.Empty);
+            var timeStarted = Preferences.Default.Get(Keys.CurrentEventTimestamp, string.Empty);
             if (!string.IsNullOrWhiteSpace(timeStarted))
             {
                 //convert to DT

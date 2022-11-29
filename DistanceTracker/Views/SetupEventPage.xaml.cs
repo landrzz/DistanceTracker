@@ -7,6 +7,5 @@ public partial class SetupEventPage : ContentPage
 		InitializeComponent();
 
 		eventdatepicker.MinimumDate = DateTime.Today;
-
     }
 }

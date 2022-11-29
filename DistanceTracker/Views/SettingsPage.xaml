@@ -5,20 +5,20 @@
              Title="Settings">
     <Grid RowDefinitions="*, *, *, *, *" ColumnDefinitions="*, *, *, *, *, *">
         <Button Grid.Row="0" Grid.ColumnSpan="2" x:Name="SetupDistancesButton"
-                            FontSize="Large" LineBreakMode="WordWrap"
-                            Text="Setup Distances" Margin="15, 5" CornerRadius="6"
+                            FontSize="20" LineBreakMode="WordWrap"
+                            Text="Setup Distances" Margin="6, 5" CornerRadius="6"
                             HorizontalOptions="FillAndExpand"                            
                             BorderWidth="0" Clicked="SetupDistancesButton_Clicked" />
 
         <Button Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" x:Name="SetDashboardRefresh"
-                            FontSize="Large"
-                            Text="Set Refresh Interval" Margin="15, 5" CornerRadius="6"
+                            FontSize="20"
+                            Text="Set Refresh Interval" Margin="6, 5" CornerRadius="6"
                             HorizontalOptions="FillAndExpand" LineBreakMode="WordWrap"                      
                             BorderWidth="0" Clicked="SetDashboardRefresh_Clicked" />
 
         <Button Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" x:Name="SetEventTimeFrame"
-                            FontSize="Large"
-                            Text="Set Event Time Frame" Margin="15, 5" CornerRadius="6"
+                            FontSize="20"
+                            Text="Set Event Time Frame" Margin="6, 5" CornerRadius="6"
                             HorizontalOptions="FillAndExpand" LineBreakMode="WordWrap"                      
                             BorderWidth="0" Clicked="SetEventTimeFrame_Clicked" />
 

@@ -68,7 +68,7 @@ namespace DistanceTracker
                 }
 
                 refreshTimer.Stop();
-                var interval = Preferences.Get(Keys.RefreshInterval, 60);
+                var interval = Preferences.Default.Get(Keys.RefreshInterval, 60);
                 refreshTimer.Interval = interval * 1000;
 
                 if (parameters.GetNavigationMode() != Prism.Navigation.NavigationMode.Back)
@@ -303,7 +303,7 @@ namespace DistanceTracker
 
         public bool CheckIsEventSet()
         {
-            var raceEvent = Preferences.Get(Keys.CurrentEventName, string.Empty);
+            var raceEvent = Preferences.Default.Get(Keys.CurrentEventName, string.Empty);
             if (string.IsNullOrWhiteSpace(raceEvent))
             {
                 return false;
@@ -317,7 +317,7 @@ namespace DistanceTracker
 
         public bool CheckIsEventIdSet()
         {
-            var raceEventId = Preferences.Get(Keys.CurrentEventId, string.Empty);
+            var raceEventId = Preferences.Default.Get(Keys.CurrentEventId, string.Empty);
             if (string.IsNullOrWhiteSpace(raceEventId))
             {
                 return false;

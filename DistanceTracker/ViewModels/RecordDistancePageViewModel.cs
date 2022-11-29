@@ -58,8 +58,8 @@ namespace DistanceTracker
             }
             CheckIsEventTimeStampSet();
 
-            var currentDistances = Preferences.Get(Keys.Distances, string.Empty);
-            var currentEventId = Preferences.Get(Keys.CurrentEventId, string.Empty);
+            var currentDistances = Preferences.Default.Get(Keys.Distances, string.Empty);
+            var currentEventId = Preferences.Default.Get(Keys.CurrentEventId, string.Empty);
 
             if (!string.IsNullOrWhiteSpace(currentDistances))
             {
@@ -83,13 +83,13 @@ namespace DistanceTracker
                 }
             }
 
-            if (parameters.GetNavigationMode() != Prism.Navigation.NavigationMode.Back)
-            {
+            //if (parameters.GetNavigationMode() != Prism.Navigation.NavigationMode.Back)
+            //{
                 IsRefreshing = true;
                 await GetEventDetails(currentEventId, forceRefresh: true);
                 await GetRunners(EventName, forceRefresh: true);
                 IsRefreshing = false;
-            }
+            //}
         }
 
         private void OnNavigateCommandExecuted(string uri)
@@ -114,7 +114,7 @@ namespace DistanceTracker
                     }
                     else
                     {
-                        Preferences.Set(Keys.CurrentEventTimestamp, currentTimestamp);
+                        Preferences.Default.Set(Keys.CurrentEventTimestamp, currentTimestamp);
                         CheckIsEventTimeStampSet();
                     }
                 }
@@ -186,6 +186,7 @@ namespace DistanceTracker
                         LapCompletedTime = DateTime.Now,
                         BibNumber = runner.BibNumber,
                         RunnerName = runner.RunnerName,
+                        RunnerId = runner.Id,
                         LapDistance = distance,
                         RaceEventName = EventName,
                         LapTimeSpan = elapsedTimeTicks,
@@ -238,7 +239,7 @@ namespace DistanceTracker
 
         public bool CheckIsEventSet()
         {
-            var raceEvent = Preferences.Get(Keys.CurrentEventName, string.Empty);
+            var raceEvent = Preferences.Default.Get(Keys.CurrentEventName, string.Empty);
             if (string.IsNullOrWhiteSpace(raceEvent))
             {
                 return false;
@@ -253,7 +254,7 @@ namespace DistanceTracker
         public string CurrentEventTimestamp { get; set; }
         public bool CheckIsEventTimeStampSet()
         {
-            EventTimeStamp = Preferences.Get(Keys.CurrentEventTimestamp, string.Empty);
+            EventTimeStamp = Preferences.Default.Get(Keys.CurrentEventTimestamp, string.Empty);
             if (string.IsNullOrWhiteSpace(EventTimeStamp))
             {
                 return false;
@@ -267,7 +268,7 @@ namespace DistanceTracker
 
         public bool CheckAreDistancesSet()
         {
-            var distances = Preferences.Get(Keys.Distances, string.Empty);
+            var distances = Preferences.Default.Get(Keys.Distances, string.Empty);
             if (string.IsNullOrWhiteSpace(distances))
             {
                 return false;
@@ -278,7 +279,7 @@ namespace DistanceTracker
 
         public bool CheckIsEventIdSet()
         {
-            var raceEventId = Preferences.Get(Keys.CurrentEventId, string.Empty);
+            var raceEventId = Preferences.Default.Get(Keys.CurrentEventId, string.Empty);
             if (string.IsNullOrWhiteSpace(raceEventId))
             {
                 return false;

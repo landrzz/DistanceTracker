@@ -28,13 +28,13 @@ namespace DistanceTracker
 
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
-            var curEvent = Preferences.Get(Keys.CurrentEventName, "NOT SET");
+            var curEvent = Preferences.Default.Get(Keys.CurrentEventName, "NOT SET");
             CurrentEventName = $"Event Name: {curEvent}";
 
-            var curDistance = Preferences.Get(Keys.Distances, "NOT SET");
+            var curDistance = Preferences.Default.Get(Keys.Distances, "NOT SET");
             CurrentDistances = $"Distances: {curDistance}";
 
-            StartTime = Preferences.Get(Keys.CurrentEventTimestamp, "NOT STARTED YET");
+            StartTime = Preferences.Default.Get(Keys.CurrentEventTimestamp, "NOT STARTED YET");
             EventStartTime = $"Started At: {StartTime}";
 
             base.OnNavigatedTo(parameters);
@@ -42,13 +42,13 @@ namespace DistanceTracker
 
         public override Task InitializeAsync(INavigationParameters parameters)
         {
-            var curEvent = Preferences.Get(Keys.CurrentEventName, "NOT SET");
+            var curEvent = Preferences.Default.Get(Keys.CurrentEventName, "NOT SET");
             CurrentEventName = $"Event Name: {curEvent}";
 
-            var curDistance = Preferences.Get(Keys.Distances, "NOT SET");
+            var curDistance = Preferences.Default.Get(Keys.Distances, "NOT SET");
             CurrentDistances = $"Distances: {curDistance}";
 
-            StartTime = Preferences.Get(Keys.CurrentEventTimestamp, "NOT STARTED YET");
+            StartTime = Preferences.Default.Get(Keys.CurrentEventTimestamp, "NOT STARTED YET");
             EventStartTime = $"Started At: {StartTime}";
 
             return base.InitializeAsync(parameters);

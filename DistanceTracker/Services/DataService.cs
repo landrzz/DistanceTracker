@@ -130,12 +130,12 @@ namespace DistanceTracker
             Runner retrieved_runner = null;
             var jsonObject = JsonConvert.SerializeObject(_runner);
 
-            var id = Preferences.Get(Keys.CurrentEventId, string.Empty);
+            var id = Preferences.Default.Get(Keys.CurrentEventId, string.Empty);
 
             var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddRunner}/{id}?code={Endpoints.code}";
             Debug.WriteLine(url);
 
-            var savedCode = Preferences.Get(Keys.CurrentEventCode, string.Empty);
+            var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
             client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
 
             var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_runner, "application/json");
@@ -157,11 +157,11 @@ namespace DistanceTracker
             LapRecord retrieved_laprecord = null;
             var jsonObject = JsonConvert.SerializeObject(_laprecord);
 
-            var id = Preferences.Get(Keys.CurrentEventName, string.Empty);
+            var id = Preferences.Default.Get(Keys.CurrentEventName, string.Empty);
             var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddLapRecord}/{id}?code={Endpoints.code}";
             Debug.WriteLine(url);
 
-            var savedCode = Preferences.Get(Keys.CurrentEventCode, string.Empty);
+            var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
             client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
 
             var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_laprecord, "application/json");
@@ -183,7 +183,7 @@ namespace DistanceTracker
             RaceEvent retrieved_race = null;
             var jsonObject = JsonConvert.SerializeObject(_race);
 
-            var id = Preferences.Get(Keys.CurrentEventId, string.Empty);
+            var id = Preferences.Default.Get(Keys.CurrentEventId, string.Empty);
 
             var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddRaceEvent}/{id}?code={Endpoints.code}";
             Debug.WriteLine(url);
@@ -210,7 +210,7 @@ namespace DistanceTracker
             var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.DeleteLap}/{_lap.Id}?code={Endpoints.code}";
             Debug.WriteLine(url);
 
-            var savedCode = Preferences.Get(Keys.CurrentEventCode, string.Empty);
+            var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
             client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
 
             var restRequest = new RestRequest(url, Method.DELETE).AddJsonBody(_lap, "application/json");
@@ -232,7 +232,7 @@ namespace DistanceTracker
             var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.DeleteRunner}/{_runner.Id}?code={Endpoints.code}";
             Debug.WriteLine(url);
 
-            var savedCode = Preferences.Get(Keys.CurrentEventCode, string.Empty);
+            var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
             client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
 
             var restRequest = new RestRequest(url, Method.DELETE).AddJsonBody(_runner, "application/json");
@@ -259,13 +259,13 @@ namespace DistanceTracker
             var jsonObject = JsonConvert.SerializeObject(nowTimeCode);
             //var jsonObject = JsonConvert.SerializeObject(nowObject);
 
-            var id = Preferences.Get(Keys.CurrentEventId, string.Empty);
+            var id = Preferences.Default.Get(Keys.CurrentEventId, string.Empty);
 
             var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.UpdateRaceEvent}/{id}?code={Endpoints.code}";
             Debug.WriteLine(url);
             //url = $"http://localhost:7071/api/Update-RaceEvent/{id}?code={Endpoints.code}";
 
-            var savedCode = Preferences.Get(Keys.CurrentEventCode, string.Empty);
+            var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
             client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
 
             var restRequest = new RestRequest(url, Method.PUT).AddJsonBody(nowTimeCode, "application/json");

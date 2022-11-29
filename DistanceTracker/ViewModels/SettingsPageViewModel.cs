@@ -62,7 +62,7 @@ namespace DistanceTracker
 
                     if (res != null)
                     {
-                        Preferences.Set(Keys.CurrentEventTimestamp, res.EventStartTimestamp);
+                        Preferences.Default.Set(Keys.CurrentEventTimestamp, res.EventStartTimestamp);
                         await _dialogService.Snackbar("Time Clock Started!");
                     }
                     else

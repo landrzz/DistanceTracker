@@ -20,19 +20,26 @@ namespace DistanceTracker
 
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            var startedWhen = GetTimeSinceEventTimerStarted(dtStarted);
-            Debug.WriteLine(startedWhen);
-            MainThread.BeginInvokeOnMainThread(() =>
+            try
             {
-                ElapsedTimeLabel.Text = $"Elapsed Time: {startedWhen}";
-            });
+                var startedWhen = GetTimeSinceEventTimerStarted(dtStarted);
+                Debug.WriteLine(startedWhen);
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    ElapsedTimeLabel.Text = $"Elapsed Time: {startedWhen}";
+                });
+            }
+            catch (Exception ex)
+            {
+
+            }           
         }
 
         protected override void OnAppearing()
         {
             try
             {
-                var timeStarted = Preferences.Get(Keys.CurrentEventTimestamp, string.Empty);
+                var timeStarted = Preferences.Default.Get(Keys.CurrentEventTimestamp, string.Empty);
                 if (!string.IsNullOrWhiteSpace(timeStarted))
                 {
                     //convert to DT
@@ -45,6 +52,10 @@ namespace DistanceTracker
                         myTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
                         myTimer.Enabled = true;
                         myTimer.Start();                        
+                    }
+                    else
+                    {
+                        ElapsedTimeLabel.Text = $"Elapsed Time: UNKNOWN";
                     }
                 }
             }

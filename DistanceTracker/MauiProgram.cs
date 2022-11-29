@@ -61,6 +61,7 @@ namespace DistanceTracker
             s.RegisterForNavigation<EventsListPage, EventsListPageViewModel>();
             s.RegisterForNavigation<DashboardPage, DashboardPageViewModel>();
             s.RegisterForNavigation<EditLapsPage, EditLapsPageViewModel>();
+            s.RegisterForNavigation<EditRunnersPage, EditRunnersPageViewModel>();
 
         }
     }
