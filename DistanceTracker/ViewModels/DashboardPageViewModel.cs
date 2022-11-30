@@ -67,6 +67,8 @@ namespace DistanceTracker
                     await _navigationService.GoBackAsync();
                 }
 
+                var curEventId = Preferences.Default.Get(Keys.CurrentEventId, string.Empty);
+
                 refreshTimer.Stop();
                 var interval = Preferences.Default.Get(Keys.RefreshInterval, 60);
                 refreshTimer.Interval = interval * 1000;
@@ -77,6 +79,7 @@ namespace DistanceTracker
                     IsRefreshing = true;
                     await GetRunners(EventName, forceRefresh: true);
                     await GetLapRecords(EventName, forceRefresh: true);
+                    await RefreshCurrentEventDetails(curEventId);
 
                     FormatData();
                     IsRefreshing = false;
@@ -328,6 +331,30 @@ namespace DistanceTracker
             {
                 EventId = raceEventId;
                 return true;
+            }
+        }
+
+        public async Task RefreshCurrentEventDetails(string curId, bool forceRefresh = true)
+        {
+            var raceEvent = new RaceEvent();
+
+            try
+            {
+                var rEvent = await DataService.GetEvent(forceRefresh, curId);
+                raceEvent = rEvent;
+                if (raceEvent != null && !string.IsNullOrWhiteSpace(raceEvent.EventName))
+                {
+                    Preferences.Default.Set(Keys.CurrentEventTimestamp, raceEvent.EventStartTimestamp);
+
+                    await Task.Delay(2000);
+
+                    //MessagingCenter.Send<DashboardPage>(null, "CheckStart");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"{ex.Message}  {ex.InnerException}");
+                Logger.LogError(ex, "RefreshCurrentEventDetails - Error getting race event details");
             }
         }
     }

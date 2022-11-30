@@ -19,9 +19,13 @@ public partial class DashboardPage : ContentPage
 		InitializeComponent();
 
         myTimer = new System.Timers.Timer(1000);
-        //myScrollerTimer = new System.Timers.Timer(2000);
-
         totalTimeLimitHours = new TimeSpan(12, 0, 0).TotalMilliseconds;
+
+        //MessagingCenter.Subscribe<DashboardPage>(this, "CheckStatus", (sender) =>
+        //{
+        //    CheckIfEventHasStarted();
+        //});
+
     }
 
     private void OnTimedEvent(object source, ElapsedEventArgs e)
@@ -34,16 +38,6 @@ public partial class DashboardPage : ContentPage
         });
     }
 
-    private void OnScrollerTimerEvent(object source, ElapsedEventArgs e)
-    {
-        //MainThread.BeginInvokeOnMainThread(() =>
-        //{
-        //    if (_vm.RunnersList.Any() && _vm.RunnersList.Count > 5)
-        //    {
-        //        RunnersListView.ScrollTo(_vm.RunnersList[_vm.RunnersList.Count - 1], ScrollToPosition.MakeVisible, true);
-        //    }            
-        //});
-    }
 
     private async void BeginScrollingRacersSlowly()
     {
@@ -126,29 +120,12 @@ public partial class DashboardPage : ContentPage
             var refreshInterval = Preferences.Default.Get(Keys.RefreshInterval, 60);
             this.Title = $"Live Stats (Refresh Interval: {refreshInterval}s)";
 
-            var timeStarted = Preferences.Default.Get(Keys.CurrentEventTimestamp, string.Empty);
-            if (!string.IsNullOrWhiteSpace(timeStarted))
-            {
-                //convert to DT
-                
-                var dtValid = DateTime.TryParse(timeStarted, out dtStarted);
-                if (dtValid)
-                {
-                    TimeLeftLabel.IsVisible = true;
-
-                    myTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-                    myTimer.Enabled = true;
-                    myTimer.Start();
-                }
-            }
+            CheckIfEventHasStarted();
 
             await Task.Delay(15000);
             scrolling = true;
             BeginScrollingRacersSlowly();
             //BeginScrollingTeamsSlowly();
-            //myScrollerTimer.Elapsed += new ElapsedEventHandler(OnScrollerTimerEvent);
-            //myScrollerTimer.Enabled = true;
-            //myScrollerTimer.Start();
         }
         catch (Exception ex)
         {
@@ -156,10 +133,27 @@ public partial class DashboardPage : ContentPage
         base.OnAppearing();
     }
 
+    public void CheckIfEventHasStarted()
+    {
+        var timeStarted = Preferences.Default.Get(Keys.CurrentEventTimestamp, string.Empty);
+        if (!string.IsNullOrWhiteSpace(timeStarted))
+        {
+            //convert to DT               
+            var dtValid = DateTime.TryParse(timeStarted, out dtStarted);
+            if (dtValid)
+            {
+                TimeLeftLabel.IsVisible = true;
+
+                myTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+                myTimer.Enabled = true;
+                myTimer.Start();
+            }
+        }
+    }
+
     protected override void OnDisappearing()
     {
         myTimer.Stop();
-        //myScrollerTimer.Stop();
 
         scrolling = false;
 
