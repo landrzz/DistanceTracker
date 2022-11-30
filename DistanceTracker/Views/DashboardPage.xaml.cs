@@ -12,13 +12,14 @@ public partial class DashboardPage : ContentPage
     DateTime dtStarted;
     double totalTimeLimitHours;
     public DashboardPageViewModel _vm;
+    public bool scrolling;
 
     public DashboardPage()
 	{
 		InitializeComponent();
 
         myTimer = new System.Timers.Timer(1000);
-        myScrollerTimer = new System.Timers.Timer(2000);
+        //myScrollerTimer = new System.Timers.Timer(2000);
 
         totalTimeLimitHours = new TimeSpan(12, 0, 0).TotalMilliseconds;
     }
@@ -35,15 +36,88 @@ public partial class DashboardPage : ContentPage
 
     private void OnScrollerTimerEvent(object source, ElapsedEventArgs e)
     {
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            RunnersListView.ScrollTo(_vm.RunnersList[_vm.RunnersList.Count - 1], ScrollToPosition.End, true);
-        });
-
-        
+        //MainThread.BeginInvokeOnMainThread(() =>
+        //{
+        //    if (_vm.RunnersList.Any() && _vm.RunnersList.Count > 5)
+        //    {
+        //        RunnersListView.ScrollTo(_vm.RunnersList[_vm.RunnersList.Count - 1], ScrollToPosition.MakeVisible, true);
+        //    }            
+        //});
     }
 
-    protected override void OnAppearing()
+    private async void BeginScrollingRacersSlowly()
+    {
+        var shouldAutoScroll = Preferences.Default.Get("AutoScrollDashboard", false);
+        int count = _vm.RacersList.Count;
+        int i = 0;
+        
+        if (shouldAutoScroll) 
+        {
+            while (scrolling)
+            {
+                if (_vm.RacersList.Any() && count > 3)
+                {
+                    for (i = 3; i < count; i++)
+                    {
+                        if (!_vm.IsRefreshing)
+                        {
+                            var target = _vm.RacersList[i];
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                RunnersListView.ScrollTo(target, ScrollToPosition.MakeVisible, true);
+                            });
+                        }
+
+                        await Task.Delay(4000);
+                    }
+                    i = 0;
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        RunnersListView.ScrollTo(_vm.RacersList[0], ScrollToPosition.Start, true);
+                    });
+                    await Task.Delay(8000);
+                }
+            }
+        }           
+    }
+
+    //private async void BeginScrollingTeamsSlowly()
+    //{
+    //    var shouldAutoScroll = Preferences.Default.Get("AutoScrollDashboard", false);
+    //    int count = _vm.RaceTeamsList.Count;
+    //    int i = 0;
+
+    //    if (shouldAutoScroll)
+    //    {
+    //        while (true)
+    //        {
+    //            if (_vm.RaceTeamsList.Any() && count > 3)
+    //            {
+    //                for (i = 3; i < count; i++)
+    //                {
+    //                    if (!_vm.IsRefreshing)
+    //                    {
+    //                        var target = _vm.RaceTeamsList[i];
+    //                        MainThread.BeginInvokeOnMainThread(() =>
+    //                        {
+    //                            TeamsListView.ScrollTo(target, ScrollToPosition.MakeVisible, true);
+    //                        });
+    //                    }
+
+    //                    await Task.Delay(4000);
+    //                }
+    //                i = 0;
+    //                MainThread.BeginInvokeOnMainThread(() =>
+    //                {
+    //                    TeamsListView.ScrollTo(_vm.RaceTeamsList[0], ScrollToPosition.Start, true);
+    //                });
+    //                await Task.Delay(8000);
+    //            }
+    //        }
+    //    }
+    //}
+
+    protected override async void OnAppearing()
     {
         try
         {
@@ -68,9 +142,13 @@ public partial class DashboardPage : ContentPage
                 }
             }
 
-            myScrollerTimer.Elapsed += new ElapsedEventHandler(OnScrollerTimerEvent);
-            myScrollerTimer.Enabled = true;
-            myScrollerTimer.Start();
+            await Task.Delay(15000);
+            scrolling = true;
+            BeginScrollingRacersSlowly();
+            //BeginScrollingTeamsSlowly();
+            //myScrollerTimer.Elapsed += new ElapsedEventHandler(OnScrollerTimerEvent);
+            //myScrollerTimer.Enabled = true;
+            //myScrollerTimer.Start();
         }
         catch (Exception ex)
         {
@@ -81,8 +159,9 @@ public partial class DashboardPage : ContentPage
     protected override void OnDisappearing()
     {
         myTimer.Stop();
+        //myScrollerTimer.Stop();
 
-        myScrollerTimer.Stop();
+        scrolling = false;
 
         base.OnDisappearing();
     }

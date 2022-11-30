@@ -22,6 +22,14 @@ namespace DistanceTracker
 
         public ICommand StartEventTimeClockCommand => new Command(StartEventTimeClock);
 
+
+        public bool AutoScrollDashboard
+        {
+            get => Preferences.Default.Get(nameof(AutoScrollDashboard), false);
+            set => Preferences.Default.Set(nameof(AutoScrollDashboard), value);
+        }
+
+
         public SettingsPageViewModel(BaseServices services) : base(services)
         {
             _navigationService = services.Navigation;

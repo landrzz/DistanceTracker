@@ -91,7 +91,7 @@
                               CachingStrategy="RecycleElementAndDataTemplate"
                               RowHeight="54"
                               SeparatorVisibility="None"
-                              ItemsSource="{Binding RacersList}"
+                              ItemsSource="{Binding RacersList, Mode=TwoWay}"
                               IsRefreshing="{Binding IsRefreshing}">
                         <ListView.Header>
                             <StackLayout Padding="0" Margin="0">

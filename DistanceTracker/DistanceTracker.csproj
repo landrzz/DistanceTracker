@@ -39,8 +39,9 @@
 	  <CreatePackage>false</CreatePackage>
 	</PropertyGroup>
 	<ItemGroup>
-		<MauiIcon Include="Resources\AppIcon\dttrail.svg" ForegroundFile="Resources\Appicon\dttrail.svg" Color="#828282" />
-		<MauiSplashScreen Include="Resources\AppIcon\dttrail.svg" Color="#828282" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		
 		<MauiImage Include="Resources\Images\*" />
 		<MauiFont Include="Resources\Fonts\*" />
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
@@ -93,17 +94,11 @@
 	<ItemGroup>
 	  <None Remove="Extensions\" />
 	  <None Remove="Infrastructure\" />
-	  <None Remove="Resources\AppIcon\dttrail.svg" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Extensions\" />
 	  <Folder Include="Infrastructure\" />
 	  <Folder Include="Helpers\" />
 	  <Folder Include="Popups\" />
-	</ItemGroup>
-	<ItemGroup>
-	  <BundleResource Include="Resources\AppIcon\dttrail.svg">
-	    <Color>#828282</Color>
-	  </BundleResource>
 	</ItemGroup>
 </Project>

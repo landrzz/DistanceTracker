@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DistanceTracker.SettingsPage"
              Title="Settings">
-    <Grid RowDefinitions="*, *, *, *, *" ColumnDefinitions="*, *, *, *, *, *">
+    <Grid RowDefinitions="*, *, *, *, Auto, *" ColumnDefinitions="*, *, *, *, *, *">
         <Button Grid.Row="0" Grid.ColumnSpan="2" x:Name="SetupDistancesButton"
                             FontSize="20" LineBreakMode="WordWrap"
                             Text="Setup Distances" Margin="6, 5" CornerRadius="6"
@@ -61,8 +61,11 @@
                             BorderWidth="0" LineBreakMode="WordWrap"
                             Command="{Binding NavigateCommand}" CommandParameter="EditRunnersPage"/>
 
-        
-        <Button Grid.Row="4" Grid.ColumnSpan="6" x:Name="ResetAppSettingsButton" BackgroundColor="DarkOrange"
+        <Label Grid.Row="4" Grid.ColumnSpan="3" Text="Auto-Scroll Dashboard: " FontSize="16" FontAttributes="Bold" VerticalOptions="CenterAndExpand" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="Center"/>
+        <Switch Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="3" IsToggled="{Binding AutoScrollDashboard}" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" Margin="0, 2, 0, 0"  />
+
+
+        <Button Grid.Row="5" Grid.ColumnSpan="6" x:Name="ResetAppSettingsButton" BackgroundColor="DarkOrange"
                             HeightRequest="60" FontSize="Large"
                             Text="Reset App Settings" Margin="15, 5" CornerRadius="6"
                             HorizontalOptions="FillAndExpand"                            
