@@ -48,48 +48,47 @@ namespace DistanceTracker
         {
             base.OnNavigatedTo(parameters);
 
-            CheckIsEventIdSet();
-            var distancesSet = CheckAreDistancesSet();
-            var raceEvent = CheckIsEventSet();
-            if (!raceEvent || !distancesSet)
-            {
-                await _dialogService.Alert("You must specify both a default event and default event distances before recording distance!", "Set Event First!");
-                await _navigationService.GoBackAsync();
-            }
-            CheckIsEventTimeStampSet();
-
             var currentDistances = Preferences.Default.Get(Keys.Distances, string.Empty);
             var currentEventId = Preferences.Default.Get(Keys.CurrentEventId, string.Empty);
 
-            if (!string.IsNullOrWhiteSpace(currentDistances))
+            if (parameters.GetNavigationMode() != Prism.Navigation.NavigationMode.Back)
             {
-                ////may have things like 13.1 or 5K - need to convert to mileage
-                //DistancesMixed = currentDistances.Split(',').ToList();
-
-                //foreach (var d in DistancesMixed)
-                //{
-                //    if (d.ToLower().Contains("k"))
-                //    {
-                //        var dClean = d.Replace("K", "");
-                //    }
-                //}
-
-                //only mileage supported for right now
-                DistancesMixed = currentDistances.Split(',').ToList();
-                foreach (var d in DistancesMixed)
+                CheckIsEventIdSet();
+                var distancesSet = CheckAreDistancesSet();
+                var raceEvent = CheckIsEventSet();
+                if (!raceEvent || !distancesSet)
                 {
-                    var mileDbl = double.Parse(d);
-                    DistancesMiles.Add(mileDbl);
+                    await _dialogService.Alert("You must specify both a default event and default event distances before recording distance!", "Set Event First!");
+                    await _navigationService.GoBackAsync();
+                }
+                CheckIsEventTimeStampSet();
+
+                if (!string.IsNullOrWhiteSpace(currentDistances))
+                {
+                    ////may have things like 13.1 or 5K - need to convert to mileage
+                    //DistancesMixed = currentDistances.Split(',').ToList();
+                    //foreach (var d in DistancesMixed)
+                    //{
+                    //    if (d.ToLower().Contains("k"))
+                    //    {
+                    //        var dClean = d.Replace("K", "");
+                    //    }
+                    //}
+
+                    //only mileage supported for right now
+                    DistancesMixed = currentDistances.Split(',').ToList();
+                    foreach (var d in DistancesMixed)
+                    {
+                        var mileDbl = double.Parse(d);
+                        DistancesMiles.Add(mileDbl);
+                    }
                 }
             }
 
-            //if (parameters.GetNavigationMode() != Prism.Navigation.NavigationMode.Back)
-            //{
-                IsRefreshing = true;
-                await GetEventDetails(currentEventId, forceRefresh: true);
-                await GetRunners(EventName, forceRefresh: true);
-                IsRefreshing = false;
-            //}
+            IsRefreshing = true;
+            await GetEventDetails(currentEventId, forceRefresh: true);
+            await GetRunners(EventName, forceRefresh: true);
+            IsRefreshing = false;
         }
 
         private void OnNavigateCommandExecuted(string uri)

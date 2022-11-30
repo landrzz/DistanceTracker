@@ -38,8 +38,6 @@
                             BorderWidth="0" 
                             Command="{Binding NavigateCommand}" CommandParameter="EventsListPage"/>
 
-
-
         
         <Button Grid.Row="2" Grid.ColumnSpan="6" x:Name="StartEventTimer"
                             HeightRequest="100" FontSize="Medium"
@@ -49,16 +47,21 @@
                             Command="{Binding StartEventTimeClockCommand}"/>
 
 
-        <Button Grid.Row="3" Grid.ColumnSpan="6" x:Name="AddRunnerButton" 
+        <Button Grid.Row="3" Grid.ColumnSpan="3" x:Name="AddRunnerButton" 
                             HeightRequest="100" FontSize="Medium"
                             Text="Add Runner" Margin="15, 5" CornerRadius="6"
                             HorizontalOptions="FillAndExpand"                            
                             BorderWidth="0" LineBreakMode="WordWrap"
                             Command="{Binding NavigateCommand}" CommandParameter="AddRunnerPage"/>
 
+        <Button Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="3" x:Name="EditRunnersButton" 
+                            HeightRequest="100" FontSize="Medium"
+                            Text="Edit Runners" Margin="15, 5" CornerRadius="6"
+                            HorizontalOptions="FillAndExpand"                            
+                            BorderWidth="0" LineBreakMode="WordWrap"
+                            Command="{Binding NavigateCommand}" CommandParameter="EditRunnersPage"/>
+
         
-
-
         <Button Grid.Row="4" Grid.ColumnSpan="6" x:Name="ResetAppSettingsButton" BackgroundColor="DarkOrange"
                             HeightRequest="60" FontSize="Large"
                             Text="Reset App Settings" Margin="15, 5" CornerRadius="6"

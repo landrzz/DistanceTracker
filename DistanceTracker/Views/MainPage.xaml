@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:DistanceTracker"
              x:DataType="local:MainViewModel"
-             x:Class="DistanceTracker.MainPage" Title="Distance Tracker">
+             x:Class="DistanceTracker.MainPage">
 
     <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
         <Label Text="{Binding CurrentEventName}" HorizontalTextAlignment="Center"  HorizontalOptions="FillAndExpand" />
