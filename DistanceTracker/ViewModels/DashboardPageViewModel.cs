@@ -239,7 +239,9 @@ namespace DistanceTracker
                             RaceEventName = grpItm.RaceEventName,
                         };
 
-                        raceTeam.CurrrentTeamMileageDistance = grp.Sum(x => x.CurrentMileageTotal);
+                        var teamtotal = grp.Sum(x => x.CurrentMileageTotal);
+                        raceTeam.CurrrentTeamMileageDistance = Math.Round(teamtotal, 1);
+
                         raceTeam.BibNumbers = string.Join("|", grp.Select(x => x.BibNumber));
                         raceTeam.TeamMemberNames = string.Join("|", grp.Select(x => x.RacerName));
 
@@ -347,7 +349,8 @@ namespace DistanceTracker
         public double GetCurrentMileageTotal (List<LapRecord> CompletedLaps)
         {
             double total = CompletedLaps.Sum(item => double.Parse(item.LapDistance));
-            return total;
+            var tot = Math.Round(total, 1);
+            return tot;
         }
     }
 
@@ -360,5 +363,4 @@ namespace DistanceTracker
         public double CurrrentTeamMileageDistance { get; set; }
         public string TeamType { get; set; }
     }
-
 }

@@ -85,6 +85,7 @@
 
                 <Grid Grid.Row="1" RowDefinitions="*, *" ColumnDefinitions="*" RowSpacing="10" Padding="3">
                     <ListView Grid.Row="0"
+                              x:Name="RunnersListView"
                               HorizontalOptions="FillAndExpand"
                               VerticalOptions="FillAndExpand"
                               CachingStrategy="RecycleElementAndDataTemplate"
@@ -94,7 +95,7 @@
                               IsRefreshing="{Binding IsRefreshing}">
                         <ListView.Header>
                             <StackLayout Padding="0" Margin="0">
-                                <Label Text="Individuals" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontAttributes="Bold" FontSize="10" />
+                                <Label Text="Individual Totals" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontAttributes="Bold" FontSize="10" />
                             </StackLayout>
                         </ListView.Header>
                         
@@ -106,21 +107,22 @@
                                     
                                     <Frame HeightRequest="50" HasShadow="False" Margin="0" Padding="7, 3, 7, 3" CornerRadius="7" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
                                            BackgroundColor="{Binding Sex, Converter={StaticResource GenderToColorConverter}}">
-                                        <Grid RowDefinitions="*, *" ColumnDefinitions="*" RowSpacing="0" 
+                                        <Grid RowDefinitions="*" ColumnDefinitions=".33*, .16*, .16*" RowSpacing="0" 
                                               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                                             <Label Grid.Column="0" Grid.Row="0"
-                               Text="{Binding RacerName}" FontSize="14"
+                               Text="{Binding RacerName}" FontSize="18" HorizontalOptions="StartAndExpand"
+                               HorizontalTextAlignment="Start"
                                FontAttributes="Bold" VerticalOptions="Center"  />
 
-                                            <Label Grid.Row="1"
-                               FontSize="12" FontAttributes="Bold"
-                               Text="{Binding BibNumber}"                               
+                                            <Label Grid.Column="1"
+                               FontSize="16" FontAttributes="Bold" VerticalOptions="Center"
+                               Text="{Binding BibNumber}" HorizontalTextAlignment="Start" HorizontalOptions="StartAndExpand"                              
                                />
 
-                                            <Label Grid.Row="1"
-                               FontSize="16"
-                               Text="{Binding CurrentMileageTotal}"                               
-                               HorizontalTextAlignment="End" HorizontalOptions="End" />
+                                            <Label Grid.Column="2"
+                               FontSize="22" FontAttributes="Bold"
+                               Text="{Binding CurrentMileageTotal}" VerticalOptions="Center"                         
+                               HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" />
                                         </Grid>
                                     </Frame>
                                     </Grid>
@@ -132,7 +134,8 @@
 
 
                   <!-- =================================================== -->
-                    <ListView Grid.Row="1" 
+                    <ListView Grid.Row="1"
+                              x:Name="TeamsListView"
                               HorizontalOptions="FillAndExpand"
                               VerticalOptions="FillAndExpand"
                               CachingStrategy="RecycleElementAndDataTemplate"
@@ -144,7 +147,7 @@
 
                         <ListView.Header>
                             <StackLayout Padding="0" Margin="0">
-                             <Label Text="Teams" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontAttributes="Bold" FontSize="10" />
+                             <Label Text="Team Totals" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontAttributes="Bold" FontSize="10" />
                             </StackLayout>
                         </ListView.Header>
                         
@@ -156,22 +159,26 @@
 
                                         <Frame HeightRequest="50" HasShadow="False" Margin="0" Padding="7, 3, 7, 3" CornerRadius="7" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
                                            BackgroundColor="{Binding TeamType, Converter={StaticResource GenderToColorConverter}}">
-                                            <Grid RowDefinitions="*, *" ColumnDefinitions="*" RowSpacing="0" 
+                                            <Grid RowDefinitions="*" ColumnDefinitions=".33*, .16*, .16*" RowSpacing="0" 
                                               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                                                 <Label Grid.Column="0" Grid.Row="0"
-                               Text="{Binding TeamName}" FontSize="14"
-                               FontAttributes="Bold" VerticalOptions="Center"  />
+                                                   Text="{Binding TeamName}" FontSize="18"
+                                                   FontAttributes="Bold" VerticalOptions="Center"
+                                                   HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start"/>
 
-                                                <Label Grid.Row="1"
-                               FontSize="12" FontAttributes="Bold"
-                               Text="{Binding BibNumbers}"                               
-                               />
+                                                 <Label Grid.Column="1"
+                                                   FontSize="16" FontAttributes="Bold"
+                                                   Text="{Binding BibNumbers}"
+                                                   VerticalOptions="CenterAndExpand"
+                                                   HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start"
+                                                   />
 
-                                                <Label Grid.Row="1"
-                               FontSize="16"
-                               Text="{Binding CurrrentTeamMileageDistance}"                               
-                               HorizontalTextAlignment="End" HorizontalOptions="End" />
-                                            </Grid>
+                                                 <Label Grid.Column="2"
+                                                   FontSize="22"
+                                                   Text="{Binding CurrrentTeamMileageDistance}"
+                                                   VerticalOptions="CenterAndExpand"
+                                                   HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" />
+                                                            </Grid>
                                         </Frame>
                                     </Grid>
                                 </ViewCell>
