@@ -185,8 +185,11 @@ namespace DistanceTracker
 
             var id = Preferences.Default.Get(Keys.CurrentEventId, string.Empty);
 
-            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddRaceEvent}/{id}?code={Endpoints.code}";
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddRaceEvent}?code={Endpoints.code}";
             Debug.WriteLine(url);
+
+            var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
+            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
 
             var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_race, "application/json");
             var response = await client.PostAsync<RaceEvent>(restRequest);
