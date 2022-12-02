@@ -41,6 +41,8 @@ public partial class DashboardPage : ContentPage
 
     private async void BeginScrollingRacersSlowly()
     {
+        await Task.Delay(15000);
+
         var shouldAutoScroll = Preferences.Default.Get("AutoScrollDashboard", false);
         int count = _vm.RacersList.Count;
         int i = 0;
@@ -122,7 +124,7 @@ public partial class DashboardPage : ContentPage
 
             CheckIfEventHasStarted();
 
-            await Task.Delay(15000);
+            
             scrolling = true;
             BeginScrollingRacersSlowly();
             //BeginScrollingTeamsSlowly();

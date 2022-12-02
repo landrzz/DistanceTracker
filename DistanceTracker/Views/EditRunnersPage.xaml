@@ -30,12 +30,12 @@
                                    BackgroundColor="{Binding Sex, Converter={StaticResource GenderToColorConverter}}">
                                 <Grid RowDefinitions="Auto, *, *" ColumnDefinitions="*" RowSpacing="0" 
                                               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                                    <Label Grid.Row="0"
+                                    <Label Grid.Row="0" TextColor="Black"
                                FontSize="12" FontAttributes="Italic"
                                Text="{Binding Age}"                               
                                />
 
-                                    <Label Grid.Column="0" Grid.Row="1"
+                                    <Label Grid.Column="0" Grid.Row="1" TextColor="Black"
                                Text="{Binding RunnerName}" FontSize="16"
                                FontAttributes="Bold" VerticalOptions="Center"  />
 
@@ -44,7 +44,7 @@
                                Text="{Binding BibNumber}"                               
                                />
 
-                                    <Label Grid.Row="2"
+                                    <Label Grid.Row="2" TextColor="Black"
                                FontSize="16" FontAttributes="Bold"
                                Text="{Binding TeamName}"                               
                                HorizontalTextAlignment="End" HorizontalOptions="End" />

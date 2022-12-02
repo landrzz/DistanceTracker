@@ -111,16 +111,16 @@
                                               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                                             <Label Grid.Column="0" Grid.Row="0"
                                Text="{Binding RacerName}" FontSize="18" HorizontalOptions="StartAndExpand"
-                               HorizontalTextAlignment="Start"
+                               HorizontalTextAlignment="Start" TextColor="Black"
                                FontAttributes="Bold" VerticalOptions="Center"  />
 
                                             <Label Grid.Column="1"
-                               FontSize="16" FontAttributes="Bold" VerticalOptions="Center"
+                               FontSize="16" FontAttributes="Bold" VerticalOptions="Center" TextColor="Black"
                                Text="{Binding BibNumber}" HorizontalTextAlignment="Start" HorizontalOptions="StartAndExpand"                              
                                />
 
                                             <Label Grid.Column="2"
-                               FontSize="22" FontAttributes="Bold"
+                               FontSize="22" FontAttributes="Bold" TextColor="Black"
                                Text="{Binding CurrentMileageTotal}" VerticalOptions="Center"                         
                                HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" />
                                         </Grid>
@@ -162,19 +162,19 @@
                                             <Grid RowDefinitions="*" ColumnDefinitions=".33*, .16*, .16*" RowSpacing="0" 
                                               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                                                 <Label Grid.Column="0" Grid.Row="0"
-                                                   Text="{Binding TeamName}" FontSize="18"
+                                                   Text="{Binding TeamName}" FontSize="18" TextColor="Black"
                                                    FontAttributes="Bold" VerticalOptions="Center"
                                                    HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start"/>
 
                                                  <Label Grid.Column="1"
                                                    FontSize="16" FontAttributes="Bold"
-                                                   Text="{Binding BibNumbers}"
+                                                   Text="{Binding BibNumbers}" TextColor="Black"
                                                    VerticalOptions="CenterAndExpand"
                                                    HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start"
                                                    />
 
                                                  <Label Grid.Column="2"
-                                                   FontSize="22"
+                                                   FontSize="22" TextColor="Black"
                                                    Text="{Binding CurrrentTeamMileageDistance}"
                                                    VerticalOptions="CenterAndExpand"
                                                    HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" />
