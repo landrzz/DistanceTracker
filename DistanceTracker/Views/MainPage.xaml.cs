@@ -66,9 +66,10 @@ namespace DistanceTracker
                     }
                     else
                     {
-                        ElapsedTimeLabel.Text = $"Elapsed Time: UNKNOWN";
+                        ElapsedTimeLabel.Text = $"Elapsed Time: 00:00:00";
                     }
                 }
+                ElapsedTimeLabel.Text = $"Elapsed Time: 00:00:00";
             }
             catch (Exception ex)
             {
