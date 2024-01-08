@@ -3,10 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DistanceTracker.AddRunnerPage"
              Title="Add a Runner">
+
     <RefreshView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
                  RefreshColor="{StaticResource Primary}" IsRefreshing="{Binding ShowLoading}">
     
     <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <Button x:Name="ImportRunnersButton" 
+                HeightRequest="100" FontSize="Medium"
+                Text="Import Runners" Margin="15, 5" CornerRadius="6"
+                HorizontalOptions="FillAndExpand"                            
+                BorderWidth="0" LineBreakMode="WordWrap"
+                Clicked="ImportRunnersButton_Clicked"/>
+
         <Grid RowDefinitions="Auto, *" HorizontalOptions="FillAndExpand" Padding="10">
             <Label 
             Text="Bib Number*"

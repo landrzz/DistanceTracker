@@ -138,4 +138,6 @@ public partial class SettingsPage : ContentPage
         {
         }
     }
+
+    
 }
