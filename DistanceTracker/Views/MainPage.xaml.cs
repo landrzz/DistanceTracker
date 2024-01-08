@@ -22,24 +22,35 @@ namespace DistanceTracker
         {
             try
             {
-                var startedWhen = GetTimeSinceEventTimerStarted(dtStarted);
-                Debug.WriteLine(startedWhen);
-                MainThread.BeginInvokeOnMainThread(() =>
+                if (!string.IsNullOrWhiteSpace(timeStarted))
                 {
-                    ElapsedTimeLabel.Text = $"Elapsed Time: {startedWhen}";
-                });
+                    var startedWhen = GetTimeSinceEventTimerStarted(dtStarted);
+                    Debug.WriteLine(startedWhen);
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        ElapsedTimeLabel.Text = $"Elapsed Time: {startedWhen}";
+                    });
+                }
+                else
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        ElapsedTimeLabel.Text = $"Elapsed Time: 00:00:00";
+                    });
+                }                  
             }
             catch (Exception ex)
             {
-
+                //eat it
             }           
         }
 
+        string timeStarted;
         protected override void OnAppearing()
         {
             try
             {
-                var timeStarted = Preferences.Default.Get(Keys.CurrentEventTimestamp, string.Empty);
+                timeStarted = Preferences.Default.Get(Keys.CurrentEventTimestamp, string.Empty);
                 if (!string.IsNullOrWhiteSpace(timeStarted))
                 {
                     //convert to DT
