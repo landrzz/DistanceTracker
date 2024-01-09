@@ -4,7 +4,6 @@ using System.Timers;
 
 namespace DistanceTracker
 {
-
     public partial class MainPage : ContentPage
     {
         System.Timers.Timer myTimer;
@@ -13,7 +12,6 @@ namespace DistanceTracker
         {
             this.InitializeComponent();
             this.BindingContext = viewModel;
-
 
             myTimer = new System.Timers.Timer(1000); //Timer(Callback, null, 1000, Timeout.Infinite);
         }

@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DistanceTracker.TimedLapsPage" xmlns:b1="http://prismlibrary.com"
+             x:Name="timedLapsPage"
+             Title="TimedLapsPage">
+    
+        <Grid RowDefinitions="120, *" ColumnDefinitions="*,*" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <Button Grid.Row="0" x:Name="NewLapButton"
+                                HeightRequest="100" FontSize="Large"
+                                Text="New Timed Lap" Margin="15, 5" CornerRadius="6"
+                                HorizontalOptions="FillAndExpand"                            
+                                BorderWidth="0" 
+                                Command="{Binding NavigateCommand}" CommandParameter="NewLapPage"/>
+
+            <Button Grid.Row="0" Grid.Column="1" x:Name="ViewLapResultsButton"
+                                HeightRequest="100" FontSize="Large"
+                                Text="View Results" Margin="15, 5" CornerRadius="6"
+                                HorizontalOptions="FillAndExpand"                            
+                                BorderWidth="0" 
+                                Command="{Binding NavigateCommand}" CommandParameter="ViewLapResultsPage"/>
+
+            <Grid Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            
+                <ListView 
+                          HorizontalOptions="FillAndExpand"
+                          VerticalOptions="FillAndExpand"
+                          CachingStrategy="RecycleElement"
+                          RowHeight="120"
+                          SeparatorVisibility="None"
+                          ItemsSource="{Binding TimedLapRecords}"
+                          RefreshControlColor="LightGray"
+                  IsRefreshing="{Binding IsRefreshing,Mode=TwoWay}"
+                  SelectedItem="{Binding SelectedTimedLap, Mode=TwoWay}"
+                  Footer="{Binding TotalNumberOfTimedLaps}">
+
+            <ListView.Behaviors>
+                <b1:EventToCommandBehavior EventName="ItemTapped"
+                                          EventArgsParameterPath="Item"
+                                          Command="{Binding BindingContext.TimedLapRecordSelectedCommand, Source={x:Reference timedLapsPage}}" />
+            </ListView.Behaviors>
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>                        
+                                <Grid ColumnDefinitions="*, *, *" RowDefinitions="*" RowSpacing="0" 
+                                      HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="10" Margin="0">
+                                    
+                                    <Label Grid.Column="0" 
+                                        Text="{Binding RunnerName}" FontSize="19"
+                                        FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center"  />
+
+                                    <Button Grid.Column="1" Text="{Binding LapStartDisplay}" BackgroundColor="Green" TextColor="White" 
+                                        VerticalOptions="Center" Margin="20, 1, 20, 1"
+                                        Command="{Binding BindingContext.TimedLapRecordStartCommand, Source={x:Reference timedLapsPage}}"
+                                        CommandParameter="{Binding .}" />
+
+                            
+                                    <Button Grid.Column="2" Text="{Binding LapStopDisplay}" BackgroundColor="Red" TextColor="White" 
+                                        VerticalOptions="Center" Margin="20, 1, 20, 1" 
+                                        Command="{Binding BindingContext.TimedLapRecordStopCommand, Source={x:Reference timedLapsPage}}"
+                                        CommandParameter="{Binding .}"
+                                        />
+                                </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+                </Grid>
+
+        </Grid>
+</ContentPage>

@@ -16,5 +16,6 @@ namespace DistanceTracker
         public const string RefreshInterval = "refreshinterval";
         public const string TimeLimitHours = "timelimithours";
 
+        public const string NeedsRefresh = "NeedsRefresh";
     }
 }

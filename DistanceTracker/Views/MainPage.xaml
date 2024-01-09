@@ -29,12 +29,12 @@
                                 BorderWidth="0" 
                                 Command="{Binding NavigateCommand}" CommandParameter="DashboardPage"/>
 
-            <!--<Button Grid.Row="3" x:Name="AddRunnerButton"
-                                HeightRequest="60" FontSize="Large"
-                                Text="Add a Runner" Margin="15, 5" CornerRadius="6"
+            <Button Grid.Row="2" x:Name="TimedLapsButton"
+                                HeightRequest="100" FontSize="Large"
+                                Text="Timed Lap" Margin="15, 5" CornerRadius="6"
                                 HorizontalOptions="FillAndExpand"                            
-                                BorderWidth="0" Clicked="AddRunnerButton_Clicked" 
-                                Command="{Binding NavigateCommand}" CommandParameter="AddRunnerPage"/>-->
+                                BorderWidth="0" 
+                                Command="{Binding NavigateCommand}" CommandParameter="TimedLapsPage"/>
 
             
             <Button Grid.Row="4" x:Name="SettingsButton" BackgroundColor="MediumPurple"

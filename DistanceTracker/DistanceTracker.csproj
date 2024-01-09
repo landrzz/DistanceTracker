@@ -98,11 +98,13 @@
 	<ItemGroup>
 	  <None Remove="Extensions\" />
 	  <None Remove="Infrastructure\" />
+	  <None Remove="Templates\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Extensions\" />
 	  <Folder Include="Infrastructure\" />
 	  <Folder Include="Helpers\" />
 	  <Folder Include="Popups\" />
+	  <Folder Include="Templates\" />
 	</ItemGroup>
 </Project>

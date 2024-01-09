@@ -40,7 +40,10 @@ namespace DistanceTracker
         }
 
         public static Task<IEnumerable<LapRecord>> GetLapRecords(bool forceRefresh = true, string raceEventId = "") =>
-            GetAsync<IEnumerable<LapRecord>>(Endpoints.LapRecords, Endpoints.Settings, forceRefresh: forceRefresh, raceEvent: raceEventId);
+            GetAsync<IEnumerable<LapRecord>>(Endpoints.LapRecords, Endpoints.LapRecords, forceRefresh: forceRefresh, raceEvent: raceEventId);
+
+        public static Task<IEnumerable<TimedLapRecord>> GetTimedLapRecords(bool forceRefresh = true, string raceEventId = "") =>
+            GetAsync<IEnumerable<TimedLapRecord>>(Endpoints.TimedLapRecords, Endpoints.TimedLapRecords, forceRefresh: forceRefresh, raceEvent: raceEventId);
 
         public static Task<IEnumerable<Runner>> GetRunners(bool forceRefresh = true, string raceEventId = "") =>
             GetAsync<IEnumerable<Runner>>(Endpoints.Runners, Endpoints.Runners, forceRefresh: forceRefresh, raceEvent: raceEventId);
@@ -177,6 +180,32 @@ namespace DistanceTracker
             return retrieved_laprecord;
         }
 
+        public static async Task<TimedLapRecord> PostTimedLapRecordAsync(TimedLapRecord _laprecord)
+        {
+            Debug.WriteLine("Creating a new Timed Lap Record Item...");
+            TimedLapRecord retrieved_laprecord = null;
+            var jsonObject = JsonConvert.SerializeObject(_laprecord);
+
+            var id = Preferences.Default.Get(Keys.CurrentEventName, string.Empty);
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.AddTimedLapRecord}/{id}?code={Endpoints.code}";
+            Debug.WriteLine(url);
+
+            var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
+            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
+
+            var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_laprecord, "application/json");
+            var response = await client.PostAsync<TimedLapRecord>(restRequest);
+            if (response != null)
+            {
+                if (response.Id != null)
+                {
+                    retrieved_laprecord = response;
+                }
+            }
+
+            return retrieved_laprecord;
+        }
+
         public static async Task<RaceEvent> PostRaceEventAsync(RaceEvent _race)
         {
             Debug.WriteLine("Creating a new Race Event Item...");
@@ -283,6 +312,65 @@ namespace DistanceTracker
             return retrieved_result;
         }
 
+
+        public static async Task<TimedLapRecord> PutLapStart(string now, string lapid)
+        {
+            Debug.WriteLine("Starting the lap time clock...");
+            TimedLapRecord retrieved_result = null;
+
+            var nowTimeCode = new TimedLapRecordUpdateModel()
+            {
+                LapStartedTime = now,
+            };
+            var jsonObject = JsonConvert.SerializeObject(nowTimeCode);
+
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.PutTimedLapRecordStart}/{lapid}?code={Endpoints.code}";
+            Debug.WriteLine(url);
+
+            var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
+            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
+
+            var restRequest = new RestRequest(url, Method.PUT).AddJsonBody(nowTimeCode, "application/json");
+            var response = await client.PutAsync<TimedLapRecord>(restRequest);
+            if (response != null)
+            {
+                if (response.RaceEventName != null)
+                    retrieved_result = response;
+            }
+
+            return retrieved_result;
+        }
+
+        public static async Task<TimedLapRecord> PutLapStop(string now, string lapid)
+        {
+            Debug.WriteLine("Stopping the lap time clock...");
+            TimedLapRecord retrieved_result = null;
+
+            var nowTimeCode = new TimedLapRecordUpdateModel()
+            {
+                LapCompletedTime = now,
+            };
+            var jsonObject = JsonConvert.SerializeObject(nowTimeCode);
+
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.PutTimedLapRecordFinish}/{lapid}?code={Endpoints.code}";
+            Debug.WriteLine(url);
+
+            var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
+            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
+
+            var restRequest = new RestRequest(url, Method.PUT).AddJsonBody(nowTimeCode, "application/json");
+            var response = await client.PutAsync<TimedLapRecord>(restRequest);
+            if (response != null)
+            {
+                if (response.RaceEventName != null)
+                    retrieved_result = response;
+            }
+
+            return retrieved_result;
+        }
+
+
+
         public static void AddToBarrel(string key, string data, TimeSpan expireIn, object dataObject)
         {
             //if User type, and user type has square brackets (array)... remove them
@@ -313,7 +401,13 @@ namespace DistanceTracker
         public static string AddUser = "Post-CreateUser";
         public static string Users = "Get-Users";
         public static string GetUser = "Get-AUser";
-    
+
+        public static string AddTimedLapRecord = "Post-TimedLapRecord";   //http://localhost:7071/api/Post-TimedLapRecord/{eventid}
+        public static string TimedLapRecords = "Get-TimedLapRecords";  //http://localhost:7071/api/Get-TimedLapRecords  
+        public static string PutTimedLapRecordStart = "Put-TimedLapRecordStart";   //http://localhost:7071/api/Put-TimedLapRecordStart/{lapid}
+        public static string PutTimedLapRecordFinish = "Put-TimedLapRecordFinish";  //http://localhost:7071/api/Put-TimedLapRecordFinish/{lapid}
+        public static string DeleteTimedLapRecord = "Delete-TimedLapRecord";     //http://localhost:7071/api/Delete-TimedLapRecord/{id}
+
         public static string AddLapRecord = "Post-LapRecord";
         public static string LapRecords = "Get-LapRecords";
         public static string DeleteLap = "Delete-LapRecord";

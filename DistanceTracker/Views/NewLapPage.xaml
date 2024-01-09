@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DistanceTracker.NewLapPage"
+             xmlns:vm="clr-namespace:DistanceTracker"
+             Title="New Timed Lap" x:Name="newLapPage">
+    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" RowDefinitions="Auto, *" RowSpacing="5">
+        <CollectionView Grid.Row="1"  x:Name="RunnersCollectionView"
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="FillAndExpand"
+                        ItemsSource="{Binding RunnersList}"
+                        SelectionMode="Single"
+                        ItemSizingStrategy="MeasureAllItems"
+                         HorizontalScrollBarVisibility="Always"
+                         VerticalScrollBarVisibility="Always"
+                        SelectedItem="{Binding SelectedRunner, Mode=TwoWay}"
+                        Footer="{Binding ItemCount}"
+                        EmptyView="No Runners to Display / Loading..."
+                        >
+
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical"
+                                 Span="3" HorizontalItemSpacing="2" VerticalItemSpacing="2" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame HasShadow="False" CornerRadius="10" Margin="3" Padding="2" BackgroundColor="{Binding Sex, Converter={StaticResource GenderToColorConverter}}"
+                           HeightRequest="100">
+                        <Grid Padding="8" RowDefinitions="*, Auto, Auto" ColumnDefinitions="*" HorizontalOptions="Center" 
+                              VerticalOptions="Center">
+                            <Label Grid.Column="0" Grid.Row="0" FontSize="22" TextColor="Black"
+                               Text="{Binding BibNumber}" HorizontalOptions="CenterAndExpand"
+                               HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand"
+                               FontAttributes="Bold" Margin="0,0,0,10" />
+
+                            <Label Grid.Row="1"
+                               Grid.Column="0" TextColor="Black"
+                               Text="{Binding RunnerName}"  
+                               FontSize="11" HorizontalOptions="Center"
+                                   VerticalOptions="End"
+                                 />
+                            <Label Grid.Row="2"
+                               Grid.Column="0" TextColor="Black"
+                               Text="{Binding TeamName}"  
+                               FontSize="11" HorizontalOptions="Center"
+                                  />
+                        </Grid>
+
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:NewLapPageViewModel}}, Path=SelectionChangedCommand}" CommandParameter="{Binding .}" />
+                        </Frame.GestureRecognizers>
+
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+</ContentPage>
