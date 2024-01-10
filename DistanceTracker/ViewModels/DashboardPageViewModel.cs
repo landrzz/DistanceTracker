@@ -206,11 +206,15 @@ namespace DistanceTracker
                     };
 
                     var runr = RunnersList.FirstOrDefault(x => x.BibNumber == racer.BibNumber);
-                    racer.Age = runr.Age;
-                    racer.Sex = runr.Sex;
-                    racer.TeamName = runr.TeamName;
-                    racer.CompletedLaps = grp;
+                    if (runr != null)
+                    {
+                        racer.Age = runr.Age;
+                        racer.Sex = runr.Sex;
+                        racer.TeamName = runr.TeamName;
+                        
+                    }
 
+                    racer.CompletedLaps = grp;
                     RacersList.Add(racer);
                 }
                 RacersList = new ObservableCollection<Racer>(RacersList.OrderByDescending(x => x.CurrentMileageTotal));

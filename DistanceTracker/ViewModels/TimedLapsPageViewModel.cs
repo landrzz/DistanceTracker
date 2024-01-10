@@ -106,8 +106,7 @@ namespace DistanceTracker
                 {
                     foreach (var lapp in TimedLapRecords.Where(x => x.BibNumber == result.BibNumber))
                     {
-                        lapp.LapStartedTime = result.LapStartedTime;
-                        OnPropertyChanged(nameof(TimedLapRecords));
+                        lapp.LapStartedTime = result.LapStartedTime;                       
                     }
                 }
 

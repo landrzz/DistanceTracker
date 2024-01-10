@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using DistanceTracker.ViewModels;
 using Prism.DryIoc;
-using ZXing.Net.Maui.Controls;
 
 namespace DistanceTracker
 {
@@ -12,7 +11,6 @@ namespace DistanceTracker
             var builder = MauiApp
                 .CreateBuilder()
                 .UseMauiApp<App>()
-                .UseBarcodeReader()
                 .UseMauiCommunityToolkit()
                 .UseShinyFramework(
                     new DryIocContainerExtension(),
