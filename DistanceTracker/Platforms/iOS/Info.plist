@@ -25,7 +25,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>XSAppIconAssets</key>
-	<string>Assets.xcassets/appicon.appiconset</string>	
+	<string>Assets.xcassets/appicon.appiconset</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Say something useful here that your users will understand</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
@@ -36,5 +36,7 @@
 	<string>Say something useful here that your users will understand</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Say something useful here that your users will understand</string>
+	<key>MinimumOSVersion</key>
+	<string>14.2</string>
 </dict>
 </plist>
