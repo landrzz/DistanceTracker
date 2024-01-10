@@ -39,7 +39,7 @@
                         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  >
                             <Label Text="Distance Leader (M)" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="18" TextColor="White"/>
                         <Label Text="{Binding LeadingMaleDistance}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="36" FontAttributes="Bold" TextColor="White"/>
-                        <Label Text="{Binding LeadingMaleName}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="9" TextColor="White"/>
+                        <Label Text="{Binding LeadingMaleName}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="10" TextColor="White"/>
                         </StackLayout>
                     </Frame>
 
@@ -48,7 +48,7 @@
                         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                         <Label Text="Distance Leader (F)" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="18" TextColor="White"/>
                                 <Label Text="{Binding LeadingFemaleDistance}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="36" FontAttributes="Bold" TextColor="White"/>
-                        <Label Text="{Binding LeadingFemaleName}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="9" TextColor="White"/>
+                        <Label Text="{Binding LeadingFemaleName}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="10" TextColor="White"/>
                         </StackLayout>
                     </Frame>
 
@@ -57,7 +57,7 @@
                         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                         <Label Text="Top Team (M)" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" TextColor="White"/>
                                 <Label Text="{Binding LeadingTeamDistanceMale}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="36" FontAttributes="Bold" TextColor="White"/>
-                        <Label Text="{Binding LeadingTeamNameMale}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="9" TextColor="White"/>
+                        <Label Text="{Binding LeadingTeamNameMale}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="10" TextColor="White"/>
 
                     </StackLayout>
                     </Frame>
@@ -67,7 +67,7 @@
                     <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                         <Label Text="Top Team (F)" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" TextColor="White"/>
                                 <Label Text="{Binding LeadingTeamDistanceFemale}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="36" FontAttributes="Bold" TextColor="White"/>
-                        <Label Text="{Binding LeadingTeamNameFemale}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="9" TextColor="White"/>
+                        <Label Text="{Binding LeadingTeamNameFemale}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="10" TextColor="White"/>
                     </StackLayout>
                 </Frame>
 
@@ -77,7 +77,7 @@
                     <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                         <Label Text="Top Team (C)" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" TextColor="White"/>
                                 <Label Text="{Binding LeadingTeamDistanceCoed}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="36" FontAttributes="Bold" TextColor="White"/>
-                        <Label Text="{Binding LeadingTeamNameCoed}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="9" TextColor="White"/>
+                        <Label Text="{Binding LeadingTeamNameCoed}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="10" TextColor="White"/>
                     </StackLayout>
                 </Frame>
             </Grid>

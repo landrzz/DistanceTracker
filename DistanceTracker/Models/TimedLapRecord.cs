@@ -44,6 +44,8 @@ namespace DistanceTracker
         [JsonIgnore]
         public string LapStopDisplay => GetStopForDisplay(LapCompletedTimeLocal);
 
+        [JsonIgnore]
+        public string LapDistanceDisplay => $"{LapDistance} Mile";
 
 
         public static string GetStartForDisplay(DateTime? startTimeLocal)

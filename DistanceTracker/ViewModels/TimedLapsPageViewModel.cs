@@ -1,6 +1,8 @@
 ﻿
 
+using System.Text;
 using Prism.Events;
+using Shiny;
 
 namespace DistanceTracker
 {
@@ -18,6 +20,7 @@ namespace DistanceTracker
 
         public string EventName { get; set; }
         public string EventId { get; set; }
+        public string EventTimeStamp { get; set; }
 
         public DelegateCommand<string> NavigateCommand { get; }
         public ICommand RefreshCommand => new Command(RefreshTimedLapsOnCommand);
@@ -25,6 +28,7 @@ namespace DistanceTracker
         public TimedLapsPageViewModel(Shiny.BaseServices services) : base(services)
         {
             _navigationService = services.Navigation;
+            _dialogService = services.Dialogs;
             NavigateCommand = new DelegateCommand<string>(OnNavigateCommandExecuted);
             TimedLapRecordStartCommand = new DelegateCommand<TimedLapRecord>(TimedLapRecordStart);
             TimedLapRecordStopCommand = new DelegateCommand<TimedLapRecord>(TimedLapRecordStop);
@@ -88,7 +92,7 @@ namespace DistanceTracker
                 if (timedlaprecordList != null)
                 {
                     TimedLapRecordsList = timedlaprecordList;
-                    TimedLapRecords = new ObservableCollection<TimedLapRecord>(TimedLapRecordsList.OrderByDescending(x => x.CreatedTime));
+                    TimedLapRecords = new ObservableCollection<TimedLapRecord>(TimedLapRecordsList.Where(y => string.IsNullOrWhiteSpace(y.LapCompletedTime)).OrderByDescending(x => x.CreatedTime));
                     
                     TotalNumberOfTimedLaps = $"Laps: {TimedLapRecordsList.Count}";
                 }
@@ -117,9 +121,9 @@ namespace DistanceTracker
                 {
                     foreach (var lapp in TimedLapRecords.Where(x => x.BibNumber == result.BibNumber))
                     {
-                        lapp.LapStartedTime = result.LapStartedTime;
-                        await RefreshTimedLaps();
+                        lapp.LapStartedTime = result.LapStartedTime;                      
                     }
+                    await RefreshTimedLaps();
                 }
                 else
                     await _dialogService.Alert("Could not start lap! Please try again.");
@@ -147,14 +151,41 @@ namespace DistanceTracker
                 var result = await DataService.PutLapStop(DateTime.Now.ToString(), lap.Id);
                 if (result != null)
                 {
-                    foreach (var lapp in TimedLapRecords.Where(x => x.BibNumber == result.BibNumber))
+                    var newlapRecCount = 0;
+                    foreach (var lapp in TimedLapRecords.Where(x => x.BibNumber == result.BibNumber).OrderByDescending(y => y.CreatedTime))
                     {
                         lapp.LapCompletedTime = result.LapCompletedTime;
                         await RefreshTimedLaps();
+
+                        if (newlapRecCount == 0)
+                        {
+                            //don't even ask to add because this is for an older (lingering) timed lap record
+
+                            var res = await _dialogService.Confirm("Would you like to add this to the distance total? (Probably yes)", "Add Distance to Laps", "YES", "NO");
+                            if (res)
+                            {
+                                //add to laps
+                                var elapsedTimeTicks = GetElapsedTicks();
+                                var lapRec = new LapRecord()
+                                {
+                                    LapCompletedTime = DateTime.Now,
+                                    BibNumber = lapp.BibNumber,
+                                    RunnerName = lapp.RunnerName,
+                                    RunnerId = lapp.RunnerId,
+                                    LapDistance = lapp.LapDistance,
+                                    RaceEventName = EventName,
+                                    LapTimeSpan = elapsedTimeTicks,
+                                };
+
+                                await SyncSaveRegularLapRecord(lapRec);
+                                newlapRecCount++;
+                            }
+                        }
+                        
                     }
                 }
                 else
-                    await _dialogService.Alert("Could not stop lap! Make note of the time (write it down) and try again.");
+                    await _dialogService.Alert("Could not stop lap! Make note of the time (write it down) and try again. Lap may have already been stopped", "Error. Could not stop lap.");
 
                 SelectedTimedLap = null;
             }
@@ -171,6 +202,75 @@ namespace DistanceTracker
             //code go here
 
             return base.InitializeAsync(parameters);
+        }
+
+        public async Task SyncSaveRegularLapRecord(LapRecord lap)
+        {
+            try
+            {
+                if (ConnectivityService.IsConnected())
+                {
+                    IsRefreshing = true;
+                    var _lap = await DataService.PostLapRecordAsync(lap);
+                    if (_lap == null)
+                    {
+                        await _dialogService.Alert("Create Lap Record Failed",
+                            "An error occured while creating the lap distance record. Please try again.",
+                            "OK");
+                    }
+                    else
+                    {
+                        await _dialogService.Snackbar("Distance Saved Successfully!");
+                    }
+                }
+                else
+                {
+                    IsRefreshing = false;
+                    await _dialogService.Alert("No Internet Connection", "Please ensure you have an active network connection and try again.", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                IsRefreshing = false;
+            }
+            IsRefreshing = false;
+        }
+
+        public int GetElapsedTicks()
+        {
+            if (!string.IsNullOrWhiteSpace(EventTimeStamp))
+            {
+                //convert to DT
+                DateTime dtStarted;
+                var dtValid = DateTime.TryParse(EventTimeStamp, out dtStarted);
+
+                if (dtValid)
+                {
+                    var tsElapsed = (DateTime.Now - dtStarted).TotalSeconds;
+                    return (int)tsElapsed;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+                return 0;
+        }
+
+        public string CurrentEventTimestamp { get; set; }
+        public bool CheckIsEventTimeStampSet()
+        {
+            EventTimeStamp = Preferences.Default.Get(Keys.CurrentEventTimestamp, string.Empty);
+            if (string.IsNullOrWhiteSpace(EventTimeStamp))
+            {
+                return false;
+            }
+            else
+            {
+                CurrentEventTimestamp = EventTimeStamp;
+                return true;
+            }
         }
 
         [Reactive] public string Property { get; set; }

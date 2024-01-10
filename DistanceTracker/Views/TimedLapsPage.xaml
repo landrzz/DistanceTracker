@@ -21,47 +21,6 @@
                                 Command="{Binding NavigateCommand}" CommandParameter="ViewLapResultsPage"/>
 
             <Grid Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-
-            <!--<RefreshView RefreshColor="LightGray" IsRefreshing="{Binding IsRefreshing}"
-                         Command="{Binding RefreshCommand}">
-            <CollectionView 
-    HorizontalOptions="FillAndExpand"
-    VerticalOptions="FillAndExpand"
-    ItemsSource="{Binding TimedLapRecords}"
-    SelectionMode="Single"
-    SelectedItem="{Binding SelectedTimedLap, Mode=TwoWay}"
-    Footer="{Binding TotalNumberOfTimedLaps}"
-    >
-
-                    <CollectionView.ItemsLayout>
-        <LinearItemsLayout Orientation="Vertical" />
-    </CollectionView.ItemsLayout>
-
-    <CollectionView.ItemTemplate>
-        <DataTemplate>
-            <Grid ColumnDefinitions="*, *, *" RowDefinitions="*" RowSpacing="0" 
-                  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="10" Margin="0">
-                
-                <Label Grid.Column="0" 
-                       Text="{Binding RunnerName}" FontSize="19"
-                       FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center"  />
-
-                <Button Grid.Column="1" Text="{Binding LapStartDisplay}" BackgroundColor="Green" TextColor="White" 
-                        VerticalOptions="Center" Margin="20, 1, 20, 1"
-                        Command="{Binding BindingContext.TimedLapRecordStartCommand, Source={x:Reference timedLapsPage}}"
-                        CommandParameter="{Binding .}" />
-
-                <Button Grid.Column="2" Text="{Binding LapStopDisplay}" BackgroundColor="Red" TextColor="White" 
-                        VerticalOptions="Center" Margin="20, 1, 20, 1" 
-                        Command="{Binding BindingContext.TimedLapRecordStopCommand, Source={x:Reference timedLapsPage}}"
-                        CommandParameter="{Binding .}"
-                        />
-            </Grid>
-        </DataTemplate>
-    </CollectionView.ItemTemplate>
-</CollectionView>
-
-                </RefreshView>-->
             
                 <ListView 
                           HorizontalOptions="FillAndExpand"
@@ -78,21 +37,25 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>                        
-                                <Grid ColumnDefinitions="*, *, *" RowDefinitions="*" RowSpacing="0" 
+                                <Grid ColumnDefinitions="*, *, *" RowDefinitions="*, *" RowSpacing="0" 
                                       HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="10" Margin="0">
                                     
                                     <Label Grid.Column="0" 
-                                        Text="{Binding RunnerName}" FontSize="19"
-                                        FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center"  />
+                                        Text="{Binding RunnerName}" FontSize="20"
+                                        FontAttributes="Bold" VerticalOptions="End" HorizontalOptions="Center"  />
 
-                                    <Button Grid.Column="1" Text="{Binding LapStartDisplay}" BackgroundColor="Green" TextColor="White" 
-                                        VerticalOptions="Center" Margin="20, 1, 20, 1"
+                                    <Label Grid.Column="0" Grid.Row="1"
+                                            Text="{Binding LapDistanceDisplay}" FontSize="12"
+                                            FontAttributes="None" VerticalOptions="Start" HorizontalOptions="Center"  />
+
+                                    <Button Grid.Column="1" Grid.RowSpan="2" Text="{Binding LapStartDisplay}" BackgroundColor="Green" TextColor="White" 
+                                        VerticalOptions="CenterAndExpand" Margin="20, 1, 20, 1" HeightRequest="70"
                                         Command="{Binding BindingContext.TimedLapRecordStartCommand, Source={x:Reference timedLapsPage}}"
                                         CommandParameter="{Binding .}" />
 
                             
-                                    <Button Grid.Column="2" Text="{Binding LapStopDisplay}" BackgroundColor="Red" TextColor="White" 
-                                        VerticalOptions="Center" Margin="20, 1, 20, 1" 
+                                    <Button Grid.Column="2" Grid.RowSpan="2" Text="{Binding LapStopDisplay}" BackgroundColor="Red" TextColor="White" 
+                                        VerticalOptions="CenterAndExpand" Margin="20, 1, 20, 1" HeightRequest="70"
                                         Command="{Binding BindingContext.TimedLapRecordStopCommand, Source={x:Reference timedLapsPage}}"
                                         CommandParameter="{Binding .}"
                                         />
