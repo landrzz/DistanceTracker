@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="DistanceTracker.TimedLapsPage" xmlns:b1="http://prismlibrary.com"
+             x:Class="DistanceTracker.TimedLapsPage" xmlns:b1="http://prismlibrary.com" xmlns:distancetracker="clr-namespace:DistanceTracker"
              x:Name="timedLapsPage"
              Title="TimedLapsPage">
     
@@ -21,6 +21,47 @@
                                 Command="{Binding NavigateCommand}" CommandParameter="ViewLapResultsPage"/>
 
             <Grid Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+            <!--<RefreshView RefreshColor="LightGray" IsRefreshing="{Binding IsRefreshing}"
+                         Command="{Binding RefreshCommand}">
+            <CollectionView 
+    HorizontalOptions="FillAndExpand"
+    VerticalOptions="FillAndExpand"
+    ItemsSource="{Binding TimedLapRecords}"
+    SelectionMode="Single"
+    SelectedItem="{Binding SelectedTimedLap, Mode=TwoWay}"
+    Footer="{Binding TotalNumberOfTimedLaps}"
+    >
+
+                    <CollectionView.ItemsLayout>
+        <LinearItemsLayout Orientation="Vertical" />
+    </CollectionView.ItemsLayout>
+
+    <CollectionView.ItemTemplate>
+        <DataTemplate>
+            <Grid ColumnDefinitions="*, *, *" RowDefinitions="*" RowSpacing="0" 
+                  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="10" Margin="0">
+                
+                <Label Grid.Column="0" 
+                       Text="{Binding RunnerName}" FontSize="19"
+                       FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center"  />
+
+                <Button Grid.Column="1" Text="{Binding LapStartDisplay}" BackgroundColor="Green" TextColor="White" 
+                        VerticalOptions="Center" Margin="20, 1, 20, 1"
+                        Command="{Binding BindingContext.TimedLapRecordStartCommand, Source={x:Reference timedLapsPage}}"
+                        CommandParameter="{Binding .}" />
+
+                <Button Grid.Column="2" Text="{Binding LapStopDisplay}" BackgroundColor="Red" TextColor="White" 
+                        VerticalOptions="Center" Margin="20, 1, 20, 1" 
+                        Command="{Binding BindingContext.TimedLapRecordStopCommand, Source={x:Reference timedLapsPage}}"
+                        CommandParameter="{Binding .}"
+                        />
+            </Grid>
+        </DataTemplate>
+    </CollectionView.ItemTemplate>
+</CollectionView>
+
+                </RefreshView>-->
             
                 <ListView 
                           HorizontalOptions="FillAndExpand"
@@ -33,12 +74,6 @@
                   IsRefreshing="{Binding IsRefreshing,Mode=TwoWay}"
                   SelectedItem="{Binding SelectedTimedLap, Mode=TwoWay}"
                   Footer="{Binding TotalNumberOfTimedLaps}">
-
-            <ListView.Behaviors>
-                <b1:EventToCommandBehavior EventName="ItemTapped"
-                                          EventArgsParameterPath="Item"
-                                          Command="{Binding BindingContext.TimedLapRecordSelectedCommand, Source={x:Reference timedLapsPage}}" />
-            </ListView.Behaviors>
 
             <ListView.ItemTemplate>
                 <DataTemplate>

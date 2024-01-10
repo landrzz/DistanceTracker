@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DistanceTracker
 {
-    public class TimedLapRecord
+    public class TimedLapRecord : INotifyPropertyChanged
     {
         public string LapDistance { get; set; }
         public string BibNumber { get; set; }
@@ -18,6 +19,7 @@ namespace DistanceTracker
         public string RaceEventName { get; set; }
         public string LapStartedTime { get; set; } = "START";
         public string LapCompletedTime { get; set; } = "STOP";
+        public DateTime CreatedTime { get; set; }
 
         public string Id { get; set; }
 
@@ -82,6 +84,13 @@ namespace DistanceTracker
             }
             else
                 return null;           
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 

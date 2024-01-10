@@ -16,12 +16,11 @@ namespace DistanceTracker
         public DelegateCommand<TimedLapRecord> TimedLapRecordStartCommand { get; }
         public DelegateCommand<TimedLapRecord> TimedLapRecordStopCommand { get; }
 
-
-
         public string EventName { get; set; }
         public string EventId { get; set; }
 
         public DelegateCommand<string> NavigateCommand { get; }
+        public ICommand RefreshCommand => new Command(RefreshTimedLapsOnCommand);
 
         public TimedLapsPageViewModel(Shiny.BaseServices services) : base(services)
         {
@@ -29,7 +28,6 @@ namespace DistanceTracker
             NavigateCommand = new DelegateCommand<string>(OnNavigateCommandExecuted);
             TimedLapRecordStartCommand = new DelegateCommand<TimedLapRecord>(TimedLapRecordStart);
             TimedLapRecordStopCommand = new DelegateCommand<TimedLapRecord>(TimedLapRecordStop);
-
         }
 
         private void OnNavigateCommandExecuted(string uri)
@@ -66,8 +64,17 @@ namespace DistanceTracker
                 IsRefreshing = false;
             }
 
-
             base.OnNavigatedTo(parameters);
+        }
+
+        public async Task RefreshTimedLaps()
+        {
+            await GetCurrentTimedLaps(EventName, forceRefresh: true);
+        }
+
+        public async void RefreshTimedLapsOnCommand()
+        {
+            await GetCurrentTimedLaps(EventName, forceRefresh: true);
         }
 
         public async Task<List<TimedLapRecord>> GetCurrentTimedLaps(string curRaceEvent, bool forceRefresh = true)
@@ -81,7 +88,8 @@ namespace DistanceTracker
                 if (timedlaprecordList != null)
                 {
                     TimedLapRecordsList = timedlaprecordList;
-                    TimedLapRecords = new ObservableCollection<TimedLapRecord>(TimedLapRecordsList.OrderByDescending(x => x.LapStartedTimeLocal));
+                    TimedLapRecords = new ObservableCollection<TimedLapRecord>(TimedLapRecordsList.OrderByDescending(x => x.CreatedTime));
+                    
                     TotalNumberOfTimedLaps = $"Laps: {TimedLapRecordsList.Count}";
                 }
             }
@@ -96,6 +104,9 @@ namespace DistanceTracker
 
         public async void TimedLapRecordStart(TimedLapRecord lap)
         {
+            if (IsBusy)
+                return;
+
             IsBusy = true;
 
             try
@@ -106,22 +117,28 @@ namespace DistanceTracker
                 {
                     foreach (var lapp in TimedLapRecords.Where(x => x.BibNumber == result.BibNumber))
                     {
-                        lapp.LapStartedTime = result.LapStartedTime;                       
+                        lapp.LapStartedTime = result.LapStartedTime;
+                        await RefreshTimedLaps();
                     }
                 }
+                else
+                    await _dialogService.Alert("Could not start lap! Please try again.");
 
                 SelectedTimedLap = null;
             }
             catch (Exception ex)
             {
                 IsBusy = false;
+                await _dialogService.Alert("Could not start lap! Please try again.");
             }
-
             IsBusy = false;
         }
 
         public async void TimedLapRecordStop(TimedLapRecord lap)
         {
+            if (IsBusy)
+                return;
+
             IsBusy = true;
 
             try
@@ -130,16 +147,22 @@ namespace DistanceTracker
                 var result = await DataService.PutLapStop(DateTime.Now.ToString(), lap.Id);
                 if (result != null)
                 {
-                    SelectedTimedLap.LapCompletedTime = result.LapCompletedTime;
+                    foreach (var lapp in TimedLapRecords.Where(x => x.BibNumber == result.BibNumber))
+                    {
+                        lapp.LapCompletedTime = result.LapCompletedTime;
+                        await RefreshTimedLaps();
+                    }
                 }
+                else
+                    await _dialogService.Alert("Could not stop lap! Make note of the time (write it down) and try again.");
 
                 SelectedTimedLap = null;
             }
             catch (Exception ex)
             {
                 IsBusy = false;
+                await _dialogService.Alert("Could not stop lap! Start time must be set! Please try again.");
             }
-
             IsBusy = false;
         }
 
