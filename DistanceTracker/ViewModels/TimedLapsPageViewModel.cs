@@ -92,7 +92,7 @@ namespace DistanceTracker
                 if (timedlaprecordList != null)
                 {
                     TimedLapRecordsList = timedlaprecordList;
-                    TimedLapRecords = new ObservableCollection<TimedLapRecord>(TimedLapRecordsList.Where(y => string.IsNullOrWhiteSpace(y.LapCompletedTime)).OrderByDescending(x => x.CreatedTime));
+                    TimedLapRecords = new ObservableCollection<TimedLapRecord>(TimedLapRecordsList.Where(y => !y.IsLapFinished).OrderBy(x => x.CreatedTime));
                     
                     TotalNumberOfTimedLaps = $"Laps: {TimedLapRecordsList.Count}";
                 }

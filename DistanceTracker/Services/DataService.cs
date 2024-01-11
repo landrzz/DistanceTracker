@@ -255,6 +255,28 @@ namespace DistanceTracker
             return retrieved_result;
         }
 
+        public static async Task<Object> DeleteTimedLapRecord(TimedLapRecord _lap)
+        {
+            Debug.WriteLine("Deleting a timed lap record item...");
+            Object retrieved_result = null;
+            var jsonObject = JsonConvert.SerializeObject(_lap);
+
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.DeleteTimedLapRecord}/{_lap.Id}?code={Endpoints.code}";
+            Debug.WriteLine(url);
+
+            var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
+            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
+
+            var restRequest = new RestRequest(url, Method.DELETE).AddJsonBody(_lap, "application/json");
+            var response = await client.DeleteAsync<Object>(restRequest);
+            if (response != null)
+            {
+                retrieved_result = response;
+            }
+
+            return retrieved_result;
+        }
+
         public static async Task<Object> DeleteRunner(Runner _runner)
         {
             Debug.WriteLine("Deleting a runner...");

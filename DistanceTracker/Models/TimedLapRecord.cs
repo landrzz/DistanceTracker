@@ -48,6 +48,30 @@ namespace DistanceTracker
         public string LapDistanceDisplay => $"{LapDistance} Mile";
 
 
+        [JsonIgnore]
+        public string TotalLapTime => GetTotalLapTime(LapStartedTimeLocal, LapCompletedTimeLocal);
+
+        public string GetTotalLapTime(DateTime? startTime, DateTime? endTime)
+        {
+            if (startTime.HasValue && endTime.HasValue)
+            {
+                DateTime start = (DateTime)startTime;
+                DateTime end = (DateTime)endTime;
+
+                // Calculate the time delta
+                TimeSpan timeDelta = end - start;
+
+                System.Diagnostics.Debug.WriteLine(timeDelta.ToString());
+
+                // Format and display the time delta
+                //string formattedTimeDelta = timeDelta.ToString(@"hh\:mm\:ss");
+                string formattedTimeDelta = timeDelta.ToString();
+                return formattedTimeDelta;
+            }
+            else
+                return string.Empty;
+        }
+
         public static string GetStartForDisplay(DateTime? startTimeLocal)
         {
             if (startTimeLocal.HasValue)

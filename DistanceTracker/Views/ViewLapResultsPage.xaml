@@ -2,11 +2,60 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DistanceTracker.ViewLapResultsPage"
-             Title="ViewLapResultsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             xmlns:b1="http://prismlibrary.com"
+             x:Name="editTimedLapsPage"
+             Title="View Timed Laps">
+   <StackLayout>
+        <ListView Grid.Row="1" 
+                              CachingStrategy="RecycleElementAndDataTemplate"
+                              RowHeight="85"
+                              SeparatorVisibility="None"
+                              ItemsSource="{Binding TimedLapRecords}"
+                  IsRefreshing="{Binding IsRefreshing,Mode=TwoWay}"
+                  SelectedItem="{Binding SelectedTimedLap, Mode=TwoWay}"
+                  Footer="{Binding TotalNumberOfTimedLaps}">
+
+            <ListView.Behaviors>
+                <b1:EventToCommandBehavior EventName="ItemTapped"
+                                          EventArgsParameterPath="Item"
+                                          Command="{Binding BindingContext.TimedLapRecordSelectedCommand, Source={x:Reference editTimedLapsPage}}" />
+            </ListView.Behaviors>
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell >
+                        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="0" Margin="0">
+
+
+                            <Frame HeightRequest="70" HasShadow="False" Margin="0" Padding="7, 3, 7, 3" CornerRadius="7" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                                           >
+                                <Grid RowDefinitions="Auto, *, *" ColumnDefinitions="*, *, Auto" RowSpacing="0" 
+                                              HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                                    <Label Grid.Row="0"
+                               FontSize="16" FontAttributes="Italic"
+                               Text="{Binding TotalLapTime}"                               
+                               />
+                                    
+                                    <Label Grid.Column="0" Grid.Row="1"
+                               Text="{Binding RunnerName}" FontSize="19"
+                               FontAttributes="Bold" VerticalOptions="Center"  />
+
+                                    <Label Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"
+                               FontSize="16" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"
+                               Text="{Binding BibNumber}"                               
+                               />
+
+                                    <Label Grid.Row="0" Grid.RowSpan="3" Grid.Column="2"
+                               FontSize="16" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"
+                               Text="{Binding LapDistance}" WidthRequest="60" Margin="0, 0, 10, 0"                      
+                               HorizontalTextAlignment="End"  />
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+        </ListView>
+    </StackLayout>
 </ContentPage>
