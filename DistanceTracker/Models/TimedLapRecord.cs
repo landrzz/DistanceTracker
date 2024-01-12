@@ -104,8 +104,11 @@ namespace DistanceTracker
         {
             if (lapCompleted.HasValue)
             {
-                TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("America/New_York");
-                DateTime estTime = TimeZoneInfo.ConvertTimeFromUtc((DateTime)lapCompleted, estZone);
+                //TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("America/New_York");
+                //DateTime estTime = TimeZoneInfo.ConvertTimeFromUtc((DateTime)lapCompleted, estZone);
+
+                var estTime = ((DateTime)lapCompleted);//.ToLocalTime();
+
                 return estTime;
             }
             else

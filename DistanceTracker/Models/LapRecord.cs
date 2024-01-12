@@ -28,6 +28,9 @@ namespace DistanceTracker
         {
             TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("America/New_York");
             DateTime estTime = TimeZoneInfo.ConvertTimeFromUtc(lapCompleted, estZone);
+
+            //var estTime = ((DateTime)lapCompleted);//.ToLocalTime();
+
             return estTime;
         }
     }

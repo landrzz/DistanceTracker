@@ -116,10 +116,11 @@ namespace DistanceTracker
                 }
 
                 await GetTimedLapRecords(EventName, forceRefresh: true);
+
+                await _dialogService.Alert("the TIMED LAP was deleted; however, the lap record for the overall distance total still remains. you may wish to go delete that now.", "REMINDER", "OK");
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
