@@ -51,6 +51,10 @@ namespace DistanceTracker
         [JsonIgnore]
         public string TotalLapTime => GetTotalLapTime(LapStartedTimeLocal, LapCompletedTimeLocal);
 
+        [JsonIgnore]
+        public string StartToEndDisplay => $"{LapStartedTimeLocal?.ToString("h:mm:ss tt")} - {LapCompletedTimeLocal?.ToString("h:mm:ss tt")}";
+
+
         public string GetTotalLapTime(DateTime? startTime, DateTime? endTime)
         {
             if (startTime.HasValue && endTime.HasValue)
