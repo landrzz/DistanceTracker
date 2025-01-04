@@ -299,6 +299,28 @@ namespace DistanceTracker
             return retrieved_result;
         }
 
+        public static async Task<Object> EditRunner(Runner _runner)
+        {
+            Debug.WriteLine("Editing a runner (team)...");
+            Object retrieved_result = null;
+            var jsonObject = JsonConvert.SerializeObject(_runner);
+
+            var url = $"{Endpoints.DistTrackURLBase}/{Endpoints.EditRunner}/{_runner.Id}?code={Endpoints.code}";
+            Debug.WriteLine(url);
+
+            var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
+            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
+
+            var restRequest = new RestRequest(url, Method.PUT).AddJsonBody(_runner, "application/json");
+            var response = await client.PutAsync<Object>(restRequest);
+            if (response != null)
+            {
+                retrieved_result = response;
+            }
+
+            return retrieved_result;
+        }
+
         public static async Task<RaceEvent> PutEventTimeClock(string now)
         {
             Debug.WriteLine("Starting the event time clock...");
@@ -442,6 +464,8 @@ namespace DistanceTracker
         public static string AddRunner = "Post-Runner";
         public static string Runners = "Get-Runners";
         public static string DeleteRunner = "Delete-Runner";
+        public static string EditRunner = "Edit-Runner";
+
 
         public static string Settings = "Get-Settings";
 

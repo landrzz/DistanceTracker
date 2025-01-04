@@ -112,7 +112,7 @@ public partial class SettingsPage : ContentPage
     {
         try
         {
-            var eventTimeLimit = Preferences.Default.Get(Keys.TimeLimitHours, 12);
+            var eventTimeLimit = Preferences.Default.Get(Keys.TimeLimitHours, 0);
             var res = string.Empty;
 
             if (eventTimeLimit != 0)
@@ -126,13 +126,14 @@ public partial class SettingsPage : ContentPage
 
             if (!string.IsNullOrWhiteSpace(res))
             {
-                var resInt = 12;
+                var resInt = 0;
                 var worked = int.TryParse(res, out resInt);
 
                 Preferences.Default.Set(Keys.TimeLimitHours, resInt);
                 _vm.FinalizeEventTimeLimitCommand.Execute(null);
-            }
-            System.Diagnostics.Debug.WriteLine(res);
+                System.Diagnostics.Debug.WriteLine(resInt);
+            }   
+            
         }
         catch (Exception ex)
         {

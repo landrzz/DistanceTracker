@@ -19,7 +19,10 @@ public partial class DashboardPage : ContentPage
 		InitializeComponent();
 
         myTimer = new System.Timers.Timer(1000);
-        totalTimeLimitHours = new TimeSpan(12, 0, 0).TotalMilliseconds;
+
+        var timeLimitHours = Preferences.Get(Keys.TimeLimitHours, 12);
+
+        totalTimeLimitHours = new TimeSpan(timeLimitHours, 0, 0).TotalMilliseconds;
 
         //MessagingCenter.Subscribe<DashboardPage>(this, "CheckStatus", (sender) =>
         //{

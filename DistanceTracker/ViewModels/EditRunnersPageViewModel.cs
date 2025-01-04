@@ -82,7 +82,7 @@ namespace DistanceTracker
             try
             {
                 var result = await _dialogService.ActionSheet($"Edit {runner.RunnerName}'s Runner Record:",
-                    null, "Cancel", "DELETE RUNNER");
+                    null, "Cancel", "DELETE RUNNER", "EDIT TEAM");
 
                 if (result != null && result != "Cancel")
                 {
@@ -97,8 +97,19 @@ namespace DistanceTracker
                             DeleteRunnerRecord(runner);
                         }
                     }
-                }
+                    else if (result == "EDIT TEAM")
+                    {
+                        var newTeam = await _dialogService.Input("Enter the Team Name: ", "Team Name", "OK", "Cancel");
 
+                        if (!string.IsNullOrWhiteSpace(newTeam?.ToString()))
+                        {
+                            //edit the runner record (Team Name)
+                            var newRunnerWithTeam = runner;
+                            newRunnerWithTeam.TeamName = newTeam;
+                            EditRunnerRecord(newRunnerWithTeam);
+                        }
+                    }
+                }
 
                 SelectedRunner = null;
             }
@@ -118,6 +129,25 @@ namespace DistanceTracker
                 if (deleteResult != null)
                 {
                     await _dialogService.Snackbar("Runner deleted successfully");
+                }
+
+                await GetRunners(EventName, forceRefresh: true);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async void EditRunnerRecord(Runner runner)
+        {
+            try
+            {
+                var editResult = await DataService.EditRunner(runner);
+                if (editResult != null)
+                {
+                    await _dialogService.Snackbar("Runner team name updated successfully");
                 }
 
                 await GetRunners(EventName, forceRefresh: true);
