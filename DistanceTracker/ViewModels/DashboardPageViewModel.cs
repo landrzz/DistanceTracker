@@ -17,6 +17,7 @@ namespace DistanceTracker
 
         public DelegateCommand<string> NavigateCommand { get; }
 
+        public DateTime EventStartTime;
         System.Timers.Timer refreshTimer;
         public string EventId { get; set; }
         public ElapsedEventHandler refreshHandler;
@@ -42,9 +43,10 @@ namespace DistanceTracker
 
         [Reactive] public ObservableCollection<Racer> RacersList { get; set; } = new ObservableCollection<Racer>();
         [Reactive] public ObservableCollection<RaceTeam> RaceTeamsList { get; set; } = new ObservableCollection<RaceTeam>();
+        [Reactive] public ObservableCollection<Deltas> TopDeltasList { get; set; } = new ObservableCollection<Deltas>();
 
         public DashboardPageViewModel(BaseServices services) : base(services)
-        {           
+        {
             _navigationService = services.Navigation;
             _dialogService = services.Dialogs;
 
@@ -194,7 +196,7 @@ namespace DistanceTracker
                 var groupedLapRecordsList = LapRecordsList.GroupBy(u => u.BibNumber)
                         .Select(grp => grp.ToList())
                         .ToList();
-             
+
                 foreach (var grp in groupedLapRecordsList)
                 {
                     var grpItem = grp.FirstOrDefault();
@@ -202,7 +204,7 @@ namespace DistanceTracker
                     {
                         RacerName = grpItem?.RunnerName,
                         RaceEventName = grpItem?.RaceEventName,
-                        BibNumber = grpItem?.BibNumber, 
+                        BibNumber = grpItem?.BibNumber,
                     };
 
                     var runr = RunnersList.FirstOrDefault(x => x.BibNumber == racer.BibNumber);
@@ -211,7 +213,7 @@ namespace DistanceTracker
                         racer.Age = runr.Age;
                         racer.Sex = runr.Sex;
                         racer.TeamName = runr.TeamName;
-                        
+
                     }
 
                     racer.CompletedLaps = grp;
@@ -296,6 +298,16 @@ namespace DistanceTracker
                 }
 
                 OverallDistanceTotal = LapRecordsList.Sum(x => double.Parse(x.LapDistance)).ToString("N2");
+
+                // Group laps by runner (BibNumber) *AND* LapDistance
+                var groupedLapRecordsList_Deltas = LapRecordsList
+                    .GroupBy(l => new { l.BibNumber, l.LapDistance })
+                    .Select(grp => grp.OrderBy(x => x.LapCompletedTimeLocal).ToList())
+                    .ToList();
+
+                CalculateTotalElapsedTimeForLaps(EventStartTime, groupedLapRecordsList_Deltas);
+
+                BuildDeltasList(groupedLapRecordsList_Deltas);
             }
             catch (Exception ex)
             {
@@ -303,6 +315,167 @@ namespace DistanceTracker
                 Logger.LogError(ex, "FormatData - Error formatting dashboard data");
             }
         }
+
+        private void BuildDeltasList(List<List<LapRecord>> groupedLapRecordsList_Deltas)
+        {
+            try
+            {
+                var deltasList = new List<Deltas>();
+
+                foreach (var lapGroup in groupedLapRecordsList_Deltas)
+                {
+                    var lapCount = lapGroup.Count;
+                    if (lapCount == 0)
+                        continue; // No laps? Nothing to do.
+
+                    // Extract some basics from the group
+                    var bibNumber = lapGroup[0].BibNumber;
+                    var runnerName = lapGroup[0].RunnerName;
+
+                    // Look up the runner to retrieve Sex (or other info)
+                    var runnerInfo = RunnersList.FirstOrDefault(r => r.BibNumber == bibNumber);
+                    var runnerSex = runnerInfo?.Sex ?? string.Empty;
+
+                    // We’ll track the best (fastest) delta in seconds
+                    double bestDeltaSeconds = double.MaxValue;
+                    LapRecord bestDeltaLap = null;
+
+                    // ----------------------------------
+                    //  Handle SINGLE-LAP scenario
+                    // ----------------------------------
+                    if (lapCount == 1)
+                    {
+                        // Just compute the time from event start to first (and only) lap
+                        var singleLap = lapGroup[0];
+                        if (singleLap.LapCompletedTimeLocal.HasValue)
+                        {
+                            bestDeltaSeconds = (singleLap.LapCompletedTimeLocal.Value - EventStartTime).TotalSeconds;
+                            bestDeltaLap = singleLap;
+                        }
+                    }
+                    else
+                    {
+                        // ----------------------------------
+                        //  Handle MULTI-LAP scenario
+                        // ----------------------------------
+                        for (int i = 1; i < lapCount; i++)
+                        {
+                            DateTime? currentLapTime = lapGroup[i].LapCompletedTimeLocal;
+                            DateTime? previousLapTime = lapGroup[i - 1].LapCompletedTimeLocal;
+                            if (!currentLapTime.HasValue || !previousLapTime.HasValue)
+                                continue;
+
+                            var deltaSeconds = (currentLapTime.Value - previousLapTime.Value).TotalSeconds;
+                            if (deltaSeconds < bestDeltaSeconds)
+                            {
+                                bestDeltaSeconds = deltaSeconds;
+                                bestDeltaLap = lapGroup[i];
+                            }
+                        }
+                    }
+
+                    // If we found a bestDeltaLap, build a Deltas object and add it
+                    if (bestDeltaLap != null)
+                    {
+                        var bestDeltasObject = new Deltas
+                        {
+                            RacerName = runnerName,
+                            BibNumber = bibNumber,
+                            LapDistance = bestDeltaLap.LapDistance,
+                            DeltaTimespan = TimeSpan.FromSeconds(bestDeltaSeconds),
+                            Sex = runnerSex
+                        };
+                        deltasList.Add(bestDeltasObject);
+                    }
+                }
+
+                // Sort them in ascending order (fastest = smallest timespan)
+                var sortedDeltas = deltasList
+                    .OrderBy(d => d.DeltaTimespan)
+                    .ToList();
+
+                // Assign them to the reactive property
+                TopDeltasList = new ObservableCollection<Deltas>(sortedDeltas);
+            }
+            catch (Exception ex)
+            {
+                // In production, always log or handle exceptions
+                System.Diagnostics.Debug.WriteLine($"{ex.Message} :: {ex.InnerException}");
+                Logger.LogError(ex, "BuildDeltasList - Error computing deltas");
+            }
+        }
+
+
+        //private void BuildDeltasList(List<List<LapRecord>> groupedLapRecordsList_Deltas)
+        //{
+        //    try
+        //    {
+        //        var deltasList = new List<Deltas>();
+
+        //        foreach (var lapGroup in groupedLapRecordsList_Deltas)
+        //        {
+        //            // If the runner has fewer than 2 laps, we can’t compute a delta
+        //            if (lapGroup.Count() < 2)
+        //                continue;
+
+        //            // Extract some basics from the group
+        //            var bibNumber = lapGroup[0].BibNumber;
+        //            var runnerName = lapGroup[0].RunnerName;
+
+        //            // Look up the runner to retrieve Sex (or other info)
+        //            var runnerInfo = RunnersList.FirstOrDefault(r => r.BibNumber == bibNumber);
+        //            var runnerSex = runnerInfo?.Sex ?? string.Empty;
+
+        //            // We’ll track the best (fastest) delta in seconds
+        //            double bestDeltaSeconds = double.MaxValue;
+        //            LapRecord bestDeltaLap = null;
+
+        //            // Pairwise check consecutive laps
+        //            for (int i = 1; i < lapGroup.Count(); i++)
+        //            {
+        //                DateTime? currentLapTime = lapGroup[i].LapCompletedTimeLocal;
+        //                DateTime? previousLapTime = lapGroup[i - 1].LapCompletedTimeLocal;
+        //                if (!currentLapTime.HasValue || !previousLapTime.HasValue)
+        //                    continue;
+
+        //                var deltaSeconds = (currentLapTime.Value - previousLapTime.Value).TotalSeconds;
+        //                if (deltaSeconds < bestDeltaSeconds)
+        //                {
+        //                    bestDeltaSeconds = deltaSeconds;
+        //                    bestDeltaLap = lapGroup[i];
+        //                }
+        //            }
+
+        //            // If we found a bestDeltaLap, build a Deltas object and add it
+        //            if (bestDeltaLap != null)
+        //            {
+        //                var bestDeltasObject = new Deltas
+        //                {
+        //                    RacerName = runnerName,
+        //                    BibNumber = bibNumber,
+        //                    LapDistance = bestDeltaLap.LapDistance,
+        //                    DeltaTimespan = TimeSpan.FromSeconds(bestDeltaSeconds),
+        //                    Sex = runnerSex
+        //                };
+        //                deltasList.Add(bestDeltasObject);
+        //            }
+        //        }
+
+        //        // 4) Sort or filter them in any way you like
+        //        var sortedDeltas = deltasList
+        //            .OrderBy(d => d.DeltaTimespan)  // fastest first
+        //            .ToList();
+
+        //        // 5) Assign them to the reactive property
+        //        TopDeltasList = new ObservableCollection<Deltas>(sortedDeltas);
+        //    }
+        //    catch
+        //    {
+
+        //    }
+
+        //}
+
 
         private void OnNavigateCommandExecuted(string uri)
         {
@@ -349,6 +522,7 @@ namespace DistanceTracker
                 if (raceEvent != null && !string.IsNullOrWhiteSpace(raceEvent.EventName))
                 {
                     Preferences.Default.Set(Keys.CurrentEventTimestamp, raceEvent.EventStartTimestamp);
+                    EventStartTime = DateTime.Parse(raceEvent.EventStartTimestamp);
 
                     await Task.Delay(2000);
 
@@ -361,6 +535,50 @@ namespace DistanceTracker
                 Logger.LogError(ex, "RefreshCurrentEventDetails - Error getting race event details");
             }
         }
+
+        //////////////////////////////////////////////////
+        ///
+        public void CalculateTotalElapsedTimeForLaps(
+        DateTime eventStartTime,
+        List<List<LapRecord>> groupedLapRecordsList)
+        {
+            foreach (var lapGroup in groupedLapRecordsList)
+            {
+                // The "previous" time for the first lap is the event start
+                DateTime previousLapTime = eventStartTime;
+
+                // Running total of elapsed seconds from event start
+                int totalElapsedSeconds = 0;
+
+                foreach (var lap in lapGroup)
+                {
+
+                    var lapDateTime = lap.LapCompletedTimeLocal.Value;
+
+                    // How many seconds between this lap's completion and the previous checkpoint?
+                    var delta = (lapDateTime - previousLapTime).TotalSeconds;
+
+                    // Accumulate total elapsed time
+                    totalElapsedSeconds += Convert.ToInt32(delta);
+
+                    // Assign that running total to LapTimeSpan (the "total time" from event start)
+                    lap.LapTimeSpan = totalElapsedSeconds;
+
+                    // Update "previous" time
+                    previousLapTime = lapDateTime;
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
     }
 
     public class Racer
@@ -393,5 +611,18 @@ namespace DistanceTracker
         public string RaceEventName { get; set;}
         public double CurrrentTeamMileageDistance { get; set; }
         public string TeamType { get; set; }
+    }
+
+    public class Deltas
+    {
+        public string RacerName { get; set; }
+        public string BibNumber { get; set; }
+        public string LapDistance { get; set; }
+        public TimeSpan DeltaTimespan { get; set; }
+        public string Sex { get; set; }
+
+        public string DelaTimeSpanFormatted => DeltaTimespan.ToString(@"hh\:mm\:ss");
+
+        public string DeltaAndDistance => $"{DeltaTimespan} ({LapDistance})";
     }
 }

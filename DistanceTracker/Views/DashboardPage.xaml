@@ -83,8 +83,12 @@
             </Grid>
                 </ScrollView>
 
-                <Grid Grid.Row="1" RowDefinitions="*, *" ColumnDefinitions="*" RowSpacing="10" Padding="3">
+                <Grid Grid.Row="1" RowDefinitions="*, *" ColumnDefinitions="*, *" RowSpacing="10" ColumnSpacing="10" Padding="3">
+
+                    <!-- ====================== RUNERS LISTVIEW ============================= -->
                     <ListView Grid.Row="0"
+                              Grid.Column="1"
+                              Grid.RowSpan="2"
                               x:Name="RunnersListView"
                               HorizontalOptions="FillAndExpand"
                               VerticalOptions="FillAndExpand"
@@ -133,8 +137,9 @@
                     </ListView>
 
 
-                  <!-- =================================================== -->
+                  <!-- ======================= TEAMS LISTVIEW  ============================ -->
                     <ListView Grid.Row="1"
+                              Grid.Column="0"
                               x:Name="TeamsListView"
                               HorizontalOptions="FillAndExpand"
                               VerticalOptions="FillAndExpand"
@@ -186,6 +191,64 @@
                         </ListView.ItemTemplate>
 
                     </ListView>
+
+
+
+
+
+                    <!-- ====================== DELTAS ============================= -->
+                    <ListView Grid.Row="0"
+                              Grid.Column="0"
+                              Grid.RowSpan="1"
+                              x:Name="DeltasListView"
+                              HorizontalOptions="FillAndExpand"
+                              VerticalOptions="FillAndExpand"
+                              CachingStrategy="RecycleElementAndDataTemplate"
+                              RowHeight="54"
+                              SeparatorVisibility="None"
+                              ItemsSource="{Binding TopDeltasList, Mode=TwoWay}"
+                              IsRefreshing="{Binding IsRefreshing}">
+                        <ListView.Header>
+                            <StackLayout Padding="0" Margin="0">
+                                <Label Text="Fastest Lap Deltas (Experimental)" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontAttributes="Bold" FontSize="10" />
+                            </StackLayout>
+                        </ListView.Header>
+                        
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell >
+                                    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="0" Margin="0">
+                                        
+                                    
+                                    <Frame HeightRequest="50" HasShadow="False" Margin="0" Padding="7, 3, 7, 3" CornerRadius="7"
+                                           HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                                           BackgroundColor="{Binding Sex, Converter={StaticResource GenderToColorConverter}}">
+                                        <Grid RowDefinitions="*" ColumnDefinitions=".33*, .16*, .16*" RowSpacing="0" 
+                                              HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                                            <Label Grid.Column="0" Grid.Row="0"
+                               Text="{Binding RacerName}" FontSize="18" HorizontalOptions="StartAndExpand"
+                               HorizontalTextAlignment="Start" TextColor="Black"
+                               FontAttributes="Bold" VerticalOptions="Center"  />
+
+                                            <Label Grid.Column="1"
+                               FontSize="16" FontAttributes="Bold" VerticalOptions="Center" TextColor="Black"
+                               Text="{Binding BibNumber}" HorizontalTextAlignment="Start" HorizontalOptions="StartAndExpand"                              
+                               />
+
+                                            <Label Grid.Column="2"
+                               FontSize="22" FontAttributes="Bold" TextColor="Black"
+                               Text="{Binding DeltaAndDistance}" VerticalOptions="Center"                         
+                               HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" />
+                                        </Grid>
+                                    </Frame>
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+
+
                 </Grid>
 
             </Grid>
