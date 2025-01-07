@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Disposables;
+using Microsoft.Maui.ApplicationModel;
 
 namespace DistanceTracker
 {

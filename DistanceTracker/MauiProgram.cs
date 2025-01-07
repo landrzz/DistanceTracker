@@ -2,6 +2,8 @@
 using DistanceTracker.ViewModels;
 using Prism.DryIoc;
 using ZXing.Net.Maui.Controls;
+using Microsoft.Maui.Media;
+using Microsoft.Maui.ApplicationModel;
 
 namespace DistanceTracker
 {

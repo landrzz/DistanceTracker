@@ -1,6 +1,8 @@
 using Humanizer;
 using System.Diagnostics;
 using System.Timers;
+using Microsoft.Maui.Storage;
+using Microsoft.Maui.ApplicationModel;
 
 namespace DistanceTracker;
 

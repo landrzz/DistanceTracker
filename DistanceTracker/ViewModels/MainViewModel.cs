@@ -1,4 +1,6 @@
-﻿
+﻿using Microsoft.Maui.Storage;
+using Microsoft.Maui.ApplicationModel;
+
 
 namespace DistanceTracker
 {

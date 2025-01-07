@@ -1,4 +1,6 @@
-﻿namespace DistanceTracker.ViewModels
+﻿using Microsoft.Maui.Storage;
+using Microsoft.Maui.ApplicationModel;
+namespace DistanceTracker.ViewModels
 {
     public class EventsListPageViewModel : DTViewModel
     {
