@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using DistanceTracker.ViewModels;
-using Prism.DryIoc;
+using Prism.Container.DryIoc;
 
 namespace DistanceTracker
 {
@@ -14,7 +14,10 @@ namespace DistanceTracker
                 .UseMauiCommunityToolkit()
                 .UseShinyFramework(
                     new DryIocContainerExtension(),
-                    prism => prism.OnAppStart("NavigationPage/MainPage")
+                    prism => prism.CreateWindow(nav => nav.CreateBuilder()
+                        .AddNavigationPage()
+                        .AddSegment<MainPage>()
+                        .NavigateAsync())
                 )
                 .ConfigureFonts(fonts =>
                 {
@@ -22,7 +25,6 @@ namespace DistanceTracker
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            builder.Configuration.AddJsonPlatformBundle();
             RegisterServices(builder);
             RegisterViews(builder.Services);
 

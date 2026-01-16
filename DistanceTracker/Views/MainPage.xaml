@@ -31,7 +31,7 @@
 
             <Button Grid.Row="2" x:Name="TimedLapsButton"
                                 HeightRequest="100" FontSize="Large"
-                                Text="Timed Lap" Margin="15, 5" CornerRadius="6"
+                                Text="Timed Lap (Don't Use)" Margin="15, 5" CornerRadius="6"
                                 HorizontalOptions="FillAndExpand"                            
                                 BorderWidth="0" 
                                 Command="{Binding NavigateCommand}" CommandParameter="TimedLapsPage"/>

@@ -10,8 +10,6 @@ using RestSharp;
 using Newtonsoft.Json;
 using RestSharp.Serializers.NewtonsoftJson;
 using MonkeyCache.SQLite;
-using RestSharp.Authenticators;
-
 namespace DistanceTracker
 {
     public static class DataService
@@ -27,16 +25,18 @@ namespace DistanceTracker
 
         static DataService()
         {
-            client = new RestClient(BaseUrl);
-            client.DefaultParameters.Clear();
-
-            client.UseNewtonsoftJson(new JsonSerializerSettings()
+            var options = new RestClientOptions(BaseUrl)
             {
-                DefaultValueHandling = DefaultValueHandling.Include,
-                NullValueHandling = NullValueHandling.Ignore,
-            });
-            client.ThrowOnAnyError = true;
-            
+                ThrowOnAnyError = true
+            };
+            client = new RestClient(
+                options,
+                configureSerialization: s => s.UseNewtonsoftJson(new JsonSerializerSettings()
+                {
+                    DefaultValueHandling = DefaultValueHandling.Include,
+                    NullValueHandling = NullValueHandling.Ignore,
+                })
+            );
         }
 
         public static Task<IEnumerable<LapRecord>> GetLapRecords(bool forceRefresh = true, string raceEventId = "") =>
@@ -95,7 +95,7 @@ namespace DistanceTracker
 
                     Debug.WriteLine($"URL -- {url}");
 
-                    var request = new RestRequest(url, DataFormat.Json);
+                    var request = new RestRequest(url);
                     dataObject = await client.GetAsync<T>(request);
 
                     try
@@ -139,9 +139,9 @@ namespace DistanceTracker
             Debug.WriteLine(url);
 
             var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
-            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
-
-            var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_runner, "application/json");
+            var restRequest = new RestRequest(url, Method.Post)
+                .AddJsonBody(_runner, "application/json")
+                .AddHeader("Authorization", GetBasicAuthHeader("distancetrackerapp", savedCode));
             var response = await client.PostAsync<Runner>(restRequest);
             if (response != null)
             {
@@ -165,9 +165,9 @@ namespace DistanceTracker
             Debug.WriteLine(url);
 
             var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
-            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
-
-            var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_laprecord, "application/json");
+            var restRequest = new RestRequest(url, Method.Post)
+                .AddJsonBody(_laprecord, "application/json")
+                .AddHeader("Authorization", GetBasicAuthHeader("distancetrackerapp", savedCode));
             var response = await client.PostAsync<LapRecord>(restRequest);
             if (response != null)
             {
@@ -191,9 +191,9 @@ namespace DistanceTracker
             Debug.WriteLine(url);
 
             var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
-            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
-
-            var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_laprecord, "application/json");
+            var restRequest = new RestRequest(url, Method.Post)
+                .AddJsonBody(_laprecord, "application/json")
+                .AddHeader("Authorization", GetBasicAuthHeader("distancetrackerapp", savedCode));
             var response = await client.PostAsync<TimedLapRecord>(restRequest);
             if (response != null)
             {
@@ -218,9 +218,9 @@ namespace DistanceTracker
             Debug.WriteLine(url);
 
             var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
-            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
-
-            var restRequest = new RestRequest(url, Method.POST).AddJsonBody(_race, "application/json");
+            var restRequest = new RestRequest(url, Method.Post)
+                .AddJsonBody(_race, "application/json")
+                .AddHeader("Authorization", GetBasicAuthHeader("distancetrackerapp", savedCode));
             var response = await client.PostAsync<RaceEvent>(restRequest);
             if (response != null)
             {
@@ -243,9 +243,9 @@ namespace DistanceTracker
             Debug.WriteLine(url);
 
             var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
-            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
-
-            var restRequest = new RestRequest(url, Method.DELETE).AddJsonBody(_lap, "application/json");
+            var restRequest = new RestRequest(url, Method.Delete)
+                .AddJsonBody(_lap, "application/json")
+                .AddHeader("Authorization", GetBasicAuthHeader("distancetrackerapp", savedCode));
             var response = await client.DeleteAsync<Object>(restRequest);  
             if (response != null)
             {
@@ -265,9 +265,9 @@ namespace DistanceTracker
             Debug.WriteLine(url);
 
             var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
-            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
-
-            var restRequest = new RestRequest(url, Method.DELETE).AddJsonBody(_lap, "application/json");
+            var restRequest = new RestRequest(url, Method.Delete)
+                .AddJsonBody(_lap, "application/json")
+                .AddHeader("Authorization", GetBasicAuthHeader("distancetrackerapp", savedCode));
             var response = await client.DeleteAsync<Object>(restRequest);
             if (response != null)
             {
@@ -287,9 +287,9 @@ namespace DistanceTracker
             Debug.WriteLine(url);
 
             var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
-            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
-
-            var restRequest = new RestRequest(url, Method.DELETE).AddJsonBody(_runner, "application/json");
+            var restRequest = new RestRequest(url, Method.Delete)
+                .AddJsonBody(_runner, "application/json")
+                .AddHeader("Authorization", GetBasicAuthHeader("distancetrackerapp", savedCode));
             var response = await client.DeleteAsync<Object>(restRequest);
             if (response != null)
             {
@@ -309,9 +309,9 @@ namespace DistanceTracker
             Debug.WriteLine(url);
 
             var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
-            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
-
-            var restRequest = new RestRequest(url, Method.PUT).AddJsonBody(_runner, "application/json");
+            var restRequest = new RestRequest(url, Method.Put)
+                .AddJsonBody(_runner, "application/json")
+                .AddHeader("Authorization", GetBasicAuthHeader("distancetrackerapp", savedCode));
             var response = await client.PutAsync<Object>(restRequest);
             if (response != null)
             {
@@ -342,9 +342,9 @@ namespace DistanceTracker
             //url = $"http://localhost:7071/api/Update-RaceEvent/{id}?code={Endpoints.code}";
 
             var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
-            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
-
-            var restRequest = new RestRequest(url, Method.PUT).AddJsonBody(nowTimeCode, "application/json");
+            var restRequest = new RestRequest(url, Method.Put)
+                .AddJsonBody(nowTimeCode, "application/json")
+                .AddHeader("Authorization", GetBasicAuthHeader("distancetrackerapp", savedCode));
             var response = await client.PutAsync<RaceEvent>(restRequest);
             if (response != null)
             {
@@ -372,9 +372,9 @@ namespace DistanceTracker
             Debug.WriteLine(url);
 
             var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
-            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
-
-            var restRequest = new RestRequest(url, Method.PUT).AddJsonBody(nowTimeCode, "application/json");
+            var restRequest = new RestRequest(url, Method.Put)
+                .AddJsonBody(nowTimeCode, "application/json")
+                .AddHeader("Authorization", GetBasicAuthHeader("distancetrackerapp", savedCode));
             var response = await client.PutAsync<TimedLapRecord>(restRequest);
             if (response != null)
             {
@@ -400,9 +400,9 @@ namespace DistanceTracker
             Debug.WriteLine(url);
 
             var savedCode = Preferences.Default.Get(Keys.CurrentEventCode, string.Empty);
-            client.Authenticator = new HttpBasicAuthenticator("distancetrackerapp", savedCode);
-
-            var restRequest = new RestRequest(url, Method.PUT).AddJsonBody(nowTimeCode, "application/json");
+            var restRequest = new RestRequest(url, Method.Put)
+                .AddJsonBody(nowTimeCode, "application/json")
+                .AddHeader("Authorization", GetBasicAuthHeader("distancetrackerapp", savedCode));
             var response = await client.PutAsync<TimedLapRecord>(restRequest);
             if (response != null)
             {
@@ -414,6 +414,12 @@ namespace DistanceTracker
         }
 
 
+
+        private static string GetBasicAuthHeader(string username, string password)
+        {
+            var credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}"));
+            return $"Basic {credentials}";
+        }
 
         public static void AddToBarrel(string key, string data, TimeSpan expireIn, object dataObject)
         {
